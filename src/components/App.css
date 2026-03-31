@@ -1,0 +1,143 @@
+/* Color Palette */
+:root {
+  --bg-color: #E8F1E8;      /* The soft green background */
+  --card-color: #FFFFFF;    /* Clean white cards */
+  --text-dark: #333333;
+  --accent-blue: #3C8CE7;   /* For the placeholder weather box */
+}
+
+/* Base page setup */
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-dark);
+}
+
+/* MAIN LAYOUT */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar Styling */
+.sidebar {
+  width: 250px;
+  padding: 2rem;
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar .logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}
+
+.nav-item {
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 1rem;
+  width: 100%;
+  font-size: 1rem;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.nav-item.active {
+  background-color: var(--card-color);
+  color: var(--accent-blue);
+  font-weight: bold;
+}
+
+/* Main Content Area */
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Header/Search Bar */
+.search-bar {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 20px;
+  border: none;
+  background-color: var(--card-color);
+}
+
+/* Standard Card styling */
+.card {
+  background-color: var(--card-color);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05); /* Soft shadow */
+}
+
+/* Weather Card (Placeholder for image) */
+.weather-hero-card {
+  height: 300px;
+  border-radius: 20px;
+  
+  /* Placeholder background while we wait for images */
+  background-image: linear-gradient(135deg, var(--accent-blue) 0%, #00EAFF 100%);
+  
+  display: flex;
+  align-items: flex-end; /* Text at the bottom of the image */
+  padding: 2rem;
+  color: white; /* Contrast text */
+}
+
+.weather-info h1 { margin: 0; font-size: 2.5rem; }
+.current-temp { font-size: 4rem; font-weight: bold; margin: 0; }
+.short-forecast { font-size: 1.2rem; margin: 0; }
+
+/* Lower Row (Flexbox for Hourly + Alerts) */
+.lower-row {
+  display: flex;
+  gap: 1.5rem;
+  flex: 1; /* Take up remaining height */
+}
+
+.hourly-grid {
+  display: flex;
+  justify-content: space-between; /* Spreads the items evenly */
+  padding: 1rem 0;
+}
+
+.hour-item {
+  display: flex;
+  flex-direction: column; /* Stacks Time over Temp */
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.hour-time {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0;
+}
+
+.hour-temp {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 0;
+}
+
+.hourly-forecast-card { flex: 2; } /* Hourly is wider */
+.alerts-and-tips { flex: 1; display: flex; flex-direction: column; gap: 1rem; }
+
+.hourly-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr); /* 6 columns */
+  text-align: center;
+}
+
+.hour-item { font-weight: bold; font-size: 1.2rem; }
+
+/* Placeholder colors for Alerts */
+.alert-card.heat { background-color: #FFEBEE; border: 2px solid #FF5252; color: #D32F2F; }
