@@ -141,3 +141,36 @@ body {
 
 /* Placeholder colors for Alerts */
 .alert-card.heat { background-color: #FFEBEE; border: 2px solid #FF5252; color: #D32F2F; }
+
+/* Loading Screen */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;           /* Takes up the full screen height */
+  width: 100vw;            /* Takes up the full screen width */
+  background-color: var(--bg-color);
+  gap: 1rem;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid rgba(0, 0, 0, 0.1);
+  border-top: 5px solid #4f4f4f; 
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* rotation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-container p {
+  font-weight: 600;
+  color: #555;
+  margin: 0;
+}
