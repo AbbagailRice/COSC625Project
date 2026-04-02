@@ -1,9 +1,12 @@
-/* Color Palette */
+/* Color Palette (can be changed later easier this way)*/
 :root {
+  --sidebar-accent: #2e7d32;
   --bg-color: #E8F1E8;      /* The soft green background */
+  --accent-blue: #4f4f4f;      /* temp for weather card */
   --card-color: #FFFFFF;    /* Clean white cards */
-  --text-dark: #333333;
-  --accent-blue: #3C8CE7;   /* For the placeholder weather box */
+  --text-main: #333333;
+  --text-sub: #666666;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 /* Base page setup */
@@ -22,34 +25,70 @@ body {
 
 /* Sidebar Styling */
 .sidebar {
-  width: 250px;
-  padding: 2rem;
-  background-color: transparent;
+  width: 100px; /* Slimmer sidebar for vertical icons */
   display: flex;
   flex-direction: column;
+  align-items: center;
+  padding-top: 2rem;
+  background-color: #f4f7f4; /* background */
+  border-right: 1px solid #e0e0e0;
 }
 
-.sidebar .logo {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 2rem;
+/* Logo Container */
+.logo-container {
+  margin-bottom: 2.5rem;
+  text-align: center;
+  padding: 0 5px;
 }
 
+.logo-text {
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--sidebar-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+/* Navigation List */
+.nav-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem; 
+  margin-top: 0rem;
+}
+
+/* The Combined Nav Item (Icon + Text) */
 .nav-item {
-  background: none;
-  border: none;
-  text-align: left;
-  padding: 1rem;
-  width: 100%;
-  font-size: 1rem;
-  cursor: pointer;
-  border-radius: 8px;
+  display: flex;
+  flex-direction: column; /* Stacks Icon on top of Text */
+  align-items: center;
+  text-decoration: none;
+  color: #666;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
 }
 
+/* The Square Icon Placeholders */
+.nav-icon {
+  width: 45px;
+  height: 45px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px; /* Small square with rounded corners */
+  margin-bottom: 8px;
+}
+
+/* Active State Styles */
 .nav-item.active {
-  background-color: var(--card-color);
-  color: var(--accent-blue);
+  color: var(--sidebar-accent);
   font-weight: bold;
+}
+
+.nav-item.active .nav-icon {
+  background-color: #e8f5e9;
+  border: 2px solid var(--sidebar-accent);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
 
 /* Main Content Area */
@@ -61,9 +100,10 @@ body {
   gap: 1.5rem;
 }
 
+
 /* Header/Search Bar */
 .search-bar {
-  width: 100%;
+  width: 98%;
   padding: 1rem;
   border-radius: 20px;
   border: none;
@@ -74,22 +114,24 @@ body {
 .card {
   background-color: var(--card-color);
   border-radius: 12px;
-  padding: 1.5rem;
+  padding:1rem;
   box-shadow: 0 4px 6px rgba(0,0,0,0.05); /* Soft shadow */
 }
 
 /* Weather Card (Placeholder for image) */
-.weather-hero-card {
-  height: 300px;
+.weather-card {
+  height: 200px;
   border-radius: 20px;
-  
-  /* Placeholder background while we wait for images */
-  background-image: linear-gradient(135deg, var(--accent-blue) 0%, #00EAFF 100%);
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+
+  /* Placeholder background while we wait for images (change to background-image)  */
+  background-color: var(--card-color);
   
   display: flex;
-  align-items: flex-end; /* Text at the bottom of the image */
+  
   padding: 2rem;
-  color: white; /* Contrast text */
+  color: var(--text-main)
 }
 
 .weather-info h1 { margin: 0; font-size: 2.5rem; }
@@ -174,3 +216,88 @@ body {
   color: #555;
   margin: 0;
 }
+
+/* Garden View Styles */
+/* i don't know whats happening here whoever does the styling can fix it ( i was trying to use a overall card styling to no avail)*/
+.garden-view .header {
+  margin-bottom: 1rem; 
+  
+}
+
+.garden-view .lower-row {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.plant-list-card {
+  margin-bottom: 1rem;
+  
+  border-radius: 20px;
+}
+
+.plant-grid {
+  display: flex;
+  gap: 2rem; /* Better breathing room between plants */
+  overflow-x: auto; /* Allows scrolling if you have 10+ plants */
+  padding: 1rem;
+  align-items: center;
+}
+
+/* Individual Plant Items */
+.img-placeholder {
+  width: 70px;
+  height: 70px;
+  background-color: #eee;
+  border-radius: 10px;
+  margin-bottom: 8px;
+  padding: 1rem;
+}
+
+.plant-item p {
+  margin: 5px 0 0 0;
+  font-size: 0.9rem;
+  color: var(--text-main);
+  font-weight: 500;
+}
+
+/* The + Button Styling */
+.add-plant-btn {
+  min-width: 70px;
+  height: 70px;
+  border: 2px dashed #ccc;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  color: #aaa;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 25px;
+}
+
+.add-plant-btn:hover {
+  border-color: var(--primary-green);
+  color: var(--primary-green);
+  background-color: var(--light-green);
+}
+
+/* 5. Lower Row Layout (Watering & Schedule) */
+.garden-view .lower-row {
+  display: flex;
+  gap: 1.5rem;
+  align-items: stretch; /* Makes both cards the same height */
+}
+
+.garden-left {
+  flex: 1;
+}
+
+.schedule-card {
+  flex: 1;
+}
+
+
+
+

@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import './App.css';
+import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
+import HomeView from '../views/HomeView';
+import GardenView from '../views/GardenView';
 import { getCoordinates, getWeatherData } from '../services/WeatherService';
+import './App.css';
 
 function App() {
-  const [zip, setZip] = useState('21532'); // Default to Frostburg
+  const [zip, setZip] = useState('21532'); // Default to prefered location (erica this should be the spot for storage persistance)
   const [weather, setWeather] = useState(null);
   const [loading, setLoading] = useState(true);
   const [fullName, setCityName] = useState('Loading...');
@@ -81,73 +84,36 @@ function App() {
   const currentHour = weather.hourly.properties.periods[0];
 
   return (
-    <div className="app-container">
-      {/* Sidebar/Navigation Panel */}
-      <aside className="sidebar">
-        <div className="logo">DewDiligence</div>
-        <nav>
-          <button className="nav-item active">Dashboard</button>
-          <button className="nav-item">My Garden</button>
-        </nav>
-      </aside>
-
-      {/* Main Content Area */}
-      <main className="main-content">
-        {/* Top Search Bar with standard input */}
-        <header className="header">
-          <input 
-            type="text" 
-            placeholder="Search Zip Code..." 
-            className="search-bar"
-            onKeyDown={(e) => e.key === 'Enter' && updateDashboard(e.target.value)}
-          />
-        </header>
-
-        {/* The Weather Box (Placeholder for images) */}
-        <section className="weather-card">
-          <div className="weather-info">
-            {/* Display the Location directly from the state */}
-            <h1> {fullName}</h1>
-            
-            {/* Weather data mapped from the NWS response */}
-            <p className="current-temp">{currentHour.temperature}°</p>
-            <p className="short-forecast">{currentHour.shortForecast}</p>
+    <Router>
+      <div className="app-container">
+        <aside className="sidebar">
+          <div className="logo-container">
+            <h2 className="logo-text">DewDiligence</h2>
           </div>
-        </section>
+          
+          <nav className="nav-list">
+            <NavLink to="/" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
+              <div className="nav-icon home-icon"></div>
+              <span>Home</span>
+            </NavLink>
 
-        {/* Hourly and Alerts Row */}
-        <div className="lower-row">
-          <section className="hourly-forecast-card card">
-            <h2>Hourly Forecast</h2>
-            <div className="hourly-grid">
-              {/* Map through the first 6 hours of the hourly data */}
-              {weather.hourly.properties.periods.slice(0, 6).map((period, index) => {
-                // Convert '2026-03-31T14:00:00-04:00' to '2 PM'
-                const timeLabel = new Date(period.startTime).toLocaleTimeString([], { 
-                  hour: 'numeric', 
-                  hour12: true 
-                });
+            <NavLink to="/garden" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
+              <div className="nav-icon garden-icon"></div>
+              <span>My Garden</span>
+            </NavLink>
+          </nav>
+        </aside>
 
-                return (
-                  <div key={index} className="hour-item">
-                    {/* Time sits above the temperature */}
-                    <p className="hour-time">{index === 0 ? "Now" : timeLabel}</p>
-                    <p className="hour-temp">{period.temperature}°</p>
-                  </div>
-                );
-              })}
-            </div>
-          </section>
-
-          {/* Placeholder for Alerts (heat/frost) and Gardening Tips */}
-          <section className="alerts-and-tips">
-            <div className="alert-card card heat">Heat Warning Placeholder</div>
-            <div className="tip-card card">Tip of the Day Placeholder</div>
-          </section>
-        </div>
-      </main>
-    </div>
+        <main className="main-content">
+          <Routes>
+            <Route path="/" element={<HomeView weather={weather} cityName={fullName} updateDashboard={updateDashboard} />} />
+            <Route path="/garden" element={<GardenView cityName={fullName} />} />
+          </Routes>
+        </main>
+      </div>
+    </Router>
   );
 }
 
 export default App;
+
