@@ -10,6 +10,7 @@ function App() {
   const [weather, setWeather] = useState(null);
   const [loading, setLoading] = useState(true);
   const [fullName, setCityName] = useState('Loading...');
+  const [plants, setPlants] = useState([]);
 
   // Funct to handel API sequence
   const updateDashboard = async (searchZip) => {
