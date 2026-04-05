@@ -10,9 +10,9 @@ function App() {
   const [weather, setWeather] = useState(null);
   const [loading, setLoading] = useState(true);
   const [fullName, setCityName] = useState('Loading...');
-  const [plants, setPlants] = useState([]);
+  const [plants, setPlants] = useState([]); // Added state for plants
 
-  // Funct to handel API sequence
+  // Function to handle API sequence
   const updateDashboard = async (searchZip) => {
 
     // Validate Zip Code format before making API calls
@@ -55,22 +55,22 @@ function App() {
   };
 
   useEffect(() => {
-  // Init Load
-  const loadInitialWeather = async () => {
-    await updateDashboard(zip);
-  };
-  loadInitialWeather();
+    // Init Load
+    const loadInitialWeather = async () => {
+      await updateDashboard(zip);
+    };
+    loadInitialWeather();
 
-  // Timer for 30 minute refeshes 
-  const refreshInterval = setInterval(() => {
-    console.log("Auto-refreshing weather data...");
-    updateDashboard(zip);
-  }, 1800000); 
+    // Timer for 30 minute refreshes 
+    const refreshInterval = setInterval(() => {
+      console.log("Auto-refreshing weather data...");
+      updateDashboard(zip);
+    }, 1800000); 
 
-  // stops the timer if the user closes the page or switches tabs.
-  return () => clearInterval(refreshInterval);
-  
-}, [zip]);
+    // stops the timer if the user closes the page or switches tabs.
+    return () => clearInterval(refreshInterval);
+    
+  }, [zip]);
 
   // While data loads, show a simple message
   if (loading || !weather) {
@@ -79,7 +79,7 @@ function App() {
         <div className="loading-spinner"></div>
         <p>Loading...</p>
       </div>
-  );
+    );
   }
 
   const currentHour = weather.hourly.properties.periods[0];
@@ -107,8 +107,20 @@ function App() {
 
         <main className="main-content">
           <Routes>
-            <Route path="/" element={<HomeView weather={weather} cityName={fullName} updateDashboard={updateDashboard} />} />
-            <Route path="/garden" element={<GardenView cityName={fullName} />} />
+            <Route 
+              path="/" 
+              element={<HomeView weather={weather} cityName={fullName} updateDashboard={updateDashboard} />} 
+            />
+            <Route 
+              path="/garden" 
+              element={
+                <GardenView 
+                  cityName={fullName} 
+                  plants={plants}          // Pass plants state
+                  setPlants={setPlants}    // Pass function to update plants
+                />
+              } 
+            />
           </Routes>
         </main>
       </div>
