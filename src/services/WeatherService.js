@@ -1,65 +1,70 @@
-const USER_AGENT = process.env.REACT_APP_NWS_USER_AGENT;
+import React from 'react';
 
-/** Zip Code Geocoding
- * Converts a 5-digit Zip Code into Lat/Lon using Zippopotam.us.
- */
-export const getCoordinates = async (zip) => {
-  try {
-    // Fetch data from the Zippopotam.us API
-    const response = await fetch(`https://api.zippopotam.us/us/${zip}`);
-    
-    // Handle invalid Zip Codes
-    if (!response.ok) {
-      console.error("Zip Code not found");
-      return null;
-    }
+const GardenView = ({ fullName, plants, setPlants }) => {
+  // Local state for the form
+  const [nickname, setNickname] = React.useState('');
+  const [waterCategory, setWaterCategory] = React.useState('Moderate');
 
-    const data = await response.json();
+  // Handle form submission
+  const handleAddPlant = (e) => {
+    e.preventDefault();
+    setPlants([...plants, { nickname, waterCategory }]);
+    setNickname('');
+    setWaterCategory('Moderate');
+  };
 
-    // Get Lat and Lon from the places array
-    // Convert results to floats
-    return {
-      lat: parseFloat(data.places[0].latitude),
-      lon: parseFloat(data.places[0].longitude)
-    };
-  } catch (error) {
-    console.error("Zip Search Failed:", error);
-    return null;
-  }
+  return (
+    <div className="garden-view">
+      <header className="header">
+        <input type="text" placeholder="Search Garden..." className="search-bar" />
+      </header>
+
+      <section className="plant-list-card card">
+        <h2>Plant List</h2>
+        <div className="plant-grid">
+          {/* Render the list of plants */}
+          {plants.map((plant, index) => (
+            <div key={index} className="plant-item card">
+              <div className="img-placeholder"></div>
+              <p>{plant.nickname} - {plant.waterCategory}</p>
+            </div>
+          ))}
+
+          {/* Form to add a new plant */}
+          <div className="add-plant-form card">
+            <form onSubmit={handleAddPlant}>
+              <input
+                type="text"
+                placeholder="Plant Nickname"
+                value={nickname}
+                onChange={(e) => setNickname(e.target.value)}
+                required
+              />
+              <select
+                value={waterCategory}
+                onChange={(e) => setWaterCategory(e.target.value)}
+              >
+                <option value="Low">Low</option>
+                <option value="Moderate">Moderate</option>
+                <option value="High">High</option>
+              </select>
+              <button type="submit">Add Plant</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <div className="lower-row">
+        <section className="card garden-left">
+          <h3>Watering Needed...</h3>
+        </section>
+
+        <section className="schedule-card card">
+          <h3>Watering Schedule</h3>
+        </section>
+      </div>
+    </div>
+  );
 };
 
-/**
- * NWS Data Integration
- * Logic for retrieving real-time weather and rainfall history from 
- * the National Weather Service (NWS) API
- */
-export const getWeatherData = async (lat, lon) => {
-  try {
-    // Retrieve the User-Agent from the .env file for secure identification
-    const headers = { 'User-Agent': process.env.REACT_APP_NWS_USER_AGENT };
-
-    // Convert Lat/Lon into NWS-specific Grid Points
-    const pointsResponse = await fetch(`https://api.weather.gov/points/${lat},${lon}`, { headers });
-    const pointsData = await pointsResponse.json();
-
-    // Extract the unique URLs for the General Forecast and the Hourly Rain Data
-    const forecastUrl = pointsData.properties.forecast; 
-    const hourlyUrl = pointsData.properties.forecastHourly;
-
-    // Fetch both data sets at the same time for improved performance
-    const [forecastRes, hourlyRes] = await Promise.all([
-      fetch(forecastUrl, { headers }),
-      fetch(hourlyUrl, { headers })
-    ]);
-
-    // Return the parsed data for use in the Dashboard and Logic layers
-    return {
-      current: await forecastRes.json(),
-      hourly: await hourlyRes.json()
-    };
-  } catch (error) {
-    // Handles API timeouts or downtime
-    console.error("NWS Fetch Error:", error);
-    return null;
-  }
-};
+export default GardenView;
