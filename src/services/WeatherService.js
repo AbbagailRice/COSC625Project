@@ -63,3 +63,36 @@ export const getWeatherData = async (lat, lon) => {
     return null;
   }
 };
+
+/**
+ * Fetches precipitation totals for the last 7 days.
+ * Uses the Open-Meteo API for historical weather data.
+ */
+export const getPastRainTotal = async (lat, lon) => {
+  try {
+    const today = new Date().toISOString().split('T')[0];
+    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+
+    // Open-Meteo API for historical precipitation data
+    const url = `https://archive-api.open-meteo.com/v1/archive?latitude=${lat}&longitude=${lon}&start_date=${sevenDaysAgo}&end_date=${today}&daily=precipitation_sum&timezone=auto`;
+
+    const response = await fetch(url);
+    const data = await response.json();
+
+    // data.daily.precipitation_sum will be an array like [0.1, 0, 0.25, 0, 0, 0, 0]
+    const rainArray = data.daily.precipitation_sum;
+    const totalRain = rainArray.reduce((acc, val) => acc + (val || 0), 0);
+
+    //debugging 
+    console.log("--- OPEN-METEO WEEKLY REPORT ---");
+    console.table(data.daily.time.map((date, i) => ({ Date: date, Rain: rainArray[i] })));
+    
+    // Convert mm to inches
+    const totalInches = totalRain / 25.4; 
+    return totalInches.toFixed(2);
+
+  } catch (error) {
+    console.error("Open-Meteo Error:", error);
+    return "0.00";
+  }
+};
