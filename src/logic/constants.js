@@ -14,3 +14,14 @@ export const GARDENING_CONFIG = {
     LOW: 0.5
   }
 };
+
+/**
+ * Water category options for plant form dropdown
+ * Values align with GARDENING_CONFIG.WATER_NEEDS keys
+ */
+export const WATER_CATEGORIES = [
+  { value: 'LOW',    label: 'Low – 0.5 in/week' },
+  { value: 'MEDIUM', label: 'Medium – 1.0 in/week' },
+  { value: 'HIGH',   label: 'High – 1.5 in/week' },
+  { value: 'MAX',    label: 'Max – 3.0 in/week' },
+];
