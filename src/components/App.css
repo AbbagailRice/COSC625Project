@@ -184,6 +184,28 @@ body {
 /* Placeholder colors for Alerts */
 .alert-card.heat { background-color: #FFEBEE; border: 2px solid #FF5252; color: #D32F2F; }
 
+/* Rain Total Section */
+.rain-total-container {
+  display: flex;
+  flex-direction: column;
+  
+  margin-top: 1.5rem;
+  padding-top: .5rem;
+}
+
+.rain-label {
+  font-size: 0.85rem;
+  color: var(--text-sub);
+  font-weight: 500;
+}
+
+.rain-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+
 /* Loading Screen */
 .loading-container {
   display: flex;

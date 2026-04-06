@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
 import HomeView from '../views/HomeView';
 import GardenView from '../views/GardenView';
-import { getCoordinates, getWeatherData } from '../services/WeatherService';
+import { getCoordinates, getWeatherData, getPastRainTotal } from '../services/WeatherService';
 import './App.css';
 
 function App() {
@@ -10,6 +10,7 @@ function App() {
   const [weather, setWeather] = useState(null);
   const [loading, setLoading] = useState(true);
   const [fullName, setCityName] = useState('Loading...');
+  const [rainTotal, setRainTotal] = useState('0.00');
 
   // Funct to handel API sequence
   const updateDashboard = async (searchZip) => {
@@ -23,7 +24,8 @@ function App() {
 
     setLoading(true);
     const coords = await getCoordinates(searchZip);
-    
+
+
     if (coords) {
       try {
         // Fetch NWS Points to get the real City/State name
@@ -36,6 +38,10 @@ function App() {
         const city = pointsData.properties.relativeLocation.properties.city;
         const state = pointsData.properties.relativeLocation.properties.state;
         setCityName(`${city}, ${state}`);
+
+        // Fetch the rain total
+        const total = await getPastRainTotal(coords.lat, coords.lon);
+        setRainTotal(total);
 
         // Fetch Weather Data
         const data = await getWeatherData(coords.lat, coords.lon);
@@ -81,7 +87,6 @@ function App() {
   );
   }
 
-  const currentHour = weather.hourly.properties.periods[0];
 
   return (
     <Router>
@@ -106,8 +111,15 @@ function App() {
 
         <main className="main-content">
           <Routes>
-            <Route path="/" element={<HomeView weather={weather} cityName={fullName} updateDashboard={updateDashboard} />} />
             <Route path="/garden" element={<GardenView cityName={fullName} />} />
+            <Route path="/" element={
+              <HomeView 
+                weather={weather} 
+                cityName={fullName} 
+                rainTotal={rainTotal}
+                updateDashboard={updateDashboard} 
+              />
+            } />
           </Routes>
         </main>
       </div>

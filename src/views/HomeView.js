@@ -1,6 +1,6 @@
 import React from 'react';
 
-const HomeView = ({ weather, cityName, updateDashboard }) => {
+const HomeView = ({ weather, cityName, rainTotal, updateDashboard }) => {
   const currentHour = weather.hourly.properties.periods[0];
 
   return (
@@ -22,6 +22,7 @@ const HomeView = ({ weather, cityName, updateDashboard }) => {
         </div>
       </section>
 
+
       <div className="lower-row">
         <section className="hourly-forecast-card card">
           <h2>Hourly Forecast</h2>
@@ -34,6 +35,14 @@ const HomeView = ({ weather, cityName, updateDashboard }) => {
                 <p className="hour-temp">{period.temperature}°</p>
               </div>
             ))}
+            <div className="rain-total-container">
+              <div className="rain-label">
+                 7-Day Rain Total
+              </div>
+              <div className="rain-value">
+                {rainTotal} inches
+              </div>
+            </div>
           </div>
         </section>
 
