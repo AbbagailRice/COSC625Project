@@ -1,13 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { GARDENING_CONFIG } from '../logic/constants';
 
 const WATER_CATEGORIES = Object.keys(GARDENING_CONFIG.WATER_NEEDS);
 
 const GardenView = ({ cityName }) => {
-  const [plants, setPlants] = useState([]);
+  const [plants, setPlants] = useState(() => {
+    const saved = localStorage.getItem('plants');
+    return saved ? JSON.parse(saved) : [];
+  });
   const [showForm, setShowForm] = useState(false);
   const [nickname, setNickname] = useState('');
   const [waterCategory, setWaterCategory] = useState(WATER_CATEGORIES[2]);
+
+  useEffect(() => {
+    localStorage.setItem('plants', JSON.stringify(plants));
+  }, [plants]);
 
   const handleAddPlant = () => {
     if (!nickname.trim()) {
