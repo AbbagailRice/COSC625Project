@@ -1,32 +1,246 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { GARDENING_CONFIG } from '../logic/constants';
+import '../components/App.css';
 
-const GardenView = ({ fullName }) => {
+const WATER_NEEDS = GARDENING_CONFIG.WATER_NEEDS;
+const WATER_CATEGORIES = Object.keys(WATER_NEEDS);
+
+
+const GardenView = ({ cityName }) => {
+  // Init State from LocalStorage
+  const [plants, setPlants] = useState(() => {
+    const saved = localStorage.getItem('dewDiligence_garden');
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  // Modal Control
+  const [activeModal, setActiveModal] = useState(null); // 'add' or 'remove'
+  
+  // Form State
+  const [nickname, setNickname] = useState('');
+  const [imageUrl, setImageUrl] = useState('');
+  const [waterCategory, setWaterCategory] = useState(WATER_CATEGORIES[0]);
+  const [plantToRemoveId, setPlantToRemoveId] = useState(null);
+
+  // Persist to LocalStorage whenever plants change
+  useEffect(() => {
+    localStorage.setItem('dewDiligence_garden', JSON.stringify(plants));
+    // Keep remove selection in sync with plant list
+    if (plants.length > 0 && !plantToRemoveId) {
+      setPlantToRemoveId(plants[0].id);
+    }
+  }, [plants, plantToRemoveId]);
+
+  const handleAddPlant = () => {
+    if (!nickname.trim()) return;
+
+    if (plants.length >= GARDENING_CONFIG.MAX_PLANTS) {
+      alert(`Max of ${GARDENING_CONFIG.MAX_PLANTS} plants reached.`);
+      setActiveModal(null);
+      return;
+    }
+
+    const newPlant = {
+      id: Date.now(),
+      nickname: nickname.trim(),
+      waterCategory,
+      // Uses specific URL if provided, otherwise a default sprout icon
+      image: imageUrl.trim() || 'https://cdn-icons-png.flaticon.com/512/628/628283.png'
+    };
+
+    setPlants([...plants, newPlant]);
+    setNickname('');
+    setImageUrl('');
+    setActiveModal(null);
+  };
+
+  const handleConfirmRemove = () => {
+    if (!plantToRemoveId) return;
+    const updated = plants.filter(p => p.id !== plantToRemoveId);
+    setPlants(updated);
+    setPlantToRemoveId(updated[0]?.id || null);
+    setActiveModal(null);
+  };
+
+  // Function to handle clicking a plant
+  const [selectedPlant, setSelectedPlant] = useState(null);
+
+  const handlePlantClick = (plant) => {
+    setSelectedPlant(plant);
+  };
+
+  // Filter plants based on search query
+  const [searchQuery, setSearchQuery] = useState('');
+  
+  const filteredPlants = plants.filter(plant => 
+    plant.nickname.toLowerCase().startsWith(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="garden-view">
       <header className="header">
-        <input type="text" placeholder="Search Garden..." className="search-bar" />
+        <input 
+          type="text" 
+          placeholder="Search Garden..." 
+          className="search-bar" 
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)} // Updates the filter as you type
+        />
       </header>
 
+      {/* PLANT LIST SECTION */}
       <section className="plant-list-card card">
-        <h2>Plant List</h2>
+        <div className="plant-list-header">
+          <h2>Plant List</h2>
+        </div>
         <div className="plant-grid">
-          {['plant1', 'plant2', 'plant3'].map(plant => (
-            <div key={plant} className="plant-item">
-              <div className="img-placeholder"></div>
-              <p>{plant}</p>
-            </div>
-          ))}
-          <div className="add-plant-btn">+</div>
+          {/* Check if anything matched the search */}
+          {filteredPlants.length === 0 && searchQuery !== '' ? (
+            <p className="empty-msg">No plants match "{searchQuery}"</p>
+          ) : filteredPlants.length === 0 && (
+            <p className="empty-msg">No plants yet. Add one!</p>
+          )}
+
+          {/* RENDER FILTERED LIST */}
+          
+          {filteredPlants.map(plant => {
+            const isDefault = plant.image.includes('628283.png');
+
+            return (
+              <div 
+                key={plant.id} 
+                className={`plant-item ${selectedPlant?.id === plant.id ? 'selected-highlight' : ''}`}
+                onClick={() => handlePlantClick(plant)} // Trigger the selection
+                style={{ cursor: 'pointer' }}
+              >
+                <p>{plant.nickname}</p>
+                <img 
+                  src={plant.image} 
+                  alt={plant.nickname} 
+                  className={`plant-img ${isDefault ? 'placeholder-icon' : ''}`}
+                  onError={(e) => { 
+                    e.target.src = 'https://cdn-icons-png.flaticon.com/512/628/628283.png';
+                    e.target.classList.add('placeholder-icon');
+                  }} 
+                />
+              </div>
+            );
+          })}
+
+          {/* Keep the ± button visible so you can still add plants during a search */}
+          {plants.length < GARDENING_CONFIG.MAX_PLANTS && (
+            <div className="add-plant-btn" onClick={() => setActiveModal('add')}>±</div>
+          )}
         </div>
       </section>
 
+      {/* ADD/REMOVE MODAL */}
+      {activeModal && (
+        <div className="modal-overlay" onClick={() => setActiveModal(null)}>
+          <div className="styled-modal-card card" onClick={e => e.stopPropagation()}>
+            
+            {/* Modal Tabs */}
+            <div className="modal-tabs">
+              <button 
+                className={`tab-btn ${activeModal === 'remove' ? 'active' : ''}`}
+                onClick={() => setActiveModal('remove')}
+              >
+                Remove Plant
+              </button>
+              <div className="tab-separator">/</div>
+              <button 
+                className={`tab-btn ${activeModal === 'add' ? 'active' : ''}`}
+                onClick={() => setActiveModal('add')}
+              >
+                Add Plant
+              </button>
+            </div>
+
+            {activeModal === 'add' ? (
+              <div className="modal-body">
+                <input 
+                  type="text" 
+                  value={nickname} 
+                  onChange={e => setNickname(e.target.value)} 
+                  placeholder="Nickname" 
+                  className="capsule-input" 
+                />
+                
+                <div className="styled-select-container">
+                  <select 
+                    className="capsule-input"
+                    value={waterCategory}
+                    onChange={e => setWaterCategory(e.target.value)}
+                  >
+                    {WATER_CATEGORIES.map(cat => (
+                      <option key={cat} value={cat}>
+                        {cat} — {WATER_NEEDS[cat]} in/week
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <input 
+                  type="text" 
+                  value={imageUrl} 
+                  onChange={e => setImageUrl(e.target.value)} 
+                  placeholder="Image URL (Optional)" 
+                  className="capsule-input" 
+                />
+
+                <div className="modal-actions-centered">
+                  <button onClick={handleAddPlant} className="confirm-btn">Confirm Add</button>
+                </div>
+              </div>
+            ) : (
+              <div className="modal-body">
+                {/* Remove Plant Selection */}
+                <div className="capsule-input readonly">
+                  {plants.find(p => p.id === plantToRemoveId)?.nickname || 'Select Plant'}
+                </div>
+
+                <div className="styled-select-container">
+                  <select 
+                    className="capsule-input"
+                    value={plantToRemoveId}
+                    onChange={e => setPlantToRemoveId(Number(e.target.value))}
+                  >
+                    {plants.map(plant => (
+                      <option key={plant.id} value={plant.id}>
+                        {plant.nickname}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="modal-actions-centered">
+                  <button onClick={handleConfirmRemove} className="confirm-btn delete-btn">Confirm Remove</button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* LOWER ROW PANELS */}
       <div className="lower-row">
         <section className="card garden-left">
-          <h3>Watering Needed...</h3>
+          <h3>Plant Details</h3>
+          {selectedPlant ? (
+            <div className="details-content">
+              <h4>{selectedPlant.nickname}</h4>
+              <p><strong>Category:</strong> {selectedPlant.waterCategory}</p>
+              <p><strong>Needs:</strong> {GARDENING_CONFIG.WATER_NEEDS[selectedPlant.waterCategory]} inches/week</p>
+              
+              {/* Visual progress bar or icon can go here */}
+            </div>
+          ) : (
+            <p className="hint-text">Click a plant to see watering needs.</p>
+          )}
         </section>
-
         <section className="schedule-card card">
           <h3>Watering Schedule</h3>
+          {/* Table logic for schedule would go here */}
         </section>
       </div>
     </div>
