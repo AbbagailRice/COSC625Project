@@ -1,17 +1,4 @@
 {
-<<<<<<< HEAD
-  "name": "cosc625project",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs"
-=======
   "name": "dew-diligence",
   "version": "0.1.0",
   "private": true,
@@ -50,5 +37,4 @@
       "last 1 safari version"
     ]
   }
->>>>>>> 796f2c908f74d922b94b6250176874ea436122f3
 }
