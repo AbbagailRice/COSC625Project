@@ -6,7 +6,9 @@ import { getCoordinates, getWeatherData, getPastRainTotal } from '../services/We
 import './App.css';
 
 function App() {
-  const [zip, setZip] = useState('21532'); // Default to prefered location (erica this should be the spot for storage persistance)
+  // Default to preferred location (storage persistance)
+  // Now loads from localStorage if available
+  const [zip, setZip] = useState(() => localStorage.getItem('zip') || '');
   const [weather, setWeather] = useState(null);
   const [loading, setLoading] = useState(true);
   const [fullName, setCityName] = useState('Loading...');
@@ -60,11 +62,15 @@ function App() {
   };
 
   useEffect(() => {
-  // Init Load
-  const loadInitialWeather = async () => {
-    await updateDashboard(zip);
-  };
-  loadInitialWeather();
+    // Init Load
+    const loadInitialWeather = async () => {
+      if (zip) {
+        await updateDashboard(zip);
+      } else {
+        setLoading(false); // No zip yet stop loading spinner
+      }
+    };
+    loadInitialWeather();
 
   // Timer for 30 minute refeshes 
   const refreshInterval = setInterval(() => {
