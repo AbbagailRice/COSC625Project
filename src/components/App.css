@@ -243,83 +243,234 @@ body {
 /* i don't know whats happening here whoever does the styling can fix it ( i was trying to use a overall card styling to no avail)*/
 .garden-view .header {
   margin-bottom: 1rem; 
-  
 }
 
-.garden-view .lower-row {
-  display: flex;
-  gap: 1.5rem;
-  margin-top: 1rem;
-}
-
+/* Main Layout Cards */
 .plant-list-card {
   margin-bottom: 1rem;
-  
   border-radius: 20px;
+  background-color: #fff;
 }
 
+/* Plant Grid - Horizontal Scroll */
 .plant-grid {
   display: flex;
-  gap: 2rem; /* Better breathing room between plants */
-  overflow-x: auto; /* Allows scrolling if you have 10+ plants */
-  padding: 1rem;
-  align-items: center;
+  gap: 2.5rem; 
+  overflow-x: auto; 
+  padding: 1.5rem;
+  align-items: flex-start;
+  scrollbar-width: thin;
 }
 
 /* Individual Plant Items */
-.img-placeholder {
-  width: 70px;
-  height: 70px;
-  background-color: #eee;
-  border-radius: 10px;
-  margin-bottom: 8px;
-  padding: 1rem;
+.plant-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-width: 100px;
 }
 
 .plant-item p {
-  margin: 5px 0 0 0;
-  font-size: 0.9rem;
-  color: var(--text-main);
-  font-weight: 500;
+  margin: 0 0 8px 0;
+  font-size: 0.95rem;
+  color: #333;
+  font-weight: 600;
+}
+
+/* IMAGE STYLING */
+.plant-img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover; /* Keeps added photos cropped nicely */
+  border-radius: 20px;
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  display: block;
+
+  transition: transform 0.2s ease;
+
+  box-sizing: border-box;
+}
+
+.plant-img.placeholder-icon {
+  object-fit: contain; /* Prevents cropping the sprout */
+  padding: 15px;      
+  background-color: #f0f0f0;
+}
+
+.plant-img:hover {
+  transform: scale(1.05);
 }
 
 /* The + Button Styling */
 .add-plant-btn {
-  min-width: 70px;
-  height: 70px;
+  min-width: 100px;
+  height: 100px;
   border: 2px dashed #ccc;
-  border-radius: 12px;
+  border-radius: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 2rem;
+  font-size: 2.5rem;
   color: #aaa;
   cursor: pointer;
   transition: all 0.2s ease;
-  margin-bottom: 25px;
+  margin-top: 28px; /* Aligns with the images below the text */
 }
 
 .add-plant-btn:hover {
-  border-color: var(--primary-green);
-  color: var(--primary-green);
-  background-color: var(--light-green);
+  border-color: #7fb086; /* Match your primary green */
+  color: #7fb086;
+  background-color: #f0f7f1;
 }
 
-/* 5. Lower Row Layout (Watering & Schedule) */
+/* MODAL STYLES */
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.styled-modal-card {
+  background: white;
+  width: 350px;
+  height: 400px;
+  padding: 30px;
+  border-radius: 40px; 
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.modal-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Centers the inputs vertically */
+  gap: 10px;
+}
+
+.modal-tabs {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #888;
+  cursor: pointer;
+  padding: 5px 12px;
+}
+
+.tab-btn.active {
+  color: #333;
+  background-color: #e0e0e0; 
+  border-radius: 20px;
+}
+
+.tab-separator {
+  font-size: 1.5rem;
+  color: #333;
+  font-weight: 300;
+}
+
+/* Capsule-Shaped Inputs */
+.capsule-input {
+  width: 100%;
+  max-width: 250px;
+  margin: 12px auto;
+  display: block;
+  padding: 12px 20px;
+  border-radius: 25px;
+  border: 1px solid #eee;
+  background-color: #f2f2f2; 
+  color: #555;
+  font-size: 0.9rem;
+  text-align: center;
+  outline: none;
+}
+
+/* Action Buttons */
+.modal-actions-centered {
+  margin-top: 25px;
+}
+
+.confirm-btn {
+  background-color: #cfcfcf; /* Grey confirm button from mockup */
+  color: #333;
+  border: none;
+  padding: 10px 30px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.confirm-btn:hover {
+  background-color: var(--sidebar-accent);
+}
+
+.delete-btn {
+  background-color: #cfcfcf;
+  color: #333;
+}
+
+.delete-btn:hover {
+  background-color: #df6262;
+}
+
+/* Lower Row Layout */
 .garden-view .lower-row {
   display: flex;
   gap: 1.5rem;
-  align-items: stretch; /* Makes both cards the same height */
+  margin-top: 1rem;
+  align-items: stretch;
 }
 
-.garden-left {
+.garden-left, .schedule-card {
   flex: 1;
+  border-radius: 20px;
 }
 
-.schedule-card {
-  flex: 1;
+/* Highlight the selected plant */
+.plant-item.selected-highlight .plant-img {
+  border: 3px solid #7fb086; /* Primary green */
+  box-shadow: 0 0 15px rgba(127, 176, 134, 0.4);
 }
 
+.details-content {
+  padding: 1rem;
+  text-align: left;
+  animation: fadeIn 0.3s ease;
+}
 
+.details-content h4 {
+  margin: 0 0 10px 0;
+  color: #333;
+}
 
+.hint-text {
+  color: #888;
+  font-style: italic;
+  margin-top: 20px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
