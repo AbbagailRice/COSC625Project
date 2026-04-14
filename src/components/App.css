@@ -139,13 +139,81 @@ body {
 .short-forecast { font-size: 1.2rem; margin: 0; }
 
 /* Lower Row (Flexbox for Hourly + Alerts) */
+/* the horizontal container that holds the entire bottom section of home view page */
 .lower-row {
   display: flex;
   gap: 1.5rem;
-  flex: 1; /* Take up remaining height */
+  margin-top: 1rem;
+  align-items: flex-start;
 }
 
+/* Alerts and Tips Column */
+/* vertical container that lives inside the right side of the lower row */
+.alerts-and-tips {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ALERT CARDS */
+.alert-card {
+  padding: 20px;
+  border-radius: 20px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #333;
+}
+
+/* Specific Alert Colors */
+.alert-card.frost {
+  background-color: #f0f7ff;
+  border: 1px solid #d1e9ff;
+  color: #0056b3;
+}
+
+.alert-card.extreme-heat {
+  background-color: #fff9f0;
+  border: 1px solid #ffe8cc;
+  color: #b35900;
+}
+
+/* No Alerts State will remove later this is for testing */
+.alert-card.no-alert {
+  background-color: #f8fbf9;
+  border: 1px solid #eef2ef;
+  color: #7a8c7d;
+}
+
+.alert-detail {
+  font-size: 0.85rem;
+  margin-top: 5px;
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+/* Tips Card */
+.alert-card, .tip-card {
+  min-height: 80px; /* Keeps them consistent */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.tip-title {
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.tip-text {
+  font-size: 0.85rem;
+  color: #666;
+  font-weight: 400;
+}
+
+/* hourly forcase section */
 .hourly-grid {
+  flex: 1;
   display: flex;
   justify-content: space-between; /* Spreads the items evenly */
   padding: 1rem 0;
@@ -170,8 +238,13 @@ body {
   margin: 0;
 }
 
-.hourly-forecast-card { flex: 2; } /* Hourly is wider */
-.alerts-and-tips { flex: 1; display: flex; flex-direction: column; gap: 1rem; }
+.hourly-forecast-card {
+  flex: 2; /* Takes up more space than the alerts column */
+  height: 250px; /* Lock height*/
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+}
 
 .hourly-grid {
   display: grid;
@@ -180,9 +253,6 @@ body {
 }
 
 .hour-item { font-weight: bold; font-size: 1.2rem; }
-
-/* Placeholder colors for Alerts */
-.alert-card.heat { background-color: #FFEBEE; border: 2px solid #FF5252; color: #D32F2F; }
 
 /* Rain Total Section */
 .rain-total-container {

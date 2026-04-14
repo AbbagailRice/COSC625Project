@@ -1,6 +1,6 @@
 import React from 'react';
 
-const HomeView = ({ weather, cityName, rainTotal, updateDashboard }) => {
+const HomeView = ({ weather, cityName, rainTotal, updateDashboard, alert }) => {
   // If no weather data exists yet (First visit)
   if (!weather) {
     return (
@@ -23,6 +23,7 @@ const HomeView = ({ weather, cityName, rainTotal, updateDashboard }) => {
     );
   }
 
+  //Active state
   const currentHour = weather.hourly.properties.periods[0];
 
   return (
@@ -69,8 +70,23 @@ const HomeView = ({ weather, cityName, rainTotal, updateDashboard }) => {
         </section>
 
         <section className="alerts-and-tips">
-          <div className="alert-card card heat">Heat Warning Placeholder</div>
-          <div className="tip-card card">Tip of the Day Placeholder</div>
+          {alert && alert.length > 0 ? (
+            alert.map((risk, index) => (
+              <div key={index} className={`alert-card card ${risk.color}`}>
+                <p>{risk.type} Warning</p>
+                <p className="alert-detail">{risk.value}°F detected within 24 hours.</p>
+              </div>
+            ))
+          ) : (
+            <div className="alert-card card no-alert">
+              <p>No weather risks detected.</p>
+            </div>
+          )}
+
+          <div className="tip-card card">
+            <p className="tip-title">Tip of the Day</p>
+            <p className="tip-text">placeholder</p>
+          </div>
         </section>
       </div>
     </div>
