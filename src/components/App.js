@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback} from 'react';
 import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
 import HomeView from '../views/HomeView';
 import GardenView from '../views/GardenView';
@@ -6,16 +6,17 @@ import { getCoordinates, getWeatherData, getPastRainTotal } from '../services/We
 import './App.css';
 
 function App() {
-  // Default to preferred location (storage persistance)
-  // Now loads from localStorage if available
+  // Check localStorage immediately. If empty, zip is an empty string.
   const [zip, setZip] = useState(() => localStorage.getItem('zip') || '');
   const [weather, setWeather] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [fullName, setCityName] = useState('Loading...');
+
+  // Start loading as FALSE if there is no zip to fetch
+  const [loading, setLoading] = useState(zip ? true : false); 
+  const [fullName, setCityName] = useState('');
   const [rainTotal, setRainTotal] = useState('0.00');
 
   // Funct to handel API sequence
-  const updateDashboard = async (searchZip) => {
+  const updateDashboard =  useCallback( async (searchZip) => {
 
     // Validate Zip Code format before making API calls
     const zipRegex = /^[0-9]{5}$/;
@@ -34,23 +35,27 @@ function App() {
         const pointsRes = await fetch(`https://api.weather.gov/points/${coords.lat},${coords.lon}`, {
           headers: { 'User-Agent': process.env.REACT_APP_NWS_USER_AGENT }
         });
-        const pointsData = await pointsRes.json();
-        
-        // Get the city and state from the NWS response to display
-        const city = pointsData.properties.relativeLocation.properties.city;
-        const state = pointsData.properties.relativeLocation.properties.state;
-        setCityName(`${city}, ${state}`);
+      const pointsData = await pointsRes.json();
+      
+      // Get the city and state from the NWS response to display
+      const city = pointsData.properties.relativeLocation.properties.city;
+      const state = pointsData.properties.relativeLocation.properties.state;
+      setCityName(`${city}, ${state}`);
 
-        // Fetch the rain total
-        const total = await getPastRainTotal(coords.lat, coords.lon);
-        setRainTotal(total);
+      // Fetch the rain total
+      const total = await getPastRainTotal(coords.lat, coords.lon);
+      setRainTotal(total);
 
-        // Fetch Weather Data
-        const data = await getWeatherData(coords.lat, coords.lon);
-        if (data) {
-          setWeather(data);
-          setZip(searchZip);
-        }
+      // Fetch Weather Data
+      const data = await getWeatherData(coords.lat, coords.lon);
+      if (data) {
+        setWeather(data);
+
+        if (searchZip !== zip) {
+            setZip(searchZip);
+            localStorage.setItem('zip', searchZip);
+          }
+      }
       } catch (error) {
         console.error("NWS Fetch Error:", error); // Handles API timeouts or downtime
         alert("Weather service is temporarily unavailable.");
@@ -58,39 +63,41 @@ function App() {
     } else {
       alert("Zip Code not found. Please try another area.");
     }
-    setLoading(false);
-  };
+      setLoading(false);
+  }, [zip]); 
 
   useEffect(() => {
-    // Init Load
-    const loadInitialWeather = async () => {
-      if (zip) {
+    // Only trigger logic if we actually have a zip code
+    if (zip) {
+      // Init load for the current zip
+      const loadInitialWeather = async () => {
         await updateDashboard(zip);
-      } else {
-        setLoading(false); // No zip yet stop loading spinner
-      }
-    };
-    loadInitialWeather();
+      };
+      loadInitialWeather();
 
-  // Timer for 30 minute refeshes 
-  const refreshInterval = setInterval(() => {
-    console.log("Auto-refreshing weather data...");
-    updateDashboard(zip);
-  }, 1800000); 
+      // Set up the 30-minute refresh interval
+      const refreshInterval = setInterval(() => {
+        console.log("Auto-refreshing weather data for:", zip);
+        updateDashboard(zip);
+      }, 1800000); 
 
-  // stops the timer if the user closes the page or switches tabs.
-  return () => clearInterval(refreshInterval);
-  
-}, [zip]);
+      // stops the timer if the component unmounts or zip changes
+      return () => clearInterval(refreshInterval);
+    } else {
+      // If no zip exists, loading is off so HomeView shows the search prompt
+      setLoading(false);
+    }
+
+}, [zip, updateDashboard]); // updateDashboard added for dependency best practices
 
   // While data loads, show a simple message
-  if (loading || !weather) {
+  if (loading) {
     return (
       <div className="loading-container">
         <div className="loading-spinner"></div>
         <p>Loading...</p>
       </div>
-  );
+    );
   }
 
 
