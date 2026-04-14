@@ -1,6 +1,28 @@
 import React from 'react';
 
 const HomeView = ({ weather, cityName, rainTotal, updateDashboard }) => {
+  // If no weather data exists yet (First visit)
+  if (!weather) {
+    return (
+      <div className="home-content">
+        <header className="header">
+          <input 
+            type="text" 
+            placeholder="Search Zip Code..." 
+            className="search-bar"
+            onKeyDown={(e) => e.key === 'Enter' && updateDashboard(e.target.value)}
+          />
+        </header>
+        <section className="weather-card empty-state">
+          <div className="weather-info">
+            <h1>Welcome to DewDiligence</h1>
+            <p>Please enter your 5-digit Zip Code above to get started.</p>
+          </div>
+        </section>
+      </div>
+    );
+  }
+
   const currentHour = weather.hourly.properties.periods[0];
 
   return (
