@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { GARDENING_CONFIG } from '../logic/constants';
 import '../components/App.css';
+import { calculateMoisture } from '../logic/moistureLogic';
 
 const WATER_NEEDS = GARDENING_CONFIG.WATER_NEEDS;
 const WATER_CATEGORIES = Object.keys(WATER_NEEDS);
 
 
-const GardenView = ({ cityName }) => {
+const GardenView = ({ cityName, rainTotal }) => {
   // Init State from LocalStorage
   const [plants, setPlants] = useState(() => {
     const saved = localStorage.getItem('dewDiligence_garden');
@@ -31,6 +32,7 @@ const GardenView = ({ cityName }) => {
     }
   }, [plants, plantToRemoveId]);
 
+  // HANDELERS FOR ADDING/REMOVING PLANTS
   const handleAddPlant = () => {
     if (!nickname.trim()) return;
 
@@ -62,19 +64,20 @@ const GardenView = ({ cityName }) => {
     setActiveModal(null);
   };
 
-  // Function to handle clicking a plant
+  // helper to handle clicking a plant
   const [selectedPlant, setSelectedPlant] = useState(null);
 
-  const handlePlantClick = (plant) => {
-    setSelectedPlant(plant);
-  };
-
-  // Filter plants based on search query
+  // FILTERS plants based on search query
   const [searchQuery, setSearchQuery] = useState('');
   
   const filteredPlants = plants.filter(plant => 
     plant.nickname.toLowerCase().startsWith(searchQuery.toLowerCase())
   );
+
+  //Moisture logic
+  const moisture = selectedPlant 
+    ? calculateMoisture(rainTotal, WATER_NEEDS[selectedPlant.waterCategory])
+    : null;
 
   return (
     <div className="garden-view">
@@ -105,24 +108,30 @@ const GardenView = ({ cityName }) => {
           
           {filteredPlants.map(plant => {
             const isDefault = plant.image.includes('628283.png');
+            const needsWater = parseFloat(rainTotal) < WATER_NEEDS[plant.waterCategory];
 
             return (
               <div 
                 key={plant.id} 
                 className={`plant-item ${selectedPlant?.id === plant.id ? 'selected-highlight' : ''}`}
-                onClick={() => handlePlantClick(plant)} // Trigger the selection
-                style={{ cursor: 'pointer' }}
+                onClick={() => setSelectedPlant(plant)}
               >
-                <p>{plant.nickname}</p>
-                <img 
-                  src={plant.image} 
-                  alt={plant.nickname} 
-                  className={`plant-img ${isDefault ? 'placeholder-icon' : ''}`}
-                  onError={(e) => { 
-                    e.target.src = 'https://cdn-icons-png.flaticon.com/512/628/628283.png';
-                    e.target.classList.add('placeholder-icon');
-                  }} 
-                />
+                <p className="plant-nickname-label">{plant.nickname}</p>
+                
+                {/* WRAPPER FOR OVERLAY */}
+                <div className="plant-img-wrapper">
+                  <img 
+                    src={plant.image} 
+                    alt={plant.nickname} 
+                    className={`plant-img ${isDefault ? 'placeholder-icon' : ''}`}
+                    onError={(e) => { 
+                      e.target.src = 'https://cdn-icons-png.flaticon.com/512/628/628283.png';
+                      e.target.classList.add('placeholder-icon');
+                    }} 
+                  />
+                  {/* DROPLIT OVERLAY */}
+                  {needsWater && <span className="drop-overlay">💧</span>}
+                </div>
               </div>
             );
           })}
@@ -225,22 +234,42 @@ const GardenView = ({ cityName }) => {
       {/* LOWER ROW PANELS */}
       <div className="lower-row">
         <section className="card garden-left">
-          <h3>Plant Details</h3>
+          <h3>Soil Status</h3>
           {selectedPlant ? (
             <div className="details-content">
               <h4>{selectedPlant.nickname}</h4>
-              <p><strong>Category:</strong> {selectedPlant.waterCategory}</p>
-              <p><strong>Needs:</strong> {GARDENING_CONFIG.WATER_NEEDS[selectedPlant.waterCategory]} inches/week</p>
-              
-              {/* Visual progress bar or icon can go here */}
+
+              {/* Show the specific need vs the actual rain */}
+              <div className="water-stats">
+                <p>Weekly Need: {WATER_NEEDS[selectedPlant.waterCategory]}"</p>
+                <p>7-Day Rain: {rainTotal}"</p>
+              </div>
+
+              <div className="moisture-meter">
+                <div className="meter-label">
+                  <span>Moisture: {moisture.status}</span>
+                  <span>{moisture.percent}%</span>
+                </div>
+                <div className="meter-bar-bg">
+                  <div className={`meter-bar-fill ${moisture.status.toLowerCase()}`} style={{ width: `${moisture.percent}%` }}></div>
+                </div>
+              </div>
+              <p className="recommendation">
+                {moisture.percent < 25 
+                  ? "Soil is very dry. Water immediately!" 
+                  : moisture.percent < 60 
+                  ? "Soil is damp, but could use a soak soon." 
+                  : "Hydration is excellent!"}
+              </p>
             </div>
           ) : (
-            <p className="hint-text">Click a plant to see watering needs.</p>
+            <p className="hint-text">Select a plant to check moisture levels.</p>
           )}
         </section>
+
         <section className="schedule-card card">
           <h3>Watering Schedule</h3>
-          {/* Table logic for schedule would go here */}
+          {/* Schedule mapping logic here */}
         </section>
       </div>
     </div>

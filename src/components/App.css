@@ -239,7 +239,8 @@ body {
   margin: 0;
 }
 
-/* Garden View Styles */
+/* GARDEN VIEW STYLES */
+
 /* i don't know whats happening here whoever does the styling can fix it ( i was trying to use a overall card styling to no avail)*/
 .garden-view .header {
   margin-bottom: 1rem; 
@@ -279,28 +280,57 @@ body {
 }
 
 /* IMAGE STYLING */
+.plant-img-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100px;
+  height: 100px;
+  margin-top: 10px; /* Gives the floating drop some room */
+}
+
 .plant-img {
   width: 100px;
   height: 100px;
-  object-fit: cover; /* Keeps added photos cropped nicely */
+  object-fit: cover;
   border-radius: 20px;
   background-color: #f9f9f9;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   display: block;
-
   transition: transform 0.2s ease;
-
   box-sizing: border-box;
 }
 
 .plant-img.placeholder-icon {
-  object-fit: contain; /* Prevents cropping the sprout */
+  object-fit: contain;
   padding: 15px;      
   background-color: #f0f0f0;
 }
 
-.plant-img:hover {
-  transform: scale(1.05);
+/* The actual water drop overlay */
+.drop-overlay {
+  position: absolute;
+  top: -8px;    /* Pulls it slightly above the edge */
+  right: -8px;  /* Pulls it slightly outside the edge */
+  font-size: 1.1rem;
+  background: white;
+  width: 26px;
+  height: 26px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+  z-index: 10;
+  pointer-events: none;
+}
+
+/* Updated Label for uniformity */
+.plant-nickname-label {
+  margin: 0 0 8px 0;
+  font-size: 0.9rem;
+  color: #333;
+  font-weight: 500; /* Medium weight, not heavy bold */
+  text-align: center;
 }
 
 /* The + Button Styling */
@@ -474,3 +504,21 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* Water Stats */
+.water-stats {
+  display: flex;
+  justify-content: space-between;
+  background: #d6ecdd;
+  padding: 10px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  border: 3px solid #7fb086;
+}
+
+.water-stats p {
+  margin: 0;
+}
+
+.recommendation {
+  margin-top: 15px;
+}

@@ -124,7 +124,7 @@ function App() {
 
         <main className="main-content">
           <Routes>
-            <Route path="/garden" element={<GardenView cityName={fullName} />} />
+            <Route path="/garden" element={<GardenView cityName={fullName} rainTotal={rainTotal} />} />
             <Route path="/" element={
               <HomeView 
                 weather={weather} 
