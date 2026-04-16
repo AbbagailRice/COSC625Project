@@ -376,22 +376,27 @@ body {
   background-color: #f0f0f0;
 }
 
-/* The actual water drop overlay */
-.drop-overlay {
-  position: absolute;
-  top: -8px;    /* Pulls it slightly above the edge */
-  right: -8px;  /* Pulls it slightly outside the edge */
-  font-size: 1.1rem;
-  background: white;
-  width: 26px;
-  height: 26px;
+/* The icons that float inside the wrapper */
+.status-icon-stack {
+  position: absolute; 
+  bottom: 5px;       
+  right: 5px;        
+  display: flex;
+  flex-direction: column; 
+  gap: 4px;
+  z-index: 10;     
+}
+
+.status-icon {
+  background: white; 
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-radius: 50%;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-  z-index: 10;
-  pointer-events: none;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
 /* Updated Label for uniformity */
@@ -443,7 +448,7 @@ body {
 .styled-modal-card {
   background: white;
   width: 350px;
-  height: 400px;
+  height: 500px;
   padding: 30px;
   border-radius: 40px; 
   box-shadow: 0 10px 25px rgba(0,0,0,0.1);
@@ -464,6 +469,28 @@ body {
   align-items: center;
   gap: 15px;
   margin-bottom: 30px;
+}
+
+/* Stacks the two zone inputs horizontally */
+.zone-input-row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.zone-input-row .capsule-input {
+  flex: 1; /* Makes them equal width */
+  margin: 12px 0;
+}
+
+/* Styles the checkbox row */
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 0;
+  font-size: 0.9rem;
+  color: #555;
 }
 
 .tab-btn {
@@ -497,7 +524,7 @@ body {
   padding: 12px 20px;
   border-radius: 25px;
   border: 1px solid #eee;
-  background-color: #f2f2f2; 
+  background-color: #c4d6bc; 
   color: #555;
   font-size: 0.9rem;
   text-align: center;
@@ -510,7 +537,7 @@ body {
 }
 
 .confirm-btn {
-  background-color: #cfcfcf; /* Grey confirm button from mockup */
+  background-color: #cfcfcf; 
   color: #333;
   border: none;
   padding: 10px 30px;
@@ -544,6 +571,10 @@ body {
 .garden-left, .schedule-card {
   flex: 1;
   border-radius: 20px;
+}
+
+.garden-left h3 {
+  margin-bottom: -0.5rem; /* Reduce space below "Status of..." */
 }
 
 /* Highlight the selected plant */

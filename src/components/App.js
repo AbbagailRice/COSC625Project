@@ -140,7 +140,13 @@ function App() {
 
         <main className="main-content">
           <Routes>
-            <Route path="/garden" element={<GardenView cityName={fullName} rainTotal={rainTotal} />} />
+            <Route path="/garden" element={
+              <GardenView 
+                cityName={fullName} 
+                rainTotal={rainTotal} 
+                weatherAlert={weatherAlert}
+                weather={weather}/>}
+                />
             <Route path="/" element={
               <HomeView 
                 weather={weather} 
