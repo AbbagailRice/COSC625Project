@@ -139,13 +139,81 @@ body {
 .short-forecast { font-size: 1.2rem; margin: 0; }
 
 /* Lower Row (Flexbox for Hourly + Alerts) */
+/* the horizontal container that holds the entire bottom section of home view page */
 .lower-row {
   display: flex;
   gap: 1.5rem;
-  flex: 1; /* Take up remaining height */
+  margin-top: 1rem;
+  align-items: flex-start;
 }
 
+/* Alerts and Tips Column */
+/* vertical container that lives inside the right side of the lower row */
+.alerts-and-tips {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ALERT CARDS */
+.alert-card {
+  padding: 20px;
+  border-radius: 20px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #333;
+}
+
+/* Specific Alert Colors */
+.alert-card.frost {
+  background-color: #f0f7ff;
+  border: 1px solid #d1e9ff;
+  color: #0056b3;
+}
+
+.alert-card.extreme-heat {
+  background-color: #fff9f0;
+  border: 1px solid #ffe8cc;
+  color: #b35900;
+}
+
+/* No Alerts State will remove later this is for testing */
+.alert-card.no-alert {
+  background-color: #f8fbf9;
+  border: 1px solid #eef2ef;
+  color: #7a8c7d;
+}
+
+.alert-detail {
+  font-size: 0.85rem;
+  margin-top: 5px;
+  font-weight: 400;
+  opacity: 0.8;
+}
+
+/* Tips Card */
+.alert-card, .tip-card {
+  min-height: 80px; /* Keeps them consistent */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.tip-title {
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.tip-text {
+  font-size: 0.85rem;
+  color: #666;
+  font-weight: 400;
+}
+
+/* hourly forcase section */
 .hourly-grid {
+  flex: 1;
   display: flex;
   justify-content: space-between; /* Spreads the items evenly */
   padding: 1rem 0;
@@ -170,8 +238,13 @@ body {
   margin: 0;
 }
 
-.hourly-forecast-card { flex: 2; } /* Hourly is wider */
-.alerts-and-tips { flex: 1; display: flex; flex-direction: column; gap: 1rem; }
+.hourly-forecast-card {
+  flex: 2; /* Takes up more space than the alerts column */
+  height: 250px; /* Lock height*/
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+}
 
 .hourly-grid {
   display: grid;
@@ -180,9 +253,6 @@ body {
 }
 
 .hour-item { font-weight: bold; font-size: 1.2rem; }
-
-/* Placeholder colors for Alerts */
-.alert-card.heat { background-color: #FFEBEE; border: 2px solid #FF5252; color: #D32F2F; }
 
 /* Rain Total Section */
 .rain-total-container {
@@ -239,7 +309,8 @@ body {
   margin: 0;
 }
 
-/* Garden View Styles */
+/* GARDEN VIEW STYLES */
+
 /* i don't know whats happening here whoever does the styling can fix it ( i was trying to use a overall card styling to no avail)*/
 .garden-view .header {
   margin-bottom: 1rem; 
@@ -279,28 +350,62 @@ body {
 }
 
 /* IMAGE STYLING */
+.plant-img-wrapper {
+  position: relative;
+  display: inline-block;
+  width: 100px;
+  height: 100px;
+  margin-top: 10px; /* Gives the floating drop some room */
+}
+
 .plant-img {
   width: 100px;
   height: 100px;
-  object-fit: cover; /* Keeps added photos cropped nicely */
+  object-fit: cover;
   border-radius: 20px;
   background-color: #f9f9f9;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   display: block;
-
   transition: transform 0.2s ease;
-
   box-sizing: border-box;
 }
 
 .plant-img.placeholder-icon {
-  object-fit: contain; /* Prevents cropping the sprout */
+  object-fit: contain;
   padding: 15px;      
   background-color: #f0f0f0;
 }
 
-.plant-img:hover {
-  transform: scale(1.05);
+/* The icons that float inside the wrapper */
+.status-icon-stack {
+  position: absolute; 
+  bottom: 5px;       
+  right: 5px;        
+  display: flex;
+  flex-direction: column; 
+  gap: 4px;
+  z-index: 10;     
+}
+
+.status-icon {
+  background: white; 
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Updated Label for uniformity */
+.plant-nickname-label {
+  margin: 0 0 8px 0;
+  font-size: 0.9rem;
+  color: #333;
+  font-weight: 500; /* Medium weight, not heavy bold */
+  text-align: center;
 }
 
 /* The + Button Styling */
@@ -343,7 +448,7 @@ body {
 .styled-modal-card {
   background: white;
   width: 350px;
-  height: 400px;
+  height: 500px;
   padding: 30px;
   border-radius: 40px; 
   box-shadow: 0 10px 25px rgba(0,0,0,0.1);
@@ -364,6 +469,28 @@ body {
   align-items: center;
   gap: 15px;
   margin-bottom: 30px;
+}
+
+/* Stacks the two zone inputs horizontally */
+.zone-input-row {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+}
+
+.zone-input-row .capsule-input {
+  flex: 1; /* Makes them equal width */
+  margin: 12px 0;
+}
+
+/* Styles the checkbox row */
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 5px 0;
+  font-size: 0.9rem;
+  color: #555;
 }
 
 .tab-btn {
@@ -397,7 +524,7 @@ body {
   padding: 12px 20px;
   border-radius: 25px;
   border: 1px solid #eee;
-  background-color: #f2f2f2; 
+  background-color: #c4d6bc; 
   color: #555;
   font-size: 0.9rem;
   text-align: center;
@@ -410,7 +537,7 @@ body {
 }
 
 .confirm-btn {
-  background-color: #cfcfcf; /* Grey confirm button from mockup */
+  background-color: #cfcfcf; 
   color: #333;
   border: none;
   padding: 10px 30px;
@@ -446,6 +573,10 @@ body {
   border-radius: 20px;
 }
 
+.garden-left h3 {
+  margin-bottom: -0.5rem; /* Reduce space below "Status of..." */
+}
+
 /* Highlight the selected plant */
 .plant-item.selected-highlight .plant-img {
   border: 3px solid #7fb086; /* Primary green */
@@ -474,3 +605,21 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* Water Stats */
+.water-stats {
+  display: flex;
+  justify-content: space-between;
+  background: #d6ecdd;
+  padding: 10px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  border: 3px solid #7fb086;
+}
+
+.water-stats p {
+  margin: 0;
+}
+
+.recommendation {
+  margin-top: 15px;
+}

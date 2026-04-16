@@ -4,11 +4,15 @@ import HomeView from '../views/HomeView';
 import GardenView from '../views/GardenView';
 import { getCoordinates, getWeatherData, getPastRainTotal } from '../services/WeatherService';
 import './App.css';
+import { checkExtremeTemps } from '../logic/weatherAlerts';
 
 function App() {
   // Check localStorage immediately. If empty, zip is an empty string.
   const [zip, setZip] = useState(() => localStorage.getItem('zip') || '');
   const [weather, setWeather] = useState(null);
+
+  // Weather Alert State to track any extreme conditions
+  const [weatherAlert, setWeatherAlert] = useState({ hasRisk: false });
 
   // Start loading as FALSE if there is no zip to fetch
   const [loading, setLoading] = useState(zip ? true : false); 
@@ -51,6 +55,17 @@ function App() {
       if (data) {
         setWeather(data);
 
+        // Check for any extreme temperature risks in the forecast and update alert state
+        if (data.hourly) {
+          const allPeriods = data.hourly.properties.periods;
+          
+          // Slice to only check the first 24 hours
+          const next24Hours = allPeriods.slice(0, 24); 
+          
+          const riskInfo = checkExtremeTemps(next24Hours);
+          setWeatherAlert(riskInfo);
+        }
+
         if (searchZip !== zip) {
             setZip(searchZip);
             localStorage.setItem('zip', searchZip);
@@ -63,7 +78,8 @@ function App() {
     } else {
       alert("Zip Code not found. Please try another area.");
     }
-      setLoading(false);
+
+    setLoading(false);
   }, [zip]); 
 
   useEffect(() => {
@@ -124,13 +140,20 @@ function App() {
 
         <main className="main-content">
           <Routes>
-            <Route path="/garden" element={<GardenView cityName={fullName} />} />
+            <Route path="/garden" element={
+              <GardenView 
+                cityName={fullName} 
+                rainTotal={rainTotal} 
+                weatherAlert={weatherAlert}
+                weather={weather}/>}
+                />
             <Route path="/" element={
               <HomeView 
                 weather={weather} 
                 cityName={fullName} 
                 rainTotal={rainTotal}
                 updateDashboard={updateDashboard} 
+                alert={weatherAlert}
               />
             } />
           </Routes>

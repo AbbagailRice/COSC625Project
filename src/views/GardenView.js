@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { GARDENING_CONFIG } from '../logic/constants';
 import '../components/App.css';
+import { calculateMoisture } from '../logic/moistureLogic';
 
 const WATER_NEEDS = GARDENING_CONFIG.WATER_NEEDS;
 const WATER_CATEGORIES = Object.keys(WATER_NEEDS);
 
 
-const GardenView = ({ cityName }) => {
+const GardenView = ({ cityName, rainTotal, weatherAlert = [], weather }) => {
   // Init State from LocalStorage
   const [plants, setPlants] = useState(() => {
     const saved = localStorage.getItem('dewDiligence_garden');
@@ -22,6 +23,11 @@ const GardenView = ({ cityName }) => {
   const [waterCategory, setWaterCategory] = useState(WATER_CATEGORIES[0]);
   const [plantToRemoveId, setPlantToRemoveId] = useState(null);
 
+  // sensitive plant filters
+  const [minZone, setMinZone] = useState('');
+  const [maxZone, setMaxZone] = useState('');
+  const [frostResistant, setFrostResistant] = useState(false);
+
   // Persist to LocalStorage whenever plants change
   useEffect(() => {
     localStorage.setItem('dewDiligence_garden', JSON.stringify(plants));
@@ -31,6 +37,8 @@ const GardenView = ({ cityName }) => {
     }
   }, [plants, plantToRemoveId]);
 
+  
+  // HANDELERS FOR ADDING/REMOVING PLANTS
   const handleAddPlant = () => {
     if (!nickname.trim()) return;
 
@@ -40,17 +48,24 @@ const GardenView = ({ cityName }) => {
       return;
     }
 
-    const newPlant = {
+  const newPlant = {
       id: Date.now(),
       nickname: nickname.trim(),
       waterCategory,
-      // Uses specific URL if provided, otherwise a default sprout icon
+      minZone: Number(minZone),
+      maxZone: Number(maxZone),
+      frostResistant,
       image: imageUrl.trim() || 'https://cdn-icons-png.flaticon.com/512/628/628283.png'
     };
 
     setPlants([...plants, newPlant]);
+
+    // RESET to empty for the next plant
     setNickname('');
     setImageUrl('');
+    setMinZone('');
+    setMaxZone('');
+    setFrostResistant(false);
     setActiveModal(null);
   };
 
@@ -62,19 +77,20 @@ const GardenView = ({ cityName }) => {
     setActiveModal(null);
   };
 
-  // Function to handle clicking a plant
+  // helper to handle clicking a plant
   const [selectedPlant, setSelectedPlant] = useState(null);
 
-  const handlePlantClick = (plant) => {
-    setSelectedPlant(plant);
-  };
-
-  // Filter plants based on search query
+  // FILTERS plants based on search query
   const [searchQuery, setSearchQuery] = useState('');
   
   const filteredPlants = plants.filter(plant => 
     plant.nickname.toLowerCase().startsWith(searchQuery.toLowerCase())
   );
+
+  //Moisture logic
+  const moisture = selectedPlant 
+    ? calculateMoisture(rainTotal, WATER_NEEDS[selectedPlant.waterCategory])
+    : null;
 
   return (
     <div className="garden-view">
@@ -100,29 +116,48 @@ const GardenView = ({ cityName }) => {
           ) : filteredPlants.length === 0 && (
             <p className="empty-msg">No plants yet. Add one!</p>
           )}
-
-          {/* RENDER FILTERED LIST */}
           
           {filteredPlants.map(plant => {
             const isDefault = plant.image.includes('628283.png');
+            const needsWater = parseFloat(rainTotal) < WATER_NEEDS[plant.waterCategory];
+            
+            console.log("Active Alerts:", weatherAlert);
+            console.log(`Checking ${plant.nickname}: FrostResist: ${plant.frostResistant}`);
+
+            // sensitve risks
+            const hasFrostRisk = weatherAlert.some(r => r.type === 'Frost') && !plant.frostResistant;
+            const hasHeatRisk = weatherAlert.some(r => r.type === 'Extreme Heat') && plant.maxZone <= 8;
+
+            const currentTemp = weather?.hourly?.properties?.periods[0]?.temperature;
+            const isBelowMinZone = currentTemp <= GARDENING_CONFIG.ZONE_TEMP_MAP[plant.minZone];
+            console.log(`Debug [${plant.nickname}]: Temp: ${weather?.hourly?.properties?.periods[0]?.temperature}, Plant MinZone: ${plant.minZone}`);
 
             return (
               <div 
                 key={plant.id} 
                 className={`plant-item ${selectedPlant?.id === plant.id ? 'selected-highlight' : ''}`}
-                onClick={() => handlePlantClick(plant)} // Trigger the selection
-                style={{ cursor: 'pointer' }}
+                onClick={() => setSelectedPlant(plant)}
               >
-                <p>{plant.nickname}</p>
-                <img 
-                  src={plant.image} 
-                  alt={plant.nickname} 
-                  className={`plant-img ${isDefault ? 'placeholder-icon' : ''}`}
-                  onError={(e) => { 
-                    e.target.src = 'https://cdn-icons-png.flaticon.com/512/628/628283.png';
-                    e.target.classList.add('placeholder-icon');
-                  }} 
-                />
+                <p className="plant-nickname-label">{plant.nickname}</p>
+                
+                {/* WRAPPER FOR OVERLAY */}
+                <div className="plant-img-wrapper">
+                  <img 
+                    src={plant.image} 
+                    alt={plant.nickname} 
+                    className={`plant-img ${isDefault ? 'placeholder-icon' : ''}`}
+                    onError={(e) => { 
+                      e.target.src = 'https://cdn-icons-png.flaticon.com/512/628/628283.png';
+                      e.target.classList.add('placeholder-icon');
+                    }} 
+                  />
+                  {/* ICON STACK OVERLAY */}
+                  <div className="status-icon-stack">
+                    {needsWater && <span className="status-icon drop">💧</span>}
+                    {(hasFrostRisk || isBelowMinZone) && <span className="status-icon snow">❄️</span>}
+                    {hasHeatRisk && <span className="status-icon flame">🔥</span>}
+                  </div>
+                </div>
               </div>
             );
           })}
@@ -158,6 +193,7 @@ const GardenView = ({ cityName }) => {
 
             {activeModal === 'add' ? (
               <div className="modal-body">
+                {/* Nickname */}
                 <input 
                   type="text" 
                   value={nickname} 
@@ -167,6 +203,7 @@ const GardenView = ({ cityName }) => {
                 />
                 
                 <div className="styled-select-container">
+                  {/* Water category */}
                   <select 
                     className="capsule-input"
                     value={waterCategory}
@@ -178,6 +215,35 @@ const GardenView = ({ cityName }) => {
                       </option>
                     ))}
                   </select>
+                </div>
+                {/* Zone Input Row */}
+                <div className="zone-input-row">
+                  <input 
+                    type="number" 
+                    value={minZone} 
+                    onChange={e => setMinZone(e.target.value)} 
+                    placeholder="Min Zone" 
+                    className="capsule-input" 
+                  />
+                  <input 
+                    type="number" 
+                    value={maxZone} 
+                    onChange={e => setMaxZone(e.target.value)} 
+                    placeholder="Max Zone" 
+                    className="capsule-input" 
+                  />
+                </div>
+
+                {/* Frost Resistance Checkbox */}
+                <div className="checkbox-row">
+                  <label className="checkbox-label">
+                    <input 
+                      type="checkbox" 
+                      checked={frostResistant} 
+                      onChange={e => setFrostResistant(e.target.checked)} 
+                    />
+                    Frost Resistant?
+                  </label>
                 </div>
 
                 <input 
@@ -225,22 +291,46 @@ const GardenView = ({ cityName }) => {
       {/* LOWER ROW PANELS */}
       <div className="lower-row">
         <section className="card garden-left">
-          <h3>Plant Details</h3>
+          {/* DYNAMIC HEADING */}
+          <h3>Status {selectedPlant ? `of ${selectedPlant.nickname}` : ""}</h3>
           {selectedPlant ? (
             <div className="details-content">
-              <h4>{selectedPlant.nickname}</h4>
-              <p><strong>Category:</strong> {selectedPlant.waterCategory}</p>
-              <p><strong>Needs:</strong> {GARDENING_CONFIG.WATER_NEEDS[selectedPlant.waterCategory]} inches/week</p>
-              
-              {/* Visual progress bar or icon can go here */}
+              {/* Zone Range Display */}
+              <div className="zone-range-display">
+                <p className="zone-text">Hardiness Zones: {selectedPlant.minZone} - {selectedPlant.maxZone}</p>
+              </div>
+
+              {/* Show the specific need vs the actual rain */}
+              <div className="water-stats">
+                <p>Weekly Need: {WATER_NEEDS[selectedPlant.waterCategory]}"</p>
+                <p>7-Day Rain: {rainTotal}"</p>
+              </div>
+
+              <div className="moisture-meter">
+                <div className="meter-label">
+                  <span>Moisture: {moisture.status}</span>
+                  <span> {moisture.percent}%</span>
+                </div>
+                <div className="meter-bar-bg">
+                  <div className={`meter-bar-fill ${moisture.status.toLowerCase()}`} style={{ width: `${moisture.percent}%` }}></div>
+                </div>
+              </div>
+              <p className="recommendation">
+                {moisture.percent < 25 
+                  ? "Soil is very dry. Water immediately!" 
+                  : moisture.percent < 60 
+                  ? "Soil is damp, but could use a soak soon." 
+                  : "Hydration is excellent!"}
+              </p>
             </div>
           ) : (
-            <p className="hint-text">Click a plant to see watering needs.</p>
+            <p className="hint-text">Select a plant to check moisture levels.</p>
           )}
         </section>
+
         <section className="schedule-card card">
           <h3>Watering Schedule</h3>
-          {/* Table logic for schedule would go here */}
+          {/* Schedule mapping logic here */}
         </section>
       </div>
     </div>
