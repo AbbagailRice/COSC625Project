@@ -93,17 +93,11 @@ const tip = getTipOfTheDay(weather, rainTotal);
                     {risk.value}°F detected within 24 hours.
                   </p>
 
-                  {/* ACTIONS */}
-                  <ul>
-                    {risk.action?.map((step, i) => (
-                      <li key={i}>{step}</li>
-                    ))}
-                  </ul>
+
 
                   {/* DISMISS BUTTON
                   //Adds alert type to dismissedAlerts state.
                   // Prevents this alert from being rendered again during session*/}
-                  Adds the alert type to dismissedAlerts state
                   <button
                     onClick={() =>
                       setDismissedAlerts((prev) =>

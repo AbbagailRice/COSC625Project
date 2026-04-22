@@ -322,6 +322,17 @@ const GardenView = ({ cityName, rainTotal, weatherAlert = [], weather }) => {
                   ? "Soil is damp, but could use a soak soon." 
                   : "Hydration is excellent!"}
               </p>
+              {selectedPlant && weatherAlert.length > 0 && (
+               <ul className="alert-actions">
+              {weatherAlert.flatMap(alert =>
+               alert.action.map((step, i) => (
+              <li key={alert.type + i}>
+              {step.replace("your plant", selectedPlant.nickname)}
+           </li>
+           ))
+         )}
+   </ul>
+)}
             </div>
           ) : (
             <p className="hint-text">Select a plant to check moisture levels.</p>
