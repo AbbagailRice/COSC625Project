@@ -1,6 +1,18 @@
-import React from 'react';
+import { getTipOfTheDay } from '../logic/tipLogic';
+import React, { useState } from 'react';
 
 const HomeView = ({ weather, cityName, rainTotal, updateDashboard, alert }) => {
+// Filters out alerts that the user has dismissed
+// Only alerts NOT in dismissedAlerts are shown on the dashboard
+  const [dismissedAlerts, setDismissedAlerts] = useState([]);
+  const visibleAlerts = (alert || []).filter(
+  a => !dismissedAlerts.includes(a.type)
+);
+// Extract the current hour forecast then generate contextual tip based on weather conditions
+const currentHour = weather.hourly.properties.periods[0];
+const tip = getTipOfTheDay(weather, rainTotal);
+
+
   // If no weather data exists yet (First visit)
   if (!weather) {
     return (
@@ -22,9 +34,6 @@ const HomeView = ({ weather, cityName, rainTotal, updateDashboard, alert }) => {
       </div>
     );
   }
-
-  //Active state
-  const currentHour = weather.hourly.properties.periods[0];
 
   return (
     <div className="home-content">
@@ -69,14 +78,46 @@ const HomeView = ({ weather, cityName, rainTotal, updateDashboard, alert }) => {
           </div>
         </section>
 
+
         <section className="alerts-and-tips">
-          {alert && alert.length > 0 ? (
-            alert.map((risk, index) => (
-              <div key={index} className={`alert-card card ${risk.color}`}>
-                <p>{risk.type} Warning</p>
-                <p className="alert-detail">{risk.value}°F detected within 24 hours.</p>
-              </div>
-            ))
+          {visibleAlerts.length > 0 ? (
+            <div className="alert-container">
+              {visibleAlerts.map((risk) => (
+                <div
+                  key={risk.type}
+                  className={`alert-card card ${risk.color}`}
+                >
+                  <p>{risk.type} Warning</p>
+
+                  <p className="alert-detail">
+                    {risk.value}°F detected within 24 hours.
+                  </p>
+
+                  {/* ACTIONS */}
+                  <ul>
+                    {risk.action?.map((step, i) => (
+                      <li key={i}>{step}</li>
+                    ))}
+                  </ul>
+
+                  {/* DISMISS BUTTON
+                  //Adds alert type to dismissedAlerts state.
+                  // Prevents this alert from being rendered again during session*/}
+                  Adds the alert type to dismissedAlerts state
+                  <button
+                    onClick={() =>
+                      setDismissedAlerts((prev) =>
+                        prev.includes(risk.type)
+                          ? prev
+                          : [...prev, risk.type]
+                      )
+                    }
+                  >
+                    Dismiss
+                  </button>
+                </div>
+              ))}
+            </div>
           ) : (
             <div className="alert-card card no-alert">
               <p>No weather risks detected.</p>
@@ -85,8 +126,9 @@ const HomeView = ({ weather, cityName, rainTotal, updateDashboard, alert }) => {
 
           <div className="tip-card card">
             <p className="tip-title">Tip of the Day</p>
-            <p className="tip-text">placeholder</p>
-          </div>
+             {/* Displays generated gardening tip based on current weather conditions */}
+            <p className="tip-text">{tip}</p>   
+               </div>
         </section>
       </div>
     </div>
