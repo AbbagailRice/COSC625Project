@@ -1,5 +1,5 @@
-import React from 'react';
 import { getTipOfTheDay } from '../logic/tipLogic';
+import React, { useState } from 'react';
 
 const HomeView = ({ weather, cityName, rainTotal, updateDashboard, alert }) => {
 // Filters out alerts that the user has dismissed
@@ -42,14 +42,6 @@ const handleRefreshTip = (e) => {
     );
   }
 
-  // Active state
-  const currentHour = weather.hourly.properties.periods[0];
-
-  // Generate tip from live forecast data
-  // Pre-condition:  weather and rainTotal have been retrieved
-  // Post-condition: relevant forecast signals are extracted and a tip is selected
-  const tip = getTipOfTheDay(weather, rainTotal);
-
   return (
     <div className="home-content">
       <header className="header">
@@ -60,6 +52,7 @@ const handleRefreshTip = (e) => {
           onKeyDown={(e) => e.key === 'Enter' && updateDashboard(e.target.value)}
         />
       </header>
+
       <section className="weather-card">
         <div className="weather-info">
           <h1>{cityName}</h1>
@@ -67,6 +60,8 @@ const handleRefreshTip = (e) => {
           <p className="short-forecast">{currentHour.shortForecast}</p>
         </div>
       </section>
+
+
       <div className="lower-row">
         <section className="hourly-forecast-card card">
           <h2>Hourly Forecast</h2>
@@ -81,7 +76,7 @@ const handleRefreshTip = (e) => {
             ))}
             <div className="rain-total-container">
               <div className="rain-label">
-                7-Day Rain Total
+                 7-Day Rain Total
               </div>
               <div className="rain-value">
                 {rainTotal} inches
@@ -89,6 +84,8 @@ const handleRefreshTip = (e) => {
             </div>
           </div>
         </section>
+
+
         <section className="alerts-and-tips">
           {visibleAlerts.length > 0 ? (
             <div className="alert-container">
@@ -138,10 +135,7 @@ const handleRefreshTip = (e) => {
               <p className="tip-text">{tip}</p>   
             </div>
           )}
-          <div className="tip-card card">
-            <p className="tip-title">Tip of the Day</p>
-            <p className="tip-text">{tip}</p>
-          </div>
+
         </section>
       </div>
     </div>
