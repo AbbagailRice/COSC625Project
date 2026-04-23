@@ -1,4 +1,5 @@
 import React from 'react';
+import { getTipOfTheDay } from '../logic/tipLogic';
 
 const HomeView = ({ weather, cityName, rainTotal, updateDashboard, alert }) => {
   // If no weather data exists yet (First visit)
@@ -23,8 +24,13 @@ const HomeView = ({ weather, cityName, rainTotal, updateDashboard, alert }) => {
     );
   }
 
-  //Active state
+  // Active state
   const currentHour = weather.hourly.properties.periods[0];
+
+  // Generate tip from live forecast data
+  // Pre-condition:  weather and rainTotal have been retrieved
+  // Post-condition: relevant forecast signals are extracted and a tip is selected
+  const tip = getTipOfTheDay(weather, rainTotal);
 
   return (
     <div className="home-content">
@@ -36,7 +42,6 @@ const HomeView = ({ weather, cityName, rainTotal, updateDashboard, alert }) => {
           onKeyDown={(e) => e.key === 'Enter' && updateDashboard(e.target.value)}
         />
       </header>
-
       <section className="weather-card">
         <div className="weather-info">
           <h1>{cityName}</h1>
@@ -44,8 +49,6 @@ const HomeView = ({ weather, cityName, rainTotal, updateDashboard, alert }) => {
           <p className="short-forecast">{currentHour.shortForecast}</p>
         </div>
       </section>
-
-
       <div className="lower-row">
         <section className="hourly-forecast-card card">
           <h2>Hourly Forecast</h2>
@@ -60,7 +63,7 @@ const HomeView = ({ weather, cityName, rainTotal, updateDashboard, alert }) => {
             ))}
             <div className="rain-total-container">
               <div className="rain-label">
-                 7-Day Rain Total
+                7-Day Rain Total
               </div>
               <div className="rain-value">
                 {rainTotal} inches
@@ -68,7 +71,6 @@ const HomeView = ({ weather, cityName, rainTotal, updateDashboard, alert }) => {
             </div>
           </div>
         </section>
-
         <section className="alerts-and-tips">
           {alert && alert.length > 0 ? (
             alert.map((risk, index) => (
@@ -82,10 +84,9 @@ const HomeView = ({ weather, cityName, rainTotal, updateDashboard, alert }) => {
               <p>No weather risks detected.</p>
             </div>
           )}
-
           <div className="tip-card card">
             <p className="tip-title">Tip of the Day</p>
-            <p className="tip-text">placeholder</p>
+            <p className="tip-text">{tip}</p>
           </div>
         </section>
       </div>
