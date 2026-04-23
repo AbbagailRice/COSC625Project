@@ -3,7 +3,7 @@
  */
 export const GARDENING_CONFIG = {
   MAX_PLANTS: 50,                // From your 'Capacity' requirement
-  FROST_THRESHOLD: 72,          // Degrees Fahrenheit
+  FROST_THRESHOLD: 32,          // Degrees Fahrenheit
   HEAT_THRESHOLD: 70,           // Degrees Fahrenheit
   HEAT_WARNING_MARGIN: 5,
   DEFAULT_LAT: 39.5298,         // Rawlings, MD Latitude

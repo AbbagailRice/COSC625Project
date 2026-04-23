@@ -55,7 +55,8 @@ const GardenView = ({ cityName, rainTotal, weatherAlert = [], weather }) => {
       minZone: Number(minZone),
       maxZone: Number(maxZone),
       frostResistant,
-      image: imageUrl.trim() || 'https://cdn-icons-png.flaticon.com/512/628/628283.png'
+      image: imageUrl.trim() || 'https://cdn-icons-png.flaticon.com/512/628/628283.png',
+      waterHistory: [] 
     };
 
     setPlants([...plants, newPlant]);
@@ -67,6 +68,23 @@ const GardenView = ({ cityName, rainTotal, weatherAlert = [], weather }) => {
     setMaxZone('');
     setFrostResistant(false);
     setActiveModal(null);
+  };
+
+  const handleManualWater = (plantId, amount) => {
+    const now = new Date().toISOString();
+    
+    const updatedPlants = plants.map(plant => {
+      if (plant.id === plantId) {
+        const history = plant.waterHistory || [];
+        return {
+          ...plant,
+          waterHistory: [{ date: now, amount: parseFloat(amount) }, ...history].slice(0, 10)        };
+      }
+      return plant;
+    });
+
+    setPlants(updatedPlants);
+    setSelectedPlant(updatedPlants.find(p => p.id === plantId));
   };
 
   const handleConfirmRemove = () => {
@@ -87,9 +105,12 @@ const GardenView = ({ cityName, rainTotal, weatherAlert = [], weather }) => {
     plant.nickname.toLowerCase().startsWith(searchQuery.toLowerCase())
   );
 
-  //Moisture logic
+  // Moisture Logic
+  // Find the last time this plant was watered
+  const lastWateredDate = selectedPlant?.waterHistory?.[0];
+
   const moisture = selectedPlant 
-    ? calculateMoisture(rainTotal, WATER_NEEDS[selectedPlant.waterCategory])
+    ? calculateMoisture(rainTotal, WATER_NEEDS[selectedPlant.waterCategory], selectedPlant.waterHistory)
     : null;
 
   return (
@@ -119,7 +140,13 @@ const GardenView = ({ cityName, rainTotal, weatherAlert = [], weather }) => {
           
           {filteredPlants.map(plant => {
             const isDefault = plant.image.includes('628283.png');
-            const needsWater = parseFloat(rainTotal) < WATER_NEEDS[plant.waterCategory];
+            const plantMoisture = calculateMoisture(
+              rainTotal, 
+              WATER_NEEDS[plant.waterCategory], 
+              plant.waterHistory // Pass the last watered date
+            );
+
+            const needsWater = plantMoisture.percent < 60; // Icon disappears if 60% or higher
             
             console.log("Active Alerts:", weatherAlert);
             console.log(`Checking ${plant.nickname}: FrostResist: ${plant.frostResistant}`);
@@ -302,8 +329,13 @@ const GardenView = ({ cityName, rainTotal, weatherAlert = [], weather }) => {
 
               {/* Show the specific need vs the actual rain */}
               <div className="water-stats">
-                <p>Weekly Need: {WATER_NEEDS[selectedPlant.waterCategory]}"</p>
-                <p>7-Day Rain: {rainTotal}"</p>
+                <div className="stat-row">
+                  <span>Weekly Need: {WATER_NEEDS[selectedPlant.waterCategory]}"</span>
+                  <span>7-Day Rain: {rainTotal}"</span>
+                </div>
+                <div className="stat-row total-highlight">
+                  <span>Overall Total:{moisture.totalReceived}"</span>
+                </div>
               </div>
 
               <div className="moisture-meter">
@@ -322,6 +354,29 @@ const GardenView = ({ cityName, rainTotal, weatherAlert = [], weather }) => {
                   ? "Soil is damp, but could use a soak soon." 
                   : "Hydration is excellent!"}
               </p>
+              {selectedPlant && weatherAlert.length > 0 && (
+                <ul className="alert-actions">
+                  {weatherAlert
+                    // Filter the alerts based on this specific plant's sensitivity
+                    .filter(alert => {
+                      if (alert.type === 'Frost') {
+                        return !selectedPlant.frostResistant; // Only show if NOT frost resistant
+                      }
+                      if (alert.type === 'Extreme Heat') {
+                        return selectedPlant.maxZone <= 8; // Only show if zone is 8 or lower
+                      }
+                      return true;
+                    })
+                    // Map the remaining relevant alerts into list items
+                    .flatMap(alert =>
+                      alert.action.map((step, i) => (
+                        <li key={alert.type + i}>
+                          {step.replace("your plant", selectedPlant.nickname)}
+                        </li>
+                      ))
+                    )}
+                </ul>
+              )}
             </div>
           ) : (
             <p className="hint-text">Select a plant to check moisture levels.</p>
@@ -329,8 +384,55 @@ const GardenView = ({ cityName, rainTotal, weatherAlert = [], weather }) => {
         </section>
 
         <section className="schedule-card card">
-          <h3>Watering Schedule</h3>
-          {/* Schedule mapping logic here */}
+          <h3>Watering</h3>
+          {selectedPlant ? (
+            <div className="schedule-content">
+              <p className="schedule-hint">
+                Based on <strong>{selectedPlant.waterCategory}</strong> water needs.
+              </p>
+
+              {/* MANUAL WATER BUTTON */}
+              <div className="manual-add-container">
+                <div className="amount-selector">
+                  {[0.25, 0.5, 1.0].map(amt => (
+                    <button 
+                      key={amt}
+                      className="amt-btn"
+                      onClick={() => handleManualWater(selectedPlant.id, amt)}
+                    >
+                      +{amt}"
+                    </button>
+                  ))}
+                </div>
+                <p className="small-label">Quick Log (Inches)</p>
+              </div>
+
+              {/* MINI HISTORY LOG */}
+              <div className="recent-log">
+                <h4>Recent Activity</h4>
+                {selectedPlant.waterHistory?.length > 0 ? (
+                  <ul className="log-list">
+                    {selectedPlant.waterHistory.map((entry, index) => {
+                      // Determine the date source: if it's an object, use entry.date; otherwise use the entry itself
+                      const dateValue = (entry && typeof entry === 'object') ? entry.date : entry;
+                      const amountValue = (entry && typeof entry === 'object') ? entry.amount : null;
+
+                      return (
+                        <li key={index} className="log-item"> 
+                          {new Date(dateValue).toLocaleTimeString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                          {amountValue && ` — Added ${amountValue}"`}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                ) : (
+                  <p className="no-log-text">No manual watering recorded yet.</p>
+                )}
+              </div>
+            </div>
+          ) : (
+            <p className="hint-text">Select a plant to manage its schedule.</p>
+          )}
         </section>
       </div>
     </div>

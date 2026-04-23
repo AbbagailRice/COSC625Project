@@ -6,9 +6,8 @@ import { GARDENING_CONFIG } from './constants';
  * @param {Array} forecastArray - The slice of hourly forecast periods 
  * @returns {Array} An array of risk objects found in the data
  */
-export const checkExtremeTemps = (forecastArray) => {
-  const risks = [];
-  
+export const checkExtremeTemps = (forecastArray, plantName = "your plant",  frostResistant = false) => {
+   const risks = [];  
   if (!forecastArray || forecastArray.length === 0) return risks;
 
   // Use a Set to ensure we only flag each risk type once 
@@ -23,7 +22,12 @@ export const checkExtremeTemps = (forecastArray) => {
       risks.push({ 
         type: 'Frost', 
         value: temp, 
-        color: 'frost' 
+        color: 'frost' ,
+        action: [
+          `Protect ${plantName} from frost overnight.`,
+          `Bring ${plantName} indoors or cover it before nightfall.`
+        ]
+
       });
       foundTypes.add('Frost');
     }
@@ -33,7 +37,11 @@ export const checkExtremeTemps = (forecastArray) => {
       risks.push({ 
         type: 'Extreme Heat', 
         value: temp, 
-        color: 'extreme-heat' 
+        color: 'extreme-heat' ,
+        action: [
+            `Cover ${plantName} to protect it from heat stress.`,
+          `Provide afternoon shade for ${plantName} to reduce heat stress.`
+        ]
       });
       foundTypes.add('Extreme Heat');
     }
@@ -41,6 +49,7 @@ export const checkExtremeTemps = (forecastArray) => {
     // If found both types, stop looping
     if (foundTypes.size === 2) break;
   }
+  
 
   return risks; 
 };
