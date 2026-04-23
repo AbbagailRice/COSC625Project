@@ -5,13 +5,20 @@ const HomeView = ({ weather, cityName, rainTotal, updateDashboard, alert }) => {
 // Filters out alerts that the user has dismissed
 // Only alerts NOT in dismissedAlerts are shown on the dashboard
   const [dismissedAlerts, setDismissedAlerts] = useState([]);
+  const [tipDismissed, setTipDismissed] = useState(false);
   const visibleAlerts = (alert || []).filter(
   a => !dismissedAlerts.includes(a.type)
 );
+
+const [tipOffset, setTipOffset] = useState(0);
 // Extract the current hour forecast then generate contextual tip based on weather conditions
 const currentHour = weather.hourly.properties.periods[0];
-const tip = getTipOfTheDay(weather, rainTotal);
+const tip = weather ? getTipOfTheDay(weather, rainTotal, tipOffset) : '';
 
+const handleRefreshTip = (e) => {
+    e.stopPropagation(); // Prevent card clicks if necessary
+    setTipOffset(prev => prev + 1);
+  };
 
   // If no weather data exists yet (First visit)
   if (!weather) {
@@ -83,46 +90,52 @@ const tip = getTipOfTheDay(weather, rainTotal);
           {visibleAlerts.length > 0 ? (
             <div className="alert-container">
               {visibleAlerts.map((risk) => (
-                <div
-                  key={risk.type}
-                  className={`alert-card card ${risk.color}`}
-                >
-                  <p>{risk.type} Warning</p>
-
-                  <p className="alert-detail">
-                    {risk.value}°F detected within 24 hours.
-                  </p>
-
-
-
-                  {/* DISMISS BUTTON
-                  //Adds alert type to dismissedAlerts state.
-                  // Prevents this alert from being rendered again during session*/}
+                <div key={risk.type} className={`alert-card card ${risk.color}`}>
+                  
                   <button
+                    className="dismiss-btn"
                     onClick={() =>
                       setDismissedAlerts((prev) =>
-                        prev.includes(risk.type)
-                          ? prev
-                          : [...prev, risk.type]
+                        prev.includes(risk.type) ? prev : [...prev, risk.type]
                       )
                     }
                   >
-                    Dismiss
+                    &times;
                   </button>
+
+                  <p className="alert-type">{risk.type} Warning</p>
+                  <p className="alert-detail">
+                    {risk.value}°F detected within 24 hours.
+                  </p>
                 </div>
               ))}
             </div>
           ) : (
             <div className="alert-card card no-alert">
-              <p>No weather risks detected.</p>
+              <p>No Weather Notifications.</p>
+            </div>
+          )}
+          {/* Only show the tip card if it hasn't been dismissed */}
+          {!tipDismissed && (
+            <div className="tip-card card">
+              <button className="dismiss-btn" onClick={() => setTipDismissed(true)}>&times;</button>
+              
+              <div className="tip-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <p className="tip-title">Tip of the Day</p>
+                {/* 3. The Refresh Button */}
+                <button 
+                  className="refresh-tip-btn" 
+                  onClick={handleRefreshTip}
+                  title="Get another tip"
+                >
+                  ⟳
+                </button>
+              </div>
+              
+              <p className="tip-text">{tip}</p>   
             </div>
           )}
 
-          <div className="tip-card card">
-            <p className="tip-title">Tip of the Day</p>
-             {/* Displays generated gardening tip based on current weather conditions */}
-            <p className="tip-text">{tip}</p>   
-               </div>
         </section>
       </div>
     </div>

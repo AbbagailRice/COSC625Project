@@ -26,9 +26,10 @@ const getDailyIndex = () => {
 /**
  * Picks one tip from an array using the daily index.
  * @param {string[]} tips - Array of tip strings for a condition
+ * @param {number} offset - Manual refresh offset (default 0)
  * @returns {string} The selected tip for today
  */
-const pickTip = (tips) => tips[getDailyIndex() % tips.length];
+const pickTip = (tips, offset = 0) => tips[(getDailyIndex() + offset) % tips.length];
 
 /**
  * Tip pool organized by weather condition.
@@ -135,51 +136,52 @@ export const extractForecastSignals = (weather, rainTotal) => {
  * @param {Object} signals - Output from extractForecastSignals()
  * @returns {string} A contextual gardening tip for today
  */
-export const selectTip = (signals) => {
+export const selectTip = (signals, offset = 0) => {
   const { minTemp, maxTemp, willRain, isWindy, isSunny, rainTotal } = signals;
   const { FROST_THRESHOLD, HEAT_THRESHOLD, HEAT_WARNING_MARGIN, WATER_NEEDS } = GARDENING_CONFIG;
 
   if (minTemp <= FROST_THRESHOLD) {
-    return pickTip(TIP_POOL.frost.map((fn) => fn(minTemp)));
+    return pickTip(TIP_POOL.frost.map((fn) => fn(minTemp)), offset);
   }
 
   if (maxTemp >= HEAT_THRESHOLD + HEAT_WARNING_MARGIN) {
-    return pickTip(TIP_POOL.heat.map((fn) => fn(maxTemp)));
+    return pickTip(TIP_POOL.heat.map((fn) => fn(maxTemp)), offset);
   }
 
   if (willRain) {
-    return pickTip(TIP_POOL.rain);
+    return pickTip(TIP_POOL.rain, offset);
   }
 
   if (rainTotal < WATER_NEEDS.LOW) {
-    return pickTip(TIP_POOL.dry.map((fn) => fn(rainTotal)));
+    return pickTip(TIP_POOL.dry.map((fn) => fn(rainTotal)), offset);
   }
 
   if (rainTotal >= WATER_NEEDS.HIGH) {
-    return pickTip(TIP_POOL.saturated.map((fn) => fn(rainTotal)));
+    return pickTip(TIP_POOL.saturated.map((fn) => fn(rainTotal)), offset);
   }
 
   if (isWindy) {
-    return pickTip(TIP_POOL.windy);
+    return pickTip(TIP_POOL.windy, offset);
   }
 
   if (isSunny && signals.currentTemp >= 50 && signals.currentTemp <= 85) {
-    return pickTip(TIP_POOL.sunny);
+    return pickTip(TIP_POOL.sunny, offset);
   }
 
-  return pickTip(TIP_POOL.default);
+  return pickTip(TIP_POOL.default, offset);
 };
 
 /**
  * Main entry point. Returns a Tip of the Day string based on current forecast.
  * @param {Object} weather - The weather object from getWeatherData()
  * @param {string} rainTotal - Weekly rain total in inches
+ * @param {number} offset - Manual refresh offset (default 0)
  * @returns {string} Tip of the Day text
  */
-export const getTipOfTheDay = (weather, rainTotal) => {
+export const getTipOfTheDay = (weather, rainTotal, offset = 0) => {
   if (!weather || !weather.hourly) {
     return 'Fetch your local forecast to get a personalized gardening tip.';
   }
   const signals = extractForecastSignals(weather, rainTotal);
-  return selectTip(signals);
+  return selectTip(signals, offset);
 };
