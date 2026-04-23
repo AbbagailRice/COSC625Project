@@ -155,12 +155,12 @@ body {
   flex-direction: column;
 }
 
-/* ALERT CARDS  */
-.alert-card, .tip-card {
-  margin-bottom: 1rem;
-  position: relative;
+/* ALERT CARDS */
+.alert-card {
+  min-height: 80px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   padding: 20px;
   min-height: 80px;
   border-radius: 20px;
@@ -196,19 +196,34 @@ body {
   opacity: 0.8;
 }
 
-/* Tips Card */
+/* ── Tip Card ── */
+.tip-card {
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 1.5rem;
+  border-radius: 20px;
+  background-color: #f0f7f1;
+  border: 1px solid #c8e6c9;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
 
 .tip-title {
-  font-weight: bold;
-  margin: 0 0 5px 0;
-  color: #333;
-  padding-right: 25px;
+  font-size: 0.80rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--sidebar-accent);
+  margin: 0 0 8px 0;
 }
 
 .tip-text {
-  font-size: 0.85rem;
-  color: #555;
+  font-size: 1.05rem;
+  color: var(--text-main);
   font-weight: 400;
+  line-height: 1.6;
+  margin: 0;
 }
 
 .refresh-tip-btn {
@@ -659,74 +674,6 @@ body {
   color: #666;
 }
 
-.total-highlight {
-  border-top: 1px dashed #000000;
-  margin-top: 8px;
-  padding-top: 8px;
-}
-
-
-/* SCHEDULE CARD */
-.schedule-content {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.schedule-hint, 
-.manual-add-container p, 
-.recent-log h4, 
-.log-list {
-  margin: 0 !important; 
-  padding: 0 !important;
-}
-.manual-add-container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 4px;
-}
-
-.schedule-hint {
-  margin-bottom: 20px;
-}
-
-.amount-selector {
-  display: flex;
-  gap: 8px;
-}
-
-.amt-btn {
-  padding: 6px 14px;
-  border: 1px solid #ccc;
-  background: white;
-  border-radius: 6px;
-  font-weight: 500;
-}
-
-.amt-btn:hover {
-  background: #d3e5fa;
-  border-color: #4a90e2;
-}
-
-.recent-log {
-  margin-top: 25px;
-  text-align: left;
-}
-
-.recent-log h4 {
-  letter-spacing: 1px;
-  margin-bottom: -10px;
-}
-
-.log-list {
-  list-style: none;
-  padding: 0;
-}
-
-.log-item {
-  font-size: 0.85rem;
-  padding: 8px 0;
-  border-bottom: 1px solid #eee;
-  color: #555;
+.recommendation {
+  margin-top: 15px;
 }
