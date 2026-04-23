@@ -105,10 +105,6 @@ const GardenView = ({ cityName, rainTotal, weatherAlert = [], weather }) => {
     plant.nickname.toLowerCase().startsWith(searchQuery.toLowerCase())
   );
 
-  // Moisture Logic
-  // Find the last time this plant was watered
-  const lastWateredDate = selectedPlant?.waterHistory?.[0];
-
   const moisture = selectedPlant 
     ? calculateMoisture(rainTotal, WATER_NEEDS[selectedPlant.waterCategory], selectedPlant.waterHistory)
     : null;
