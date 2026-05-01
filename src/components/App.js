@@ -30,57 +30,63 @@ function App() {
     }
 
     setLoading(true);
-    const coords = await getCoordinates(searchZip);
 
+    // the timeout buffer
+    const timeoutBuffer = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error("Timeout")), 5000)
+    );
+    try {
+    // Race the coordinates fetch against the 5-second timeout
+    const coords = await Promise.race([
+      getCoordinates(searchZip),
+      timeoutBuffer
+    ]);
 
     if (coords) {
-      try {
-        // Fetch NWS Points to get the real City/State name
-        const pointsRes = await fetch(`https://api.weather.gov/points/${coords.lat},${coords.lon}`, {
-          headers: { 'User-Agent': process.env.REACT_APP_NWS_USER_AGENT }
-        });
-      const pointsData = await pointsRes.json();
-      
-      // Get the city and state from the NWS response to display
-      const city = pointsData.properties.relativeLocation.properties.city;
-      const state = pointsData.properties.relativeLocation.properties.state;
-      setCityName(`${city}, ${state}`);
-
-      // Fetch the rain total
-      const total = await getPastRainTotal(coords.lat, coords.lon);
-      setRainTotal(total);
-
-      // Fetch Weather Data
-      const data = await getWeatherData(coords.lat, coords.lon);
-      if (data) {
-        setWeather(data);
-
-        // Check for any extreme temperature risks in the forecast and update alert state
-        if (data.hourly) {
-          const allPeriods = data.hourly.properties.periods;
+      // Rest of the weather data fetches against the timeout
+      await Promise.race([
+        (async () => {
+          const pointsRes = await fetch(`https://api.weather.gov/points/${coords.lat},${coords.lon}`, {
+            headers: { 'User-Agent': process.env.REACT_APP_NWS_USER_AGENT }
+          });
+          const pointsData = await pointsRes.json();
           
-          // Slice to only check the first 24 hours
-          const next24Hours = allPeriods.slice(0, 24); 
-          
-          const riskInfo = checkExtremeTemps(next24Hours);
-          setWeatherAlert(riskInfo);
-        }
+          const city = pointsData.properties.relativeLocation.properties.city;
+          const state = pointsData.properties.relativeLocation.properties.state;
+          setCityName(`${city}, ${state}`);
 
-        if (searchZip !== zip) {
-            setZip(searchZip);
-            localStorage.setItem('zip', searchZip);
+          const total = await getPastRainTotal(coords.lat, coords.lon);
+          setRainTotal(total);
+
+          const data = await getWeatherData(coords.lat, coords.lon);
+          if (data) {
+            setWeather(data);
+            if (data.hourly) {
+              const next24Hours = data.hourly.properties.periods.slice(0, 24);
+              setWeatherAlert(checkExtremeTemps(next24Hours));
+            }
+            if (searchZip !== zip) {
+              setZip(searchZip);
+              localStorage.setItem('zip', searchZip);
+            }
           }
-      }
-      } catch (error) {
-        console.error("NWS Fetch Error:", error); // Handles API timeouts or downtime
-        alert("Weather service is temporarily unavailable.");
-      }
+        })(),
+        timeoutBuffer // 5-second timer
+      ]);
     } else {
       alert("Zip Code not found. Please try another area.");
     }
-
+  } catch (error) {
+    if (error.message === "Timeout") {
+      alert("Connection is too slow. Please check your internet and try again.");
+    } else {
+      console.error("Fetch Error:", error);
+      alert("Weather service is temporarily unavailable.");
+    }
+  } finally {
     setLoading(false);
-  }, [zip]); 
+  }
+}, [zip]); 
 
   useEffect(() => {
     // Only trigger logic if we actually have a zip code
