@@ -1,9 +1,9 @@
-/* Color Palette (can be changed later easier this way)*/
+/* Color Palette */
 :root {
   --sidebar-accent: #2e7d32;
-  --bg-color: #E8F1E8;      /* The soft green background */
-  --accent-blue: #4f4f4f;      /* temp for weather card */
-  --card-color: #FFFFFF;    /* Clean white cards */
+  --bg-color: #E8F1E8;
+  --accent-blue: #4f4f4f;
+  --card-color: #FFFFFF;
   --text-main: #333333;
   --text-sub: #666666;
   --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -25,7 +25,7 @@ body {
   min-height: 100vh;
 }
  
-/* Sidebar Styling */
+/* Sidebar */
 .sidebar {
   width: 100px;
   display: flex;
@@ -36,7 +36,6 @@ body {
   border-right: 1px solid #e0e0e0;
 }
  
-/* Logo Container */
 .logo-container {
   margin-bottom: 2.5rem;
   text-align: center;
@@ -52,15 +51,13 @@ body {
   margin: 0;
 }
  
-/* Navigation List */
 .nav-list {
   display: flex;
   flex-direction: column;
-  gap: 2rem; 
-  margin-top: 0rem;
+  gap: 2rem;
+  margin-top: 0;
 }
  
-/* The Combined Nav Item (Icon + Text) */
 .nav-item {
   display: flex;
   flex-direction: column;
@@ -71,7 +68,6 @@ body {
   transition: all 0.3s ease;
 }
  
-/* The Square Icon Placeholders */
 .nav-icon {
   width: 45px;
   height: 45px;
@@ -81,7 +77,6 @@ body {
   margin-bottom: 8px;
 }
  
-/* Active State Styles */
 .nav-item.active {
   color: var(--sidebar-accent);
   font-weight: bold;
@@ -102,7 +97,7 @@ body {
   gap: 1.5rem;
 }
  
-/* Header/Search Bar */
+/* Search Bar */
 .search-bar {
   width: 98%;
   padding: 1rem;
@@ -111,7 +106,7 @@ body {
   background-color: var(--card-color);
 }
  
-/* Standard Card styling */
+/* Standard Card */
 .card {
   background-color: var(--card-color);
   border-radius: 12px;
@@ -131,7 +126,7 @@ body {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  color: white; 
+  color: white;
   text-shadow: 0px 4px 8px rgba(0, 0, 0, 0.8);
 }
  
@@ -147,14 +142,13 @@ body {
   align-items: flex-start;
 }
  
-/* Alerts and Tips Column */
 .alerts-and-tips {
   flex: 1;
   display: flex;
   flex-direction: column;
 }
  
-/* ALERT CARDS */
+/* Alert & Tip Cards */
 .alert-card, .tip-card {
   margin-bottom: 1rem;
   position: relative;
@@ -193,7 +187,6 @@ body {
   opacity: 0.8;
 }
  
-/* Tips Card */
 .tip-title {
   font-weight: bold;
   margin: 0 0 5px 0;
@@ -243,32 +236,6 @@ body {
 }
  
 /* Hourly Forecast */
-.hourly-grid {
-  flex: 1;
-  display: flex;
-  justify-content: space-between;
-  padding: 1rem 0;
-}
- 
-.hour-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-}
- 
-.hour-time {
-  font-size: 0.9rem;
-  color: #666;
-  margin: 0;
-}
- 
-.hour-temp {
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin: 0;
-}
- 
 .hourly-forecast-card {
   flex: 2;
   height: 250px;
@@ -277,20 +244,50 @@ body {
   padding: 1.5rem;
 }
  
+/* Uniform heading for Hourly Forecast card */
+.hourly-forecast-card h2 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin: 0 0 0.5rem 0;
+}
+ 
 .hourly-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   text-align: center;
+  padding: 1rem 0;
 }
  
-.hour-item { font-weight: bold; font-size: 1.2rem; }
+.hour-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: bold;
+  font-size: 1rem;
+}
  
-/* Rain Total Section */
+.hour-time {
+  font-size: 0.85rem;
+  color: var(--text-sub);
+  font-weight: 400;
+  margin: 0;
+}
+ 
+.hour-temp {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+  color: var(--text-main);
+}
+ 
+/* Rain Total */
 .rain-total-container {
   display: flex;
   flex-direction: column;
   margin-top: 1.5rem;
-  padding-top: .5rem;
+  padding-top: 0.5rem;
 }
  
 .rain-label {
@@ -321,7 +318,7 @@ body {
   width: 50px;
   height: 50px;
   border: 5px solid rgba(0, 0, 0, 0.1);
-  border-top: 5px solid #4f4f4f; 
+  border-top: 5px solid #4f4f4f;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -338,21 +335,23 @@ body {
 }
  
 /* ═══════════════════════════════════
-   GARDEN VIEW STYLES
+   GARDEN VIEW
 ═══════════════════════════════════ */
  
 .garden-view .header {
-  margin-bottom: 1rem; 
+  margin-bottom: 1rem;
 }
  
-/* Uniform headings across Garden View */
+/* Uniform headings — ALL h2 and h3 in Garden View match */
 .garden-view h2,
-.garden-view h3 {
-  font-size: 1.15rem;
+.garden-view h3,
+.garden-view h4 {
+  font-size: 1rem;
   font-weight: 600;
   color: var(--text-main);
-  margin: 0 0 1rem 0;
+  margin: 0 0 0.75rem 0;
   letter-spacing: 0.01em;
+  text-transform: none;
 }
  
 /* Plant List Card */
@@ -360,21 +359,22 @@ body {
   margin-bottom: 1rem;
   border-radius: 20px;
   background-color: #fff;
-  padding: 1.5rem;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
 }
  
-/* Plant Grid - Horizontal Scroll */
+/* Plant Grid */
 .plant-grid {
   display: flex;
-  gap: 1.5rem; 
-  overflow-x: auto; 
-  padding: 0.5rem 0 1rem 0;
+  gap: 1.5rem;
+  overflow-x: auto;
+  padding: 0.5rem 0 0.75rem 0;
   align-items: flex-start;
   scrollbar-width: thin;
   scrollbar-color: var(--green-border) transparent;
 }
  
-/* Individual Plant Items */
+/* Plant Item */
 .plant-item {
   display: flex;
   flex-direction: column;
@@ -385,12 +385,12 @@ body {
   flex-shrink: 0;
 }
  
-/* Plant nickname — confined to fixed width, wraps to 2 lines max */
+/* Plant nickname — confined, max 2 lines */
 .plant-nickname-label {
   width: 100px;
   max-width: 100px;
   margin: 0 0 6px 0;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 500;
   color: var(--text-main);
   text-align: center;
@@ -401,9 +401,10 @@ body {
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  min-height: 2.2em;
 }
  
-/* IMAGE STYLING */
+/* Plant Image */
 .plant-img-wrapper {
   position: relative;
   display: inline-block;
@@ -425,23 +426,22 @@ body {
  
 .plant-img.placeholder-icon {
   object-fit: contain;
-  padding: 15px;      
+  padding: 15px;
   background-color: var(--green-light);
 }
  
-/* Status icons overlay */
 .status-icon-stack {
-  position: absolute; 
-  bottom: 5px;       
-  right: 5px;        
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   gap: 4px;
-  z-index: 10;     
+  z-index: 10;
 }
  
 .status-icon {
-  background: white; 
+  background: white;
   width: 24px;
   height: 24px;
   border-radius: 50%;
@@ -463,7 +463,7 @@ body {
   justify-content: center;
   align-items: center;
   font-size: 2rem;
-  color: #aaa;
+  color: #bbb;
   cursor: pointer;
   transition: all 0.2s ease;
   margin-top: 27px;
@@ -476,7 +476,6 @@ body {
   background-color: var(--green-light);
 }
  
-/* Empty state message */
 .empty-msg {
   font-size: 0.9rem;
   color: var(--text-sub);
@@ -485,7 +484,7 @@ body {
 }
  
 /* ═══════════════════════════════════
-   MODAL STYLES
+   MODAL
 ═══════════════════════════════════ */
  
 .modal-overlay {
@@ -506,7 +505,7 @@ body {
   width: 350px;
   height: 500px;
   padding: 30px;
-  border-radius: 40px; 
+  border-radius: 40px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.12);
   text-align: center;
   display: flex;
@@ -572,7 +571,6 @@ body {
   font-weight: 300;
 }
  
-/* Capsule Inputs */
 .capsule-input {
   width: 100%;
   max-width: 250px;
@@ -593,7 +591,6 @@ body {
   border-color: var(--sidebar-accent);
 }
  
-/* Action Buttons */
 .modal-actions-centered {
   margin-top: 20px;
 }
@@ -644,12 +641,7 @@ body {
   padding: 1.5rem;
 }
  
-.garden-left h3,
-.schedule-card h3 {
-  margin-bottom: 1rem;
-}
- 
-/* Highlight selected plant */
+/* Selected plant highlight */
 .plant-item.selected-highlight .plant-img {
   border: 3px solid var(--sidebar-accent);
   box-shadow: 0 0 15px rgba(46, 125, 50, 0.3);
@@ -663,7 +655,7 @@ body {
 .hint-text {
   color: var(--text-sub);
   font-style: italic;
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   margin-top: 1rem;
 }
  
@@ -678,7 +670,7 @@ body {
 }
  
 .zone-text {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: var(--text-sub);
   margin: 0;
 }
@@ -690,8 +682,6 @@ body {
   border-radius: 12px;
   padding: 12px 16px;
   margin-bottom: 1rem;
-  font-size: 0.88rem;
-  color: var(--text-sub);
 }
  
 .stat-row {
@@ -707,6 +697,7 @@ body {
   padding-top: 8px;
   color: var(--text-main);
   font-weight: 500;
+  font-size: 0.88rem;
 }
  
 /* Moisture Meter */
@@ -750,7 +741,6 @@ body {
   font-style: italic;
 }
  
-/* Alert Actions List */
 .alert-actions {
   margin-top: 1rem;
   padding-left: 1.2rem;
@@ -760,7 +750,7 @@ body {
 }
  
 /* ═══════════════════════════════════
-   SCHEDULE / WATERING CARD
+   WATERING CARD
 ═══════════════════════════════════ */
  
 .schedule-content {
@@ -770,7 +760,7 @@ body {
 }
  
 .schedule-hint {
-  font-size: 0.9rem;
+  font-size: 0.88rem;
   color: var(--text-sub);
   margin: 0;
 }
@@ -815,12 +805,13 @@ body {
   margin-top: 0.5rem;
 }
  
+/* RECENT ACTIVITY heading — matches all other headings, no uppercase */
 .recent-log h4 {
-  font-size: 0.88rem;
+  font-size: 1rem;
   font-weight: 600;
   color: var(--text-main);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  text-transform: none;
   margin: 0 0 8px 0;
 }
  
@@ -843,4 +834,3 @@ body {
   font-style: italic;
   margin: 0;
 }
- 
