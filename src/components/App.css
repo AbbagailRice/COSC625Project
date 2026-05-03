@@ -7,40 +7,42 @@
   --text-main: #333333;
   --text-sub: #666666;
   --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --green-light: #f0f7f1;
+  --green-border: #c8e6c9;
 }
-
+ 
 /* Base page setup */
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background-color: var(--bg-color);
-  color: var(--text-dark);
+  color: var(--text-main);
 }
-
+ 
 /* MAIN LAYOUT */
 .app-container {
   display: flex;
   min-height: 100vh;
 }
-
+ 
 /* Sidebar Styling */
 .sidebar {
-  width: 100px; /* Slimmer sidebar for vertical icons */
+  width: 100px;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-top: 2rem;
-  background-color: #f4f7f4; /* background */
+  background-color: #f4f7f4;
   border-right: 1px solid #e0e0e0;
 }
-
+ 
 /* Logo Container */
 .logo-container {
   margin-bottom: 2.5rem;
   text-align: center;
   padding: 0 5px;
 }
-
+ 
 .logo-text {
   font-size: 0.75rem;
   font-weight: 800;
@@ -49,7 +51,7 @@ body {
   letter-spacing: 0.5px;
   margin: 0;
 }
-
+ 
 /* Navigation List */
 .nav-list {
   display: flex;
@@ -57,40 +59,40 @@ body {
   gap: 2rem; 
   margin-top: 0rem;
 }
-
+ 
 /* The Combined Nav Item (Icon + Text) */
 .nav-item {
   display: flex;
-  flex-direction: column; /* Stacks Icon on top of Text */
+  flex-direction: column;
   align-items: center;
   text-decoration: none;
   color: #666;
   font-size: 0.8rem;
   transition: all 0.3s ease;
 }
-
+ 
 /* The Square Icon Placeholders */
 .nav-icon {
   width: 45px;
   height: 45px;
   background-color: #fff;
   border: 1px solid #ddd;
-  border-radius: 12px; /* Small square with rounded corners */
+  border-radius: 12px;
   margin-bottom: 8px;
 }
-
+ 
 /* Active State Styles */
 .nav-item.active {
   color: var(--sidebar-accent);
   font-weight: bold;
 }
-
+ 
 .nav-item.active .nav-icon {
   background-color: #e8f5e9;
   border: 2px solid var(--sidebar-accent);
   box-shadow: 0 4px 6px rgba(0,0,0,0.1);
 }
-
+ 
 /* Main Content Area */
 .main-content {
   flex: 1;
@@ -99,8 +101,7 @@ body {
   flex-direction: column;
   gap: 1.5rem;
 }
-
-
+ 
 /* Header/Search Bar */
 .search-bar {
   width: 98%;
@@ -109,17 +110,16 @@ body {
   border: none;
   background-color: var(--card-color);
 }
-
+ 
 /* Standard Card styling */
 .card {
   background-color: var(--card-color);
   border-radius: 12px;
-  padding:1rem;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05); /* Soft shadow */
+  padding: 1rem;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.05);
 }
-
-/* Weather Card (Placeholder for image) */
-
+ 
+/* Weather Card */
 .weather-card {
   height: 200px;
   border-radius: 20px;
@@ -128,39 +128,33 @@ body {
   align-items: center;
   margin-bottom: 1rem;
   margin-top: 1rem;
-  
-  /* Image Scaling Logic */
-  background-size: cover;      /* Fills the whole card */
-  background-position: center; /* Centers the focus of the photo */
+  background-size: cover;
+  background-position: center;
   background-repeat: no-repeat;
-  
-  /* Visibility Fixes */
   color: white; 
-  text-shadow: 0px 4px 8px rgba(0, 0, 0, 0.8); /* Strong shadow to read over bright JPGs */
+  text-shadow: 0px 4px 8px rgba(0, 0, 0, 0.8);
 }
-
+ 
 .weather-info h1 { margin: 0; font-size: 2.5rem; }
 .current-temp { font-size: 4rem; font-weight: bold; margin: 0; }
 .short-forecast { font-size: 1.2rem; margin: 0; }
-
-/* Lower Row (Flexbox for Hourly + Alerts) */
-/* the horizontal container that holds the entire bottom section of home view page */
+ 
+/* Lower Row */
 .lower-row {
   display: flex;
   gap: 1.5rem;
   margin-top: 1rem;
   align-items: flex-start;
 }
-
+ 
 /* Alerts and Tips Column */
-/* vertical container that lives inside the right side of the lower row */
 .alerts-and-tips {
   flex: 1;
   display: flex;
   flex-direction: column;
 }
-
-/* ALERT CARDS  */
+ 
+/* ALERT CARDS */
 .alert-card, .tip-card {
   margin-bottom: 1rem;
   position: relative;
@@ -173,63 +167,55 @@ body {
   font-weight: 500;
   color: #333;
 }
-
-/* Specific Alert Colors */
+ 
 .alert-card.frost {
   background-color: #f0f7ff;
   border: 1px solid #d1e9ff;
   color: #0056b3;
 }
-
+ 
 .alert-card.extreme-heat {
   background-color: #fff9f0;
   border: 1px solid #ffe8cc;
   color: #b35900;
 }
-
-/* No Alerts State will remove later this is for testing */
+ 
 .alert-card.no-alert {
   background-color: #f8fbf9;
   border: 1px solid #eef2ef;
   color: #7a8c7d;
 }
-
+ 
 .alert-detail {
   font-size: 0.85rem;
   margin-top: 5px;
   font-weight: 400;
   opacity: 0.8;
 }
-
+ 
 /* Tips Card */
-
 .tip-title {
   font-weight: bold;
   margin: 0 0 5px 0;
   color: #333;
   padding-right: 25px;
 }
-
+ 
 .tip-text {
   font-size: 0.85rem;
   color: #555;
   font-weight: 400;
 }
-
+ 
 .refresh-tip-btn {
   background: none;
   border: none;
   cursor: pointer;
   font-size: 14px;
   padding: 4px;
-  margin-right: 25px; /* Leave room for the 'X' button */
+  margin-right: 25px;
 }
-
-.refresh-tip-btn:hover {
-  opacity: 1;
-}
-
-/* The 'X' Button styling */
+ 
 .dismiss-btn {
   position: absolute;
   top: 8px;
@@ -244,96 +230,93 @@ body {
   padding: 5px;
   transition: color 0.2s ease, transform 0.2s ease;
 }
-
+ 
 .dismiss-btn:hover {
   color: #000;
   transform: scale(1.2);
 }
-
-/* Adjusting the text so it doesn't overlap the 'X' */
+ 
 .alert-type {
   margin: 0;
   font-weight: bold;
   padding-right: 20px;
 }
-
-/* hourly forcase section */
+ 
+/* Hourly Forecast */
 .hourly-grid {
   flex: 1;
   display: flex;
-  justify-content: space-between; /* Spreads the items evenly */
+  justify-content: space-between;
   padding: 1rem 0;
 }
-
+ 
 .hour-item {
   display: flex;
-  flex-direction: column; /* Stacks Time over Temp */
+  flex-direction: column;
   align-items: center;
   gap: 0.5rem;
 }
-
+ 
 .hour-time {
   font-size: 0.9rem;
   color: #666;
   margin: 0;
 }
-
+ 
 .hour-temp {
   font-size: 1.2rem;
   font-weight: bold;
   margin: 0;
 }
-
+ 
 .hourly-forecast-card {
-  flex: 2; /* Takes up more space than the alerts column */
-  height: 250px; /* Lock height*/
+  flex: 2;
+  height: 250px;
   display: flex;
   flex-direction: column;
   padding: 1.5rem;
 }
-
+ 
 .hourly-grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr); /* 6 columns */
+  grid-template-columns: repeat(6, 1fr);
   text-align: center;
 }
-
+ 
 .hour-item { font-weight: bold; font-size: 1.2rem; }
-
+ 
 /* Rain Total Section */
 .rain-total-container {
   display: flex;
   flex-direction: column;
-  
   margin-top: 1.5rem;
   padding-top: .5rem;
 }
-
+ 
 .rain-label {
   font-size: 0.85rem;
   color: var(--text-sub);
   font-weight: 500;
 }
-
+ 
 .rain-value {
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--text-main);
 }
-
-
+ 
 /* Loading Screen */
 .loading-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;           /* Takes up the full screen height */
-  width: 100vw;            /* Takes up the full screen width */
+  height: 100vh;
+  width: 100vw;
   background-color: var(--bg-color);
   gap: 1rem;
 }
-
+ 
 .loading-spinner {
   width: 50px;
   height: 50px;
@@ -342,68 +325,92 @@ body {
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
-
-/* rotation */
+ 
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
-
+ 
 .loading-container p {
   font-weight: 600;
   color: #555;
   margin: 0;
 }
-
-/* GARDEN VIEW STYLES */
-
-/* i don't know whats happening here whoever does the styling can fix it ( i was trying to use a overall card styling to no avail)*/
+ 
+/* ═══════════════════════════════════
+   GARDEN VIEW STYLES
+═══════════════════════════════════ */
+ 
 .garden-view .header {
   margin-bottom: 1rem; 
 }
-
-/* Main Layout Cards */
+ 
+/* Uniform headings across Garden View */
+.garden-view h2,
+.garden-view h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-main);
+  margin: 0 0 1rem 0;
+  letter-spacing: 0.01em;
+}
+ 
+/* Plant List Card */
 .plant-list-card {
   margin-bottom: 1rem;
   border-radius: 20px;
   background-color: #fff;
+  padding: 1.5rem;
 }
-
+ 
 /* Plant Grid - Horizontal Scroll */
 .plant-grid {
   display: flex;
-  gap: 2.5rem; 
+  gap: 1.5rem; 
   overflow-x: auto; 
-  padding: 1.5rem;
+  padding: 0.5rem 0 1rem 0;
   align-items: flex-start;
   scrollbar-width: thin;
+  scrollbar-color: var(--green-border) transparent;
 }
-
+ 
 /* Individual Plant Items */
 .plant-item {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  width: 100px;
   min-width: 100px;
+  flex-shrink: 0;
 }
-
-.plant-item p {
-  margin: 0 0 8px 0;
-  font-size: 0.95rem;
-  color: #333;
-  font-weight: 600;
+ 
+/* Plant nickname — confined to fixed width, wraps to 2 lines max */
+.plant-nickname-label {
+  width: 100px;
+  max-width: 100px;
+  margin: 0 0 6px 0;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-main);
+  text-align: center;
+  line-height: 1.3;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
-
+ 
 /* IMAGE STYLING */
 .plant-img-wrapper {
   position: relative;
   display: inline-block;
   width: 100px;
   height: 100px;
-  margin-top: 10px; /* Gives the floating drop some room */
 }
-
+ 
 .plant-img {
   width: 100px;
   height: 100px;
@@ -415,14 +422,14 @@ body {
   transition: transform 0.2s ease;
   box-sizing: border-box;
 }
-
+ 
 .plant-img.placeholder-icon {
   object-fit: contain;
   padding: 15px;      
-  background-color: #f0f0f0;
+  background-color: var(--green-light);
 }
-
-/* The icons that float inside the wrapper */
+ 
+/* Status icons overlay */
 .status-icon-stack {
   position: absolute; 
   bottom: 5px;       
@@ -432,7 +439,7 @@ body {
   gap: 4px;
   z-index: 10;     
 }
-
+ 
 .status-icon {
   background: white; 
   width: 24px;
@@ -444,71 +451,76 @@ body {
   font-size: 0.9rem;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
-
-/* Updated Label for uniformity */
-.plant-nickname-label {
-  margin: 0 0 8px 0;
-  font-size: 0.9rem;
-  color: #333;
-  font-weight: 500; /* Medium weight, not heavy bold */
-  text-align: center;
-}
-
-/* The + Button Styling */
+ 
+/* Add Plant Button */
 .add-plant-btn {
+  width: 100px;
   min-width: 100px;
   height: 100px;
-  border: 2px dashed #ccc;
+  border: 2px dashed var(--green-border);
   border-radius: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 2.5rem;
+  font-size: 2rem;
   color: #aaa;
   cursor: pointer;
   transition: all 0.2s ease;
-  margin-top: 28px; /* Aligns with the images below the text */
+  margin-top: 27px;
+  flex-shrink: 0;
 }
-
+ 
 .add-plant-btn:hover {
-  border-color: #7fb086; /* Match your primary green */
-  color: #7fb086;
-  background-color: #f0f7f1;
+  border-color: var(--sidebar-accent);
+  color: var(--sidebar-accent);
+  background-color: var(--green-light);
 }
-
-/* MODAL STYLES */
-
+ 
+/* Empty state message */
+.empty-msg {
+  font-size: 0.9rem;
+  color: var(--text-sub);
+  font-style: italic;
+  padding: 0.5rem 0;
+}
+ 
+/* ═══════════════════════════════════
+   MODAL STYLES
+═══════════════════════════════════ */
+ 
 .modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.35);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
 }
-
+ 
 .styled-modal-card {
   background: white;
   width: 350px;
   height: 500px;
   padding: 30px;
   border-radius: 40px; 
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
   text-align: center;
+  display: flex;
+  flex-direction: column;
 }
-
+ 
 .modal-body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Centers the inputs vertically */
+  justify-content: center;
   gap: 10px;
 }
-
+ 
 .modal-tabs {
   display: flex;
   justify-content: center;
@@ -516,222 +528,319 @@ body {
   gap: 15px;
   margin-bottom: 30px;
 }
-
-/* Stacks the two zone inputs horizontally */
+ 
 .zone-input-row {
   display: flex;
   gap: 10px;
   width: 100%;
 }
-
+ 
 .zone-input-row .capsule-input {
-  flex: 1; /* Makes them equal width */
+  flex: 1;
   margin: 12px 0;
 }
-
-/* Styles the checkbox row */
+ 
 .checkbox-row {
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 5px 0;
   font-size: 0.9rem;
-  color: #555;
+  color: var(--text-sub);
 }
-
+ 
 .tab-btn {
   background: none;
   border: none;
-  font-size: 1rem;
+  font-size: 0.95rem;
   font-weight: 600;
   color: #888;
   cursor: pointer;
   padding: 5px 12px;
+  transition: all 0.2s ease;
 }
-
+ 
 .tab-btn.active {
-  color: #333;
-  background-color: #e0e0e0; 
+  color: var(--text-main);
+  background-color: var(--green-light);
   border-radius: 20px;
 }
-
+ 
 .tab-separator {
   font-size: 1.5rem;
-  color: #333;
+  color: #ccc;
   font-weight: 300;
 }
-
-/* Capsule-Shaped Inputs */
+ 
+/* Capsule Inputs */
 .capsule-input {
   width: 100%;
   max-width: 250px;
-  margin: 12px auto;
+  margin: 8px auto;
   display: block;
   padding: 12px 20px;
   border-radius: 25px;
-  border: 1px solid #eee;
-  background-color: #c4d6bc; 
-  color: #555;
+  border: 1px solid var(--green-border);
+  background-color: var(--green-light);
+  color: var(--text-main);
   font-size: 0.9rem;
   text-align: center;
   outline: none;
+  transition: border-color 0.2s ease;
 }
-
+ 
+.capsule-input:focus {
+  border-color: var(--sidebar-accent);
+}
+ 
 /* Action Buttons */
 .modal-actions-centered {
-  margin-top: 25px;
+  margin-top: 20px;
 }
-
+ 
 .confirm-btn {
-  background-color: #cfcfcf; 
-  color: #333;
+  background-color: var(--sidebar-accent);
+  color: white;
   border: none;
   padding: 10px 30px;
   border-radius: 20px;
-  font-weight: bold;
+  font-weight: 600;
+  font-size: 0.9rem;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s, transform 0.1s;
 }
-
+ 
 .confirm-btn:hover {
-  background-color: var(--sidebar-accent);
+  background-color: #1b5e20;
+  transform: translateY(-1px);
 }
-
+ 
 .delete-btn {
-  background-color: #cfcfcf;
-  color: #333;
+  background-color: #fdecea;
+  color: #c62828;
+  border: 1px solid #ffcdd2;
 }
-
+ 
 .delete-btn:hover {
-  background-color: #df6262;
+  background-color: #c62828;
+  color: white;
+  border-color: #c62828;
 }
-
-/* Lower Row Layout */
+ 
+/* ═══════════════════════════════════
+   LOWER ROW — STATUS & WATERING
+═══════════════════════════════════ */
+ 
 .garden-view .lower-row {
   display: flex;
   gap: 1.5rem;
   margin-top: 1rem;
   align-items: stretch;
 }
-
+ 
 .garden-left, .schedule-card {
   flex: 1;
   border-radius: 20px;
+  padding: 1.5rem;
 }
-
-.garden-left h3 {
-  margin-bottom: -0.5rem; /* Reduce space below "Status of..." */
+ 
+.garden-left h3,
+.schedule-card h3 {
+  margin-bottom: 1rem;
 }
-
-/* Highlight the selected plant */
+ 
+/* Highlight selected plant */
 .plant-item.selected-highlight .plant-img {
-  border: 3px solid #7fb086; /* Primary green */
-  box-shadow: 0 0 15px rgba(127, 176, 134, 0.4);
+  border: 3px solid var(--sidebar-accent);
+  box-shadow: 0 0 15px rgba(46, 125, 50, 0.3);
 }
-
+ 
 .details-content {
-  padding: 1rem;
   text-align: left;
   animation: fadeIn 0.3s ease;
 }
-
-.details-content h4 {
-  margin: 0 0 10px 0;
-  color: #333;
-}
-
+ 
 .hint-text {
-  color: #888;
+  color: var(--text-sub);
   font-style: italic;
-  margin-top: 20px;
+  font-size: 0.9rem;
+  margin-top: 1rem;
 }
-
+ 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(5px); }
   to { opacity: 1; transform: translateY(0); }
 }
-
+ 
+/* Zone Range */
+.zone-range-display {
+  margin-bottom: 0.75rem;
+}
+ 
+.zone-text {
+  font-size: 0.9rem;
+  color: var(--text-sub);
+  margin: 0;
+}
+ 
 /* Water Stats */
 .water-stats {
-  background: rgba(0, 0, 0, 0.03);
+  background: var(--green-light);
+  border: 1px solid var(--green-border);
   border-radius: 12px;
-  margin-bottom: 15px;
+  padding: 12px 16px;
+  margin-bottom: 1rem;
+  font-size: 0.88rem;
+  color: var(--text-sub);
 }
-
+ 
 .stat-row {
   display: flex;
   justify-content: space-between;
-  color: #666;
+  color: var(--text-sub);
+  font-size: 0.88rem;
 }
-
+ 
 .total-highlight {
-  border-top: 1px dashed #000000;
+  border-top: 1px dashed var(--green-border);
   margin-top: 8px;
   padding-top: 8px;
+  color: var(--text-main);
+  font-weight: 500;
 }
-
-
-/* SCHEDULE CARD */
+ 
+/* Moisture Meter */
+.moisture-meter {
+  margin-bottom: 0.75rem;
+}
+ 
+.meter-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.88rem;
+  color: var(--text-sub);
+  margin-bottom: 6px;
+}
+ 
+.meter-bar-bg {
+  width: 100%;
+  height: 8px;
+  background-color: #e0e0e0;
+  border-radius: 99px;
+  overflow: hidden;
+}
+ 
+.meter-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.4s ease;
+  background-color: var(--sidebar-accent);
+}
+ 
+.meter-bar-fill.dry { background-color: #e57373; }
+.meter-bar-fill.damp { background-color: #ffb74d; }
+.meter-bar-fill.moist { background-color: #81c784; }
+.meter-bar-fill.saturated { background-color: #4fc3f7; }
+.meter-bar-fill.stable { background-color: var(--sidebar-accent); }
+ 
+.recommendation {
+  font-size: 0.88rem;
+  color: var(--text-sub);
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+ 
+/* Alert Actions List */
+.alert-actions {
+  margin-top: 1rem;
+  padding-left: 1.2rem;
+  font-size: 0.88rem;
+  color: var(--text-sub);
+  line-height: 1.6;
+}
+ 
+/* ═══════════════════════════════════
+   SCHEDULE / WATERING CARD
+═══════════════════════════════════ */
+ 
 .schedule-content {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
-
-.schedule-hint, 
-.manual-add-container p, 
-.recent-log h4, 
-.log-list {
-  margin: 0 !important; 
-  padding: 0 !important;
+ 
+.schedule-hint {
+  font-size: 0.9rem;
+  color: var(--text-sub);
+  margin: 0;
 }
+ 
 .manual-add-container {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 4px;
+  gap: 6px;
 }
-
-.schedule-hint {
-  margin-bottom: 20px;
-}
-
+ 
 .amount-selector {
   display: flex;
   gap: 8px;
 }
-
+ 
 .amt-btn {
-  padding: 6px 14px;
-  border: 1px solid #ccc;
-  background: white;
-  border-radius: 6px;
-  font-weight: 500;
+  padding: 7px 16px;
+  border: 1px solid var(--green-border);
+  background: var(--green-light);
+  color: var(--sidebar-accent);
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
-
+ 
 .amt-btn:hover {
-  background: #d3e5fa;
-  border-color: #4a90e2;
+  background: var(--sidebar-accent);
+  color: white;
+  border-color: var(--sidebar-accent);
 }
-
+ 
+.small-label {
+  font-size: 0.78rem;
+  color: var(--text-sub);
+  margin: 0;
+}
+ 
 .recent-log {
-  margin-top: 25px;
-  text-align: left;
+  margin-top: 0.5rem;
 }
-
+ 
 .recent-log h4 {
-  letter-spacing: 1px;
-  margin-bottom: -10px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-main);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 0 0 8px 0;
 }
-
+ 
 .log-list {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
-
+ 
 .log-item {
   font-size: 0.85rem;
   padding: 8px 0;
-  border-bottom: 1px solid #eee;
-  color: #555;
+  border-bottom: 1px solid #f0f0f0;
+  color: var(--text-sub);
 }
+ 
+.no-log-text {
+  font-size: 0.85rem;
+  color: var(--text-sub);
+  font-style: italic;
+  margin: 0;
+}
+ 
