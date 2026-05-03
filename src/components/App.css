@@ -1,9 +1,6 @@
 /* ═══════════════════════════════════════
    DEWDILIGENCE — Organic & Fresh Theme
-   Color Palette
 ═══════════════════════════════════════ */
-@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Inter:wght@400;500;600&display=swap');
- 
 :root {
   --sidebar-accent: #2e7d32;
   --sidebar-bg: #1a3d1c;
@@ -15,7 +12,6 @@
   --green-mid: #c8e6c9;
   --green-border: #a5d6a7;
   --green-dark: #1b5e20;
-  --accent-warm: #f9a825;
   --shadow-soft: 0 4px 20px rgba(30, 70, 30, 0.08);
   --shadow-card: 0 2px 12px rgba(30, 70, 30, 0.10);
 }
@@ -27,12 +23,13 @@
  
 body {
   margin: 0;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background-color: var(--bg-color);
+  /* White leaf/botanical pattern on green background */
   background-image:
-    radial-gradient(circle at 20% 20%, rgba(100,180,100,0.13) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(60,140,60,0.10) 0%, transparent 50%),
-    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234caf50' fill-opacity='0.04'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    radial-gradient(circle at 15% 15%, rgba(255,255,255,0.08) 0%, transparent 45%),
+    radial-gradient(circle at 85% 85%, rgba(255,255,255,0.06) 0%, transparent 45%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cg fill='none' stroke='rgba(255,255,255,0.18)' stroke-width='1'%3E%3C!-- Leaf shape 1 --%3E%3Cpath d='M20 60 Q10 40 20 20 Q30 40 20 60Z'/%3E%3C!-- Leaf shape 2 --%3E%3Cpath d='M60 20 Q70 40 60 60 Q50 40 60 20Z'/%3E%3C!-- Small leaf --%3E%3Cpath d='M40 70 Q35 60 40 50 Q45 60 40 70Z'/%3E%3C!-- Stem lines --%3E%3Cline x1='20' y1='40' x2='20' y2='60'/%3E%3Cline x1='60' y1='40' x2='60' y2='20'/%3E%3Cline x1='40' y1='60' x2='40' y2='70'/%3E%3C/g%3E%3C/svg%3E");
   color: var(--text-main);
   min-height: 100vh;
 }
@@ -66,9 +63,8 @@ body {
 }
  
 .logo-text {
-  font-family: 'Lora', Georgia, serif;
   font-size: 0.7rem;
-  font-weight: 700;
+  font-weight: 800;
   color: #a5d6a7;
   text-transform: uppercase;
   letter-spacing: 1.5px;
@@ -142,9 +138,9 @@ body {
   padding: 1rem 1.5rem;
   border-radius: 50px;
   border: 1.5px solid var(--green-border);
-  background-color: rgba(255,255,255,0.85);
+  background-color: rgba(255,255,255,0.88);
   backdrop-filter: blur(8px);
-  font-family: 'Inter', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   font-size: 0.95rem;
   color: var(--text-main);
   outline: none;
@@ -161,7 +157,7 @@ body {
    CARDS
 ═══════════════════════════════════════ */
 .card {
-  background-color: rgba(255,255,255,0.9);
+  background-color: rgba(255,255,255,0.92);
   backdrop-filter: blur(10px);
   border-radius: 20px;
   padding: 1.25rem;
@@ -185,7 +181,7 @@ body {
   background-repeat: no-repeat;
   background-color: #4a7c59;
   color: white;
-  text-shadow: 0px 2px 10px rgba(0, 0, 0, 0.6);
+  text-shadow: 0px 2px 10px rgba(0,0,0,0.6);
   position: relative;
   overflow: hidden;
   box-shadow: 0 8px 32px rgba(30,70,30,0.18);
@@ -204,28 +200,9 @@ body {
   z-index: 1;
 }
  
-.weather-info h1 {
-  margin: 0;
-  font-family: 'Lora', Georgia, serif;
-  font-size: 2rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-}
- 
-.current-temp {
-  font-size: 3.5rem;
-  font-weight: 700;
-  margin: 0;
-  line-height: 1;
-  font-family: 'Lora', Georgia, serif;
-}
- 
-.short-forecast {
-  font-size: 1rem;
-  margin: 4px 0 0 0;
-  opacity: 0.9;
-  font-weight: 400;
-}
+.weather-info h1 { margin: 0; font-size: 2rem; font-weight: 600; }
+.current-temp { font-size: 3.5rem; font-weight: 700; margin: 0; line-height: 1; }
+.short-forecast { font-size: 1rem; margin: 4px 0 0 0; opacity: 0.9; font-weight: 400; }
  
 /* ═══════════════════════════════════════
    LOWER ROW
@@ -287,7 +264,6 @@ body {
   margin: 0;
   font-weight: 600;
   padding-right: 20px;
-  font-family: 'Lora', Georgia, serif;
 }
  
 .tip-card {
@@ -352,12 +328,10 @@ body {
 }
  
 .hourly-forecast-card h2 {
-  font-family: 'Lora', Georgia, serif;
   font-size: 1rem;
   font-weight: 600;
   color: var(--text-main);
   margin: 0 0 0.75rem 0;
-  letter-spacing: 0.01em;
 }
  
 .hourly-grid {
@@ -387,7 +361,6 @@ body {
   font-weight: 600;
   margin: 0;
   color: var(--text-main);
-  font-family: 'Lora', Georgia, serif;
 }
  
 /* Rain Total */
@@ -411,7 +384,6 @@ body {
   font-size: 1.4rem;
   font-weight: 700;
   color: var(--sidebar-accent);
-  font-family: 'Lora', Georgia, serif;
 }
  
 /* ═══════════════════════════════════════
@@ -446,7 +418,6 @@ body {
   font-weight: 600;
   color: var(--text-sub);
   margin: 0;
-  font-family: 'Lora', Georgia, serif;
 }
  
 /* ═══════════════════════════════════════
@@ -460,7 +431,6 @@ body {
 .garden-view h2,
 .garden-view h3,
 .garden-view h4 {
-  font-family: 'Lora', Georgia, serif;
   font-size: 1rem;
   font-weight: 600;
   color: var(--text-main);
@@ -473,7 +443,7 @@ body {
 .plant-list-card {
   margin-bottom: 1rem;
   border-radius: 20px;
-  background-color: rgba(255,255,255,0.9);
+  background-color: rgba(255,255,255,0.92);
   backdrop-filter: blur(10px);
   padding: 1.25rem 1.5rem;
   box-shadow: var(--shadow-card);
@@ -508,7 +478,7 @@ body {
   transform: translateY(-3px);
 }
  
-/* Plant nickname — confined, max 2 lines */
+/* Plant nickname */
 .plant-nickname-label {
   width: 100px;
   max-width: 100px;
@@ -525,7 +495,6 @@ body {
   -webkit-box-orient: vertical;
   overflow: hidden;
   min-height: 2.2em;
-  font-family: 'Inter', sans-serif;
 }
  
 /* Plant Image */
@@ -610,7 +579,7 @@ body {
   padding: 0.5rem 0;
 }
  
-/* Selected plant highlight */
+/* Selected plant */
 .plant-item.selected-highlight .plant-img {
   border: 3px solid var(--sidebar-accent);
   box-shadow: 0 0 18px rgba(46,125,50,0.35);
@@ -625,7 +594,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(10, 30, 10, 0.45);
+  background: rgba(10,30,10,0.45);
   backdrop-filter: blur(4px);
   display: flex;
   justify-content: center;
@@ -691,7 +660,6 @@ body {
   padding: 6px 14px;
   border-radius: 20px;
   transition: all 0.2s ease;
-  font-family: 'Inter', sans-serif;
 }
  
 .tab-btn.active {
@@ -717,7 +685,7 @@ body {
   background-color: var(--green-light);
   color: var(--text-main);
   font-size: 0.88rem;
-  font-family: 'Inter', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   text-align: center;
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
@@ -740,7 +708,6 @@ body {
   border-radius: 25px;
   font-weight: 600;
   font-size: 0.9rem;
-  font-family: 'Inter', sans-serif;
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: 0 4px 12px rgba(46,125,50,0.3);
@@ -799,7 +766,6 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
  
-/* Zone Range */
 .zone-range-display { margin-bottom: 0.75rem; }
  
 .zone-text {
@@ -915,7 +881,6 @@ body {
   border-radius: 20px;
   font-weight: 600;
   font-size: 0.85rem;
-  font-family: 'Inter', sans-serif;
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -943,7 +908,6 @@ body {
   letter-spacing: 0.08em;
   text-transform: uppercase;
   margin: 0 0 10px 0;
-  font-family: 'Inter', sans-serif;
 }
  
 .log-list {
@@ -965,4 +929,3 @@ body {
   font-style: italic;
   margin: 0;
 }
- 
