@@ -89,7 +89,6 @@ const GardenView = ({ cityName, rainTotal, weatherAlert = [], weather }) => {
 
   // Primera fila: siempre máximo 8
   const previewPlants = filteredPlants.slice(0, PLANTS_PREVIEW_LIMIT);
-
   // El resto: plantas 9 en adelante
   const extraPlants = filteredPlants.slice(PLANTS_PREVIEW_LIMIT);
   const hasExtraPlants = extraPlants.length > 0;
@@ -97,6 +96,46 @@ const GardenView = ({ cityName, rainTotal, weatherAlert = [], weather }) => {
   const moisture = selectedPlant
     ? calculateMoisture(rainTotal, WATER_NEEDS[selectedPlant.waterCategory], selectedPlant.waterHistory)
     : null;
+
+  const renderPlantItem = (plant) => {
+    const isDefault = plant.image.includes('628283.png');
+    const plantMoisture = calculateMoisture(
+      rainTotal,
+      WATER_NEEDS[plant.waterCategory],
+      plant.waterHistory
+    );
+    const needsWater = plantMoisture.percent < 60;
+    const hasFrostRisk = weatherAlert.some(r => r.type === 'Frost') && !plant.frostResistant;
+    const hasHeatRisk = weatherAlert.some(r => r.type === 'Extreme Heat') && plant.maxZone <= 8;
+    const currentTemp = weather?.hourly?.properties?.periods[0]?.temperature;
+    const isBelowMinZone = currentTemp <= GARDENING_CONFIG.ZONE_TEMP_MAP[plant.minZone];
+
+    return (
+      <div
+        key={plant.id}
+        className={`plant-item ${selectedPlant?.id === plant.id ? 'selected-highlight' : ''}`}
+        onClick={() => setSelectedPlant(plant)}
+      >
+        <p className="plant-nickname-label">{plant.nickname}</p>
+        <div className="plant-img-wrapper">
+          <img
+            src={plant.image}
+            alt={plant.nickname}
+            className={`plant-img ${isDefault ? 'placeholder-icon' : ''}`}
+            onError={(e) => {
+              e.target.src = 'https://cdn-icons-png.flaticon.com/512/628/628283.png';
+              e.target.classList.add('placeholder-icon');
+            }}
+          />
+          <div className="status-icon-stack">
+            {needsWater && <span className="status-icon drop">💧</span>}
+            {(hasFrostRisk || isBelowMinZone) && <span className="status-icon snow">❄️</span>}
+            {hasHeatRisk && <span className="status-icon flame">🔥</span>}
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="garden-view">
@@ -119,7 +158,7 @@ const GardenView = ({ cityName, rainTotal, weatherAlert = [], weather }) => {
           )}
         </div>
 
-        {/* FILA 1: siempre visible (máx 8) */}
+        {/* FILA 1: siempre visible (máx 8) + botón + siempre aquí */}
         <div className="plant-grid">
           {filteredPlants.length === 0 && searchQuery !== '' ? (
             <p className="empty-msg">No plants match "{searchQuery}"</p>
@@ -127,48 +166,10 @@ const GardenView = ({ cityName, rainTotal, weatherAlert = [], weather }) => {
             <p className="empty-msg">No plants yet. Add one!</p>
           )}
 
-          {previewPlants.map(plant => {
-            const isDefault = plant.image.includes('628283.png');
-            const plantMoisture = calculateMoisture(
-              rainTotal,
-              WATER_NEEDS[plant.waterCategory],
-              plant.waterHistory
-            );
-            const needsWater = plantMoisture.percent < 60;
-            const hasFrostRisk = weatherAlert.some(r => r.type === 'Frost') && !plant.frostResistant;
-            const hasHeatRisk = weatherAlert.some(r => r.type === 'Extreme Heat') && plant.maxZone <= 8;
-            const currentTemp = weather?.hourly?.properties?.periods[0]?.temperature;
-            const isBelowMinZone = currentTemp <= GARDENING_CONFIG.ZONE_TEMP_MAP[plant.minZone];
+          {previewPlants.map(plant => renderPlantItem(plant))}
 
-            return (
-              <div
-                key={plant.id}
-                className={`plant-item ${selectedPlant?.id === plant.id ? 'selected-highlight' : ''}`}
-                onClick={() => setSelectedPlant(plant)}
-              >
-                <p className="plant-nickname-label">{plant.nickname}</p>
-                <div className="plant-img-wrapper">
-                  <img
-                    src={plant.image}
-                    alt={plant.nickname}
-                    className={`plant-img ${isDefault ? 'placeholder-icon' : ''}`}
-                    onError={(e) => {
-                      e.target.src = 'https://cdn-icons-png.flaticon.com/512/628/628283.png';
-                      e.target.classList.add('placeholder-icon');
-                    }}
-                  />
-                  <div className="status-icon-stack">
-                    {needsWater && <span className="status-icon drop">💧</span>}
-                    {(hasFrostRisk || isBelowMinZone) && <span className="status-icon snow">❄️</span>}
-                    {hasHeatRisk && <span className="status-icon flame">🔥</span>}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-
-          {/* Botón + solo aparece en la fila 1 si no hay plantas extra o si ya están expandidas */}
-          {plants.length < GARDENING_CONFIG.MAX_PLANTS && !hasExtraPlants && (
+          {/* Botón + SIEMPRE en la fila 1 */}
+          {plants.length < GARDENING_CONFIG.MAX_PLANTS && (
             <div className="add-plant-btn" onClick={() => setActiveModal('add')}>±</div>
           )}
         </div>
@@ -181,63 +182,16 @@ const GardenView = ({ cityName, rainTotal, weatherAlert = [], weather }) => {
                 className="show-more-pill"
                 onClick={() => setShowAllPlants(!showAllPlants)}
               >
-                {showAllPlants
-                  ? 'Show less ↑'
-                  : `Show ${extraPlants.length} more plant${extraPlants.length > 1 ? 's' : ''} ↓`}
+                {showAllPlants ? 'Show less ↑' : 'More plants ↓'}
               </button>
             </div>
           </div>
         )}
 
-        {/* PLANTAS EXTRA: solo visibles al expandir */}
+        {/* PLANTAS EXTRA: continúan en el mismo grid */}
         {showAllPlants && hasExtraPlants && (
-          <div className="extra-plants-section">
-            <div className="plant-grid">
-              {extraPlants.map(plant => {
-                const isDefault = plant.image.includes('628283.png');
-                const plantMoisture = calculateMoisture(
-                  rainTotal,
-                  WATER_NEEDS[plant.waterCategory],
-                  plant.waterHistory
-                );
-                const needsWater = plantMoisture.percent < 60;
-                const hasFrostRisk = weatherAlert.some(r => r.type === 'Frost') && !plant.frostResistant;
-                const hasHeatRisk = weatherAlert.some(r => r.type === 'Extreme Heat') && plant.maxZone <= 8;
-                const currentTemp = weather?.hourly?.properties?.periods[0]?.temperature;
-                const isBelowMinZone = currentTemp <= GARDENING_CONFIG.ZONE_TEMP_MAP[plant.minZone];
-
-                return (
-                  <div
-                    key={plant.id}
-                    className={`plant-item ${selectedPlant?.id === plant.id ? 'selected-highlight' : ''}`}
-                    onClick={() => setSelectedPlant(plant)}
-                  >
-                    <p className="plant-nickname-label">{plant.nickname}</p>
-                    <div className="plant-img-wrapper">
-                      <img
-                        src={plant.image}
-                        alt={plant.nickname}
-                        className={`plant-img ${isDefault ? 'placeholder-icon' : ''}`}
-                        onError={(e) => {
-                          e.target.src = 'https://cdn-icons-png.flaticon.com/512/628/628283.png';
-                          e.target.classList.add('placeholder-icon');
-                        }}
-                      />
-                      <div className="status-icon-stack">
-                        {needsWater && <span className="status-icon drop">💧</span>}
-                        {(hasFrostRisk || isBelowMinZone) && <span className="status-icon snow">❄️</span>}
-                        {hasHeatRisk && <span className="status-icon flame">🔥</span>}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-
-              {/* Botón + al final de las plantas extra */}
-              {plants.length < GARDENING_CONFIG.MAX_PLANTS && (
-                <div className="add-plant-btn" onClick={() => setActiveModal('add')}>±</div>
-              )}
-            </div>
+          <div className="plant-grid extra-plants-grid">
+            {extraPlants.map(plant => renderPlantItem(plant))}
           </div>
         )}
       </section>
