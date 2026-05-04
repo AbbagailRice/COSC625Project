@@ -11,14 +11,13 @@
   --green-border: #c8e6c9;
 }
 
-/* Base page setup */
+* { box-sizing: border-box; }
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   color: var(--text-main);
   min-height: 100vh;
-
-  /* IMPROVED: soft green base with a subtle white botanical leaf pattern */
   background-color: var(--bg-color);
   background-image:
     radial-gradient(ellipse at 5% 10%, rgba(255,255,255,0.45) 0%, transparent 38%),
@@ -27,13 +26,12 @@ body {
   background-attachment: fixed;
 }
 
-/* MAIN LAYOUT */
 .app-container {
   display: flex;
   min-height: 100vh;
 }
 
-/* IMPROVED: Sidebar — dark green gradient instead of light grey */
+/* SIDEBAR */
 .sidebar {
   width: 100px;
   display: flex;
@@ -51,7 +49,6 @@ body {
   padding: 0 5px;
 }
 
-/* IMPROVED: logo text in mint green so it reads on dark sidebar */
 .logo-text {
   font-size: 0.75rem;
   font-weight: 800;
@@ -65,7 +62,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 2rem;
-  margin-top: 0rem;
+  margin-top: 0;
 }
 
 .nav-item {
@@ -78,11 +75,8 @@ body {
   transition: all 0.3s ease;
 }
 
-.nav-item:hover {
-  color: #c8e6c9;
-}
+.nav-item:hover { color: #c8e6c9; }
 
-/* IMPROVED: icon placeholder adapts to dark sidebar */
 .nav-icon {
   width: 45px;
   height: 45px;
@@ -93,10 +87,7 @@ body {
   transition: all 0.3s ease;
 }
 
-.nav-item.active {
-  color: #ffffff;
-  font-weight: bold;
-}
+.nav-item.active { color: #ffffff; font-weight: bold; }
 
 .nav-item.active .nav-icon {
   background-color: var(--sidebar-accent);
@@ -104,7 +95,7 @@ body {
   box-shadow: 0 4px 12px rgba(46,125,50,0.5);
 }
 
-/* Main Content Area */
+/* MAIN CONTENT */
 .main-content {
   flex: 1;
   padding: 2rem;
@@ -113,7 +104,7 @@ body {
   gap: 1.5rem;
 }
 
-/* Header/Search Bar */
+/* SEARCH BAR */
 .search-bar {
   width: 98%;
   padding: 1rem;
@@ -131,7 +122,7 @@ body {
   box-shadow: 0 0 0 3px rgba(46,125,50,0.1);
 }
 
-/* Standard Card styling — unchanged */
+/* CARD */
 .card {
   background-color: rgba(255,255,255,0.95);
   border-radius: 12px;
@@ -140,7 +131,7 @@ body {
   border: 1px solid rgba(200,230,200,0.4);
 }
 
-/* Weather Card */
+/* WEATHER CARD */
 .weather-card {
   height: 200px;
   border-radius: 20px;
@@ -154,13 +145,12 @@ body {
   background-repeat: no-repeat;
   background-color: #4a7c59;
   color: white;
-  text-shadow: 0px 4px 8px rgba(0, 0, 0, 0.8);
+  text-shadow: 0px 4px 8px rgba(0,0,0,0.8);
   position: relative;
   overflow: hidden;
   box-shadow: 0 6px 20px rgba(30,70,30,0.15);
 }
 
-/* IMPROVED: subtle gradient overlay so text is readable over any photo */
 .weather-card::before {
   content: '';
   position: absolute;
@@ -174,7 +164,7 @@ body {
 .current-temp { font-size: 4rem; font-weight: bold; margin: 0; }
 .short-forecast { font-size: 1.2rem; margin: 0; }
 
-/* Lower Row */
+/* LOWER ROW */
 .lower-row {
   display: flex;
   gap: 1.5rem;
@@ -188,7 +178,7 @@ body {
   flex-direction: column;
 }
 
-/* ALERT CARDS */
+/* ALERT & TIP CARDS */
 .alert-card, .tip-card {
   margin-bottom: 1rem;
   position: relative;
@@ -202,7 +192,6 @@ body {
   color: #333;
 }
 
-/* IMPROVED: subtle gradients on alert cards */
 .alert-card.frost {
   background: linear-gradient(135deg, #e8f4fd, #f5faff);
   border: 1px solid #90caf9;
@@ -228,7 +217,6 @@ body {
   opacity: 0.8;
 }
 
-/* IMPROVED: tip card gets a light green identity */
 .tip-card {
   background: linear-gradient(135deg, #f1f8e9, #f9fdf4);
   border: 1px solid var(--green-border);
@@ -279,13 +267,9 @@ body {
 
 .dismiss-btn:hover { color: #000; transform: scale(1.2); }
 
-.alert-type {
-  margin: 0;
-  font-weight: bold;
-  padding-right: 20px;
-}
+.alert-type { margin: 0; font-weight: bold; padding-right: 20px; }
 
-/* Hourly Forecast */
+/* HOURLY FORECAST */
 .hourly-grid {
   flex: 1;
   display: flex;
@@ -319,7 +303,7 @@ body {
 
 .hour-item { font-weight: bold; font-size: 1.2rem; }
 
-/* Rain Total */
+/* RAIN TOTAL */
 .rain-total-container {
   display: flex;
   flex-direction: column;
@@ -329,11 +313,9 @@ body {
 }
 
 .rain-label { font-size: 0.85rem; color: var(--text-sub); font-weight: 500; }
-
-/* IMPROVED: rain value in green instead of plain black */
 .rain-value { font-size: 1.5rem; font-weight: 700; color: var(--sidebar-accent); }
 
-/* Loading Screen */
+/* LOADING */
 .loading-container {
   display: flex;
   flex-direction: column;
@@ -345,7 +327,6 @@ body {
   gap: 1rem;
 }
 
-/* IMPROVED: spinner uses green */
 .loading-spinner {
   width: 50px;
   height: 50px;
@@ -362,10 +343,11 @@ body {
 
 .loading-container p { font-weight: 600; color: #555; margin: 0; }
 
-/* GARDEN VIEW */
+/* ═══════════════════════════════════════
+   GARDEN VIEW
+═══════════════════════════════════════ */
 .garden-view .header { margin-bottom: 1rem; }
 
-/* IMPROVED: uniform headings across garden view */
 .garden-view h2,
 .garden-view h3,
 .garden-view h4 {
@@ -377,44 +359,76 @@ body {
   text-transform: none;
 }
 
+/* Plant List Card */
 .plant-list-card {
   margin-bottom: 1rem;
   border-radius: 20px;
   background-color: rgba(255,255,255,0.95);
   border: 1px solid rgba(200,230,200,0.4);
   box-shadow: 0 4px 12px rgba(30,70,30,0.08);
+  padding: 1.25rem 1.5rem;
 }
 
-.plant-grid {
+.plant-list-header {
   display: flex;
-  gap: 2.5rem;
-  overflow-x: auto;
-  padding: 1.5rem;
-  align-items: flex-start;
-  scrollbar-width: thin;
-  scrollbar-color: var(--green-border) transparent;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
 }
 
+.plant-count {
+  font-size: 0.78rem;
+  color: var(--text-sub);
+  font-weight: 500;
+}
+
+/* ── Plant Grid: 4 columns, wraps to 2 rows ── */
+.plant-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 120px);
+  gap: 1rem 1.5rem;
+  padding: 0.5rem 0 0.75rem 0;
+  align-items: start;
+}
+
+/* Plant Item */
 .plant-item {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  min-width: 100px;
+  width: 120px;
   cursor: pointer;
   transition: transform 0.2s ease;
 }
 
 .plant-item:hover { transform: translateY(-3px); }
 
-.plant-item p { margin: 0 0 8px 0; font-size: 0.95rem; color: #333; font-weight: 600; }
+/* Plant nickname — confined to 120px, max 2 lines */
+.plant-nickname-label {
+  width: 120px;
+  max-width: 120px;
+  margin: 0 0 6px 0;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-main);
+  text-align: center;
+  line-height: 1.3;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.2em;
+}
 
+/* Plant Image */
 .plant-img-wrapper {
   position: relative;
   display: inline-block;
   width: 100px;
   height: 100px;
-  margin-top: 10px;
 }
 
 .plant-img {
@@ -457,28 +471,9 @@ body {
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-/* IMPROVED: plant name confined to fixed width, max 2 lines */
-.plant-nickname-label {
-  width: 100px;
-  max-width: 100px;
-  margin: 0 0 8px 0;
-  font-size: 0.9rem;
-  color: #333;
-  font-weight: 500;
-  text-align: center;
-  line-height: 1.3;
-  word-break: break-word;
-  overflow-wrap: break-word;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  min-height: 2.3em;
-}
-
-/* IMPROVED: add button uses green palette */
+/* Add Plant Button — lives in the grid */
 .add-plant-btn {
-  min-width: 100px;
+  width: 100px;
   height: 100px;
   border: 2px dashed var(--green-border);
   border-radius: 20px;
@@ -489,7 +484,7 @@ body {
   color: #aac8aa;
   cursor: pointer;
   transition: all 0.2s ease;
-  margin-top: 28px;
+  margin-top: 28px; /* aligns with images below the name label */
 }
 
 .add-plant-btn:hover {
@@ -497,6 +492,49 @@ body {
   color: var(--sidebar-accent);
   background-color: var(--green-light);
   transform: translateY(-2px);
+}
+
+/* ── Show More Pill ── */
+.show-more-pill-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  padding-bottom: 0.25rem;
+}
+
+.show-more-pill {
+  background: none;
+  border: 1.5px solid var(--green-border);
+  border-radius: 50px;
+  padding: 8px 24px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--sidebar-accent);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.02em;
+}
+
+.show-more-pill:hover {
+  background-color: var(--sidebar-accent);
+  border-color: var(--sidebar-accent);
+  color: white;
+  box-shadow: 0 4px 12px rgba(46,125,50,0.25);
+}
+
+/* Empty message */
+.empty-msg {
+  font-size: 0.9rem;
+  color: var(--text-sub);
+  font-style: italic;
+  padding: 0.5rem 0;
+  grid-column: 1 / -1;
+}
+
+/* Selected plant highlight */
+.plant-item.selected-highlight .plant-img {
+  border: 3px solid var(--sidebar-accent);
+  box-shadow: 0 0 15px rgba(46,125,50,0.35);
 }
 
 /* MODAL */
@@ -590,7 +628,6 @@ body {
 
 .modal-actions-centered { margin-top: 25px; }
 
-/* IMPROVED: confirm button green gradient instead of grey */
 .confirm-btn {
   background: linear-gradient(135deg, #2e7d32, #43a047);
   color: white;
@@ -622,7 +659,7 @@ body {
   border-color: #c62828;
 }
 
-/* Garden Lower Row */
+/* GARDEN LOWER ROW */
 .garden-view .lower-row {
   display: flex;
   gap: 1.5rem;
@@ -633,11 +670,6 @@ body {
 .garden-left, .schedule-card { flex: 1; border-radius: 20px; }
 .garden-left h3 { margin-bottom: -0.5rem; }
 
-.plant-item.selected-highlight .plant-img {
-  border: 3px solid var(--sidebar-accent);
-  box-shadow: 0 0 15px rgba(46,125,50,0.35);
-}
-
 .details-content { padding: 1rem; text-align: left; animation: fadeIn 0.3s ease; }
 .details-content h4 { margin: 0 0 10px 0; color: #333; }
 .hint-text { color: #888; font-style: italic; margin-top: 20px; }
@@ -647,7 +679,10 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* IMPROVED: water stats with a soft green tint */
+.zone-range-display { margin-bottom: 0.75rem; }
+.zone-text { font-size: 0.9rem; color: var(--text-sub); margin: 0; }
+
+/* Water Stats */
 .water-stats {
   background: linear-gradient(135deg, #f1f8e9, #f9fdf4);
   border: 1px solid var(--green-border);
@@ -666,7 +701,7 @@ body {
   color: var(--text-main);
 }
 
-/* IMPROVED: moisture meter with color states */
+/* Moisture Meter */
 .moisture-meter { margin-bottom: 0.75rem; }
 
 .meter-label {
@@ -716,7 +751,6 @@ body {
 .schedule-hint { margin-bottom: 20px; }
 .amount-selector { display: flex; gap: 8px; }
 
-/* IMPROVED: watering buttons green instead of grey */
 .amt-btn {
   padding: 6px 14px;
   border: 1.5px solid var(--green-border);
@@ -749,70 +783,4 @@ body {
 .log-list { list-style: none; padding: 0; }
 .log-item { font-size: 0.85rem; padding: 8px 0; border-bottom: 1px solid #eee; color: #555; }
 .no-log-text { font-size: 0.85rem; color: var(--text-sub); font-style: italic; margin: 0; }
-
-/* ═══════════════════════════════════════
-   PLANT LIST HEADER & COUNT
-═══════════════════════════════════════ */
-.plant-list-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.25rem;
-}
-
-.plant-count {
-  font-size: 0.78rem;
-  color: var(--text-sub);
-  font-weight: 500;
-}
-
-/* ═══════════════════════════════════════
-   SHOW MORE / SHOW LESS BUTTON
-═══════════════════════════════════════ */
-.show-more-btn {
-  min-width: 100px;
-  height: 100px;
-  border: 2px dashed var(--green-border);
-  border-radius: 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 6px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  margin-top: 28px;
-  flex-shrink: 0;
-  background-color: rgba(255,255,255,0.5);
-}
-
-.show-more-btn:hover {
-  border-color: var(--sidebar-accent);
-  background-color: var(--green-light);
-  transform: translateY(-2px);
-}
-
-.show-more-icon {
-  font-size: 1.8rem;
-  font-weight: 300;
-  color: var(--sidebar-accent);
-  line-height: 1;
-}
-
-.show-more-label {
-  font-size: 0.72rem;
-  font-weight: 600;
-  color: var(--sidebar-accent);
-  text-align: center;
-  letter-spacing: 0.02em;
-}
-
-/* ═══════════════════════════════════════
-   EMPTY MESSAGE
-═══════════════════════════════════════ */
-.empty-msg {
-  font-size: 0.9rem;
-  color: var(--text-sub);
-  font-style: italic;
-  padding: 0.5rem 0;
-}
+.small-label { font-size: 0.78rem; color: var(--text-sub); margin: 0; }
