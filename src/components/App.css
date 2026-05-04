@@ -382,11 +382,11 @@ body {
   font-weight: 500;
 }
 
-/* ── Plant Grid: 8 columnas ── */
+/* ── Plant Grid: 8 columnas, tamaño original ── */
 .plant-grid {
   display: grid;
-  grid-template-columns: repeat(8, 80px);
-  gap: 0.75rem 1rem;
+  grid-template-columns: repeat(8, 120px);
+  gap: 1rem 1.5rem;
   padding: 0.5rem 0 0.75rem 0;
   align-items: start;
 }
@@ -397,7 +397,7 @@ body {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  width: 80px;
+  width: 120px;
   cursor: pointer;
   transition: transform 0.2s ease;
 }
@@ -406,10 +406,10 @@ body {
 
 /* Plant nickname */
 .plant-nickname-label {
-  width: 80px;
-  max-width: 80px;
-  margin: 0 0 5px 0;
-  font-size: 0.75rem;
+  width: 120px;
+  max-width: 120px;
+  margin: 0 0 6px 0;
+  font-size: 0.85rem;
   font-weight: 500;
   color: var(--text-main);
   text-align: center;
@@ -427,17 +427,17 @@ body {
 .plant-img-wrapper {
   position: relative;
   display: inline-block;
-  width: 68px;
-  height: 68px;
+  width: 100px;
+  height: 100px;
 }
 
 .plant-img {
-  width: 68px;
-  height: 68px;
+  width: 100px;
+  height: 100px;
   object-fit: cover;
-  border-radius: 16px;
+  border-radius: 20px;
   background-color: #f9f9f9;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   display: block;
   transition: transform 0.2s ease;
   box-sizing: border-box;
@@ -445,46 +445,46 @@ body {
 
 .plant-img.placeholder-icon {
   object-fit: contain;
-  padding: 12px;
+  padding: 15px;
   background-color: var(--green-light);
 }
 
 .status-icon-stack {
   position: absolute;
-  bottom: 4px;
-  right: 4px;
+  bottom: 5px;
+  right: 5px;
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 4px;
   z-index: 10;
 }
 
 .status-icon {
   background: white;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 0.75rem;
+  font-size: 0.9rem;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-/* Add Plant Button */
+/* Add Plant Button — siempre en fila 1 */
 .add-plant-btn {
-  width: 68px;
-  height: 68px;
+  width: 100px;
+  height: 100px;
   border: 2px dashed var(--green-border);
-  border-radius: 16px;
+  border-radius: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 2rem;
+  font-size: 2.5rem;
   color: #aac8aa;
   cursor: pointer;
   transition: all 0.2s ease;
-  margin-top: 26px;
+  margin-top: 28px;
 }
 
 .add-plant-btn:hover {
@@ -494,7 +494,7 @@ body {
   transform: translateY(-2px);
 }
 
-/* ── Show More Pill — en cajita ── */
+/* ── Show More Pill en cajita ── */
 .show-more-pill-wrapper {
   display: flex;
   justify-content: center;
@@ -509,7 +509,6 @@ body {
   padding: 8px 24px;
   display: flex;
   align-items: center;
-  gap: 8px;
   transition: all 0.2s ease;
 }
 
@@ -531,11 +530,11 @@ body {
 
 .show-more-pill:hover { text-decoration: underline; }
 
-/* Extra plants section — aparece debajo del pill */
-.extra-plants-section {
+/* Extra plants grid — mismo estilo que el principal, con separador */
+.extra-plants-grid {
   margin-top: 0.75rem;
-  border-top: 1px solid var(--green-border);
   padding-top: 0.75rem;
+  border-top: 1px solid var(--green-border);
   animation: fadeIn 0.25s ease;
 }
 
