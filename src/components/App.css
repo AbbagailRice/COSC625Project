@@ -749,3 +749,70 @@ body {
 .log-list { list-style: none; padding: 0; }
 .log-item { font-size: 0.85rem; padding: 8px 0; border-bottom: 1px solid #eee; color: #555; }
 .no-log-text { font-size: 0.85rem; color: var(--text-sub); font-style: italic; margin: 0; }
+
+/* ═══════════════════════════════════════
+   PLANT LIST HEADER & COUNT
+═══════════════════════════════════════ */
+.plant-list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.25rem;
+}
+
+.plant-count {
+  font-size: 0.78rem;
+  color: var(--text-sub);
+  font-weight: 500;
+}
+
+/* ═══════════════════════════════════════
+   SHOW MORE / SHOW LESS BUTTON
+═══════════════════════════════════════ */
+.show-more-btn {
+  min-width: 100px;
+  height: 100px;
+  border: 2px dashed var(--green-border);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: 28px;
+  flex-shrink: 0;
+  background-color: rgba(255,255,255,0.5);
+}
+
+.show-more-btn:hover {
+  border-color: var(--sidebar-accent);
+  background-color: var(--green-light);
+  transform: translateY(-2px);
+}
+
+.show-more-icon {
+  font-size: 1.8rem;
+  font-weight: 300;
+  color: var(--sidebar-accent);
+  line-height: 1;
+}
+
+.show-more-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--sidebar-accent);
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+
+/* ═══════════════════════════════════════
+   EMPTY MESSAGE
+═══════════════════════════════════════ */
+.empty-msg {
+  font-size: 0.9rem;
+  color: var(--text-sub);
+  font-style: italic;
+  padding: 0.5rem 0;
+}
