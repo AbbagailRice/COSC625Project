@@ -382,11 +382,11 @@ body {
   font-weight: 500;
 }
 
-/* ── Plant Grid: 4 columns, wraps to 2 rows ── */
+/* ── Plant Grid: 8 columnas ── */
 .plant-grid {
   display: grid;
-  grid-template-columns: repeat(4, 120px);
-  gap: 1rem 1.5rem;
+  grid-template-columns: repeat(8, 80px);
+  gap: 0.75rem 1rem;
   padding: 0.5rem 0 0.75rem 0;
   align-items: start;
 }
@@ -397,19 +397,19 @@ body {
   flex-direction: column;
   align-items: center;
   text-align: center;
-  width: 120px;
+  width: 80px;
   cursor: pointer;
   transition: transform 0.2s ease;
 }
 
 .plant-item:hover { transform: translateY(-3px); }
 
-/* Plant nickname — confined to 120px, max 2 lines */
+/* Plant nickname */
 .plant-nickname-label {
-  width: 120px;
-  max-width: 120px;
-  margin: 0 0 6px 0;
-  font-size: 0.85rem;
+  width: 80px;
+  max-width: 80px;
+  margin: 0 0 5px 0;
+  font-size: 0.75rem;
   font-weight: 500;
   color: var(--text-main);
   text-align: center;
@@ -427,17 +427,17 @@ body {
 .plant-img-wrapper {
   position: relative;
   display: inline-block;
-  width: 100px;
-  height: 100px;
+  width: 68px;
+  height: 68px;
 }
 
 .plant-img {
-  width: 100px;
-  height: 100px;
+  width: 68px;
+  height: 68px;
   object-fit: cover;
-  border-radius: 20px;
+  border-radius: 16px;
   background-color: #f9f9f9;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.08);
   display: block;
   transition: transform 0.2s ease;
   box-sizing: border-box;
@@ -445,46 +445,46 @@ body {
 
 .plant-img.placeholder-icon {
   object-fit: contain;
-  padding: 15px;
+  padding: 12px;
   background-color: var(--green-light);
 }
 
 .status-icon-stack {
   position: absolute;
-  bottom: 5px;
-  right: 5px;
+  bottom: 4px;
+  right: 4px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 3px;
   z-index: 10;
 }
 
 .status-icon {
   background: white;
-  width: 24px;
-  height: 24px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 0.9rem;
+  font-size: 0.75rem;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-/* Add Plant Button — lives in the grid */
+/* Add Plant Button */
 .add-plant-btn {
-  width: 100px;
-  height: 100px;
+  width: 68px;
+  height: 68px;
   border: 2px dashed var(--green-border);
-  border-radius: 20px;
+  border-radius: 16px;
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 2.5rem;
+  font-size: 2rem;
   color: #aac8aa;
   cursor: pointer;
   transition: all 0.2s ease;
-  margin-top: 28px; /* aligns with images below the name label */
+  margin-top: 26px;
 }
 
 .add-plant-btn:hover {
@@ -494,7 +494,7 @@ body {
   transform: translateY(-2px);
 }
 
-/* ── Show More Pill ── */
+/* ── Show More Pill — en cajita ── */
 .show-more-pill-wrapper {
   display: flex;
   justify-content: center;
@@ -502,24 +502,41 @@ body {
   padding-bottom: 0.25rem;
 }
 
+.show-more-pill-box {
+  background: var(--green-light);
+  border: 1.5px solid var(--green-border);
+  border-radius: 16px;
+  padding: 8px 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.show-more-pill-box:hover {
+  background-color: #e0f0e0;
+  border-color: var(--sidebar-accent);
+}
+
 .show-more-pill {
   background: none;
-  border: 1.5px solid var(--green-border);
-  border-radius: 50px;
-  padding: 8px 24px;
+  border: none;
   font-size: 0.85rem;
   font-weight: 600;
   color: var(--sidebar-accent);
   cursor: pointer;
-  transition: all 0.2s ease;
+  padding: 0;
   letter-spacing: 0.02em;
 }
 
-.show-more-pill:hover {
-  background-color: var(--sidebar-accent);
-  border-color: var(--sidebar-accent);
-  color: white;
-  box-shadow: 0 4px 12px rgba(46,125,50,0.25);
+.show-more-pill:hover { text-decoration: underline; }
+
+/* Extra plants section — aparece debajo del pill */
+.extra-plants-section {
+  margin-top: 0.75rem;
+  border-top: 1px solid var(--green-border);
+  padding-top: 0.75rem;
+  animation: fadeIn 0.25s ease;
 }
 
 /* Empty message */
