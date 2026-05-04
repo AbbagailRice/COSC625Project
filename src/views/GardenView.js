@@ -6,34 +6,26 @@ import { calculateMoisture } from '../logic/moistureLogic';
 const WATER_NEEDS = GARDENING_CONFIG.WATER_NEEDS;
 const WATER_CATEGORIES = Object.keys(WATER_NEEDS);
 
-// Max plants visible before "Show All" button appears
 const PLANTS_PREVIEW_LIMIT = 8;
 
 const GardenView = ({ cityName, rainTotal, weatherAlert = [], weather }) => {
-  // Init State from LocalStorage
   const [plants, setPlants] = useState(() => {
     const saved = localStorage.getItem('dewDiligence_garden');
     return saved ? JSON.parse(saved) : [];
   });
 
-  // Controls whether all plants are visible or just the first PLANTS_PREVIEW_LIMIT
   const [showAllPlants, setShowAllPlants] = useState(false);
-
-  // Modal Control
-  const [activeModal, setActiveModal] = useState(null); // 'add' or 'remove'
-
-  // Form State
+  const [activeModal, setActiveModal] = useState(null);
   const [nickname, setNickname] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [waterCategory, setWaterCategory] = useState(WATER_CATEGORIES[0]);
   const [plantToRemoveId, setPlantToRemoveId] = useState(null);
-
-  // Sensitive plant filters
   const [minZone, setMinZone] = useState('');
   const [maxZone, setMaxZone] = useState('');
   const [frostResistant, setFrostResistant] = useState(false);
+  const [selectedPlant, setSelectedPlant] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  // Persist to LocalStorage whenever plants change
   useEffect(() => {
     localStorage.setItem('dewDiligence_garden', JSON.stringify(plants));
     if (plants.length > 0 && !plantToRemoveId) {
@@ -41,16 +33,13 @@ const GardenView = ({ cityName, rainTotal, weatherAlert = [], weather }) => {
     }
   }, [plants, plantToRemoveId]);
 
-  // HANDLERS FOR ADDING/REMOVING PLANTS
   const handleAddPlant = () => {
     if (!nickname.trim()) return;
-
     if (plants.length >= GARDENING_CONFIG.MAX_PLANTS) {
       alert(`Max of ${GARDENING_CONFIG.MAX_PLANTS} plants reached.`);
       setActiveModal(null);
       return;
     }
-
     const newPlant = {
       id: Date.now(),
       nickname: nickname.trim(),
@@ -61,10 +50,7 @@ const GardenView = ({ cityName, rainTotal, weatherAlert = [], weather }) => {
       image: imageUrl.trim() || 'https://cdn-icons-png.flaticon.com/512/628/628283.png',
       waterHistory: []
     };
-
     setPlants([...plants, newPlant]);
-
-    // Reset form fields
     setNickname('');
     setImageUrl('');
     setMinZone('');
@@ -97,19 +83,16 @@ const GardenView = ({ cityName, rainTotal, weatherAlert = [], weather }) => {
     setActiveModal(null);
   };
 
-  const [selectedPlant, setSelectedPlant] = useState(null);
-  const [searchQuery, setSearchQuery] = useState('');
-
   const filteredPlants = plants.filter(plant =>
     plant.nickname.toLowerCase().startsWith(searchQuery.toLowerCase())
   );
 
-  // Slice plants based on showAllPlants toggle
-  const visiblePlants = showAllPlants
-    ? filteredPlants
-    : filteredPlants.slice(0, PLANTS_PREVIEW_LIMIT);
+  // Primera fila: siempre máximo 8
+  const previewPlants = filteredPlants.slice(0, PLANTS_PREVIEW_LIMIT);
 
-  const hasMorePlants = filteredPlants.length > PLANTS_PREVIEW_LIMIT;
+  // El resto: plantas 9 en adelante
+  const extraPlants = filteredPlants.slice(PLANTS_PREVIEW_LIMIT);
+  const hasExtraPlants = extraPlants.length > 0;
 
   const moisture = selectedPlant
     ? calculateMoisture(rainTotal, WATER_NEEDS[selectedPlant.waterCategory], selectedPlant.waterHistory)
@@ -131,29 +114,26 @@ const GardenView = ({ cityName, rainTotal, weatherAlert = [], weather }) => {
       <section className="plant-list-card card">
         <div className="plant-list-header">
           <h2>Plant List</h2>
-          {/* Show count when there are many plants */}
           {plants.length > 0 && (
             <span className="plant-count">{plants.length} / {GARDENING_CONFIG.MAX_PLANTS} plants</span>
           )}
         </div>
 
+        {/* FILA 1: siempre visible (máx 8) */}
         <div className="plant-grid">
-          {/* Empty / no results states */}
           {filteredPlants.length === 0 && searchQuery !== '' ? (
             <p className="empty-msg">No plants match "{searchQuery}"</p>
           ) : filteredPlants.length === 0 && (
             <p className="empty-msg">No plants yet. Add one!</p>
           )}
 
-          {/* Visible plant cards */}
-          {visiblePlants.map(plant => {
+          {previewPlants.map(plant => {
             const isDefault = plant.image.includes('628283.png');
             const plantMoisture = calculateMoisture(
               rainTotal,
               WATER_NEEDS[plant.waterCategory],
               plant.waterHistory
             );
-
             const needsWater = plantMoisture.percent < 60;
             const hasFrostRisk = weatherAlert.some(r => r.type === 'Frost') && !plant.frostResistant;
             const hasHeatRisk = weatherAlert.some(r => r.type === 'Extreme Heat') && plant.maxZone <= 8;
@@ -187,26 +167,79 @@ const GardenView = ({ cityName, rainTotal, weatherAlert = [], weather }) => {
             );
           })}
 
-          {/* Show More / Show Less button — only when there are more than the limit */}
-          {hasMorePlants && (
-            <div
-              className="show-more-btn"
-              onClick={() => setShowAllPlants(!showAllPlants)}
-            >
-              <span className="show-more-icon">{showAllPlants ? '−' : '+'}</span>
-              <span className="show-more-label">
-                {showAllPlants
-                  ? 'Show Less'
-                  : `+${filteredPlants.length - PLANTS_PREVIEW_LIMIT} More`}
-              </span>
-            </div>
-          )}
-
-          {/* Add plant button — only visible when not at max */}
-          {plants.length < GARDENING_CONFIG.MAX_PLANTS && (
+          {/* Botón + solo aparece en la fila 1 si no hay plantas extra o si ya están expandidas */}
+          {plants.length < GARDENING_CONFIG.MAX_PLANTS && !hasExtraPlants && (
             <div className="add-plant-btn" onClick={() => setActiveModal('add')}>±</div>
           )}
         </div>
+
+        {/* PILL: aparece si hay más de 8 plantas */}
+        {hasExtraPlants && (
+          <div className="show-more-pill-wrapper">
+            <div className="show-more-pill-box">
+              <button
+                className="show-more-pill"
+                onClick={() => setShowAllPlants(!showAllPlants)}
+              >
+                {showAllPlants
+                  ? 'Show less ↑'
+                  : `Show ${extraPlants.length} more plant${extraPlants.length > 1 ? 's' : ''} ↓`}
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* PLANTAS EXTRA: solo visibles al expandir */}
+        {showAllPlants && hasExtraPlants && (
+          <div className="extra-plants-section">
+            <div className="plant-grid">
+              {extraPlants.map(plant => {
+                const isDefault = plant.image.includes('628283.png');
+                const plantMoisture = calculateMoisture(
+                  rainTotal,
+                  WATER_NEEDS[plant.waterCategory],
+                  plant.waterHistory
+                );
+                const needsWater = plantMoisture.percent < 60;
+                const hasFrostRisk = weatherAlert.some(r => r.type === 'Frost') && !plant.frostResistant;
+                const hasHeatRisk = weatherAlert.some(r => r.type === 'Extreme Heat') && plant.maxZone <= 8;
+                const currentTemp = weather?.hourly?.properties?.periods[0]?.temperature;
+                const isBelowMinZone = currentTemp <= GARDENING_CONFIG.ZONE_TEMP_MAP[plant.minZone];
+
+                return (
+                  <div
+                    key={plant.id}
+                    className={`plant-item ${selectedPlant?.id === plant.id ? 'selected-highlight' : ''}`}
+                    onClick={() => setSelectedPlant(plant)}
+                  >
+                    <p className="plant-nickname-label">{plant.nickname}</p>
+                    <div className="plant-img-wrapper">
+                      <img
+                        src={plant.image}
+                        alt={plant.nickname}
+                        className={`plant-img ${isDefault ? 'placeholder-icon' : ''}`}
+                        onError={(e) => {
+                          e.target.src = 'https://cdn-icons-png.flaticon.com/512/628/628283.png';
+                          e.target.classList.add('placeholder-icon');
+                        }}
+                      />
+                      <div className="status-icon-stack">
+                        {needsWater && <span className="status-icon drop">💧</span>}
+                        {(hasFrostRisk || isBelowMinZone) && <span className="status-icon snow">❄️</span>}
+                        {hasHeatRisk && <span className="status-icon flame">🔥</span>}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+
+              {/* Botón + al final de las plantas extra */}
+              {plants.length < GARDENING_CONFIG.MAX_PLANTS && (
+                <div className="add-plant-btn" onClick={() => setActiveModal('add')}>±</div>
+              )}
+            </div>
+          </div>
+        )}
       </section>
 
       {/* ADD/REMOVE MODAL */}
@@ -231,59 +264,25 @@ const GardenView = ({ cityName, rainTotal, weatherAlert = [], weather }) => {
 
             {activeModal === 'add' ? (
               <div className="modal-body">
-                <input
-                  type="text"
-                  value={nickname}
-                  onChange={e => setNickname(e.target.value)}
-                  placeholder="Nickname"
-                  className="capsule-input"
-                />
+                <input type="text" value={nickname} onChange={e => setNickname(e.target.value)} placeholder="Nickname" className="capsule-input" />
                 <div className="styled-select-container">
-                  <select
-                    className="capsule-input"
-                    value={waterCategory}
-                    onChange={e => setWaterCategory(e.target.value)}
-                  >
+                  <select className="capsule-input" value={waterCategory} onChange={e => setWaterCategory(e.target.value)}>
                     {WATER_CATEGORIES.map(cat => (
-                      <option key={cat} value={cat}>
-                        {cat} — {WATER_NEEDS[cat]} in/week
-                      </option>
+                      <option key={cat} value={cat}>{cat} — {WATER_NEEDS[cat]} in/week</option>
                     ))}
                   </select>
                 </div>
                 <div className="zone-input-row">
-                  <input
-                    type="number"
-                    value={minZone}
-                    onChange={e => setMinZone(e.target.value)}
-                    placeholder="Min Zone"
-                    className="capsule-input"
-                  />
-                  <input
-                    type="number"
-                    value={maxZone}
-                    onChange={e => setMaxZone(e.target.value)}
-                    placeholder="Max Zone"
-                    className="capsule-input"
-                  />
+                  <input type="number" value={minZone} onChange={e => setMinZone(e.target.value)} placeholder="Min Zone" className="capsule-input" />
+                  <input type="number" value={maxZone} onChange={e => setMaxZone(e.target.value)} placeholder="Max Zone" className="capsule-input" />
                 </div>
                 <div className="checkbox-row">
                   <label className="checkbox-label">
-                    <input
-                      type="checkbox"
-                      checked={frostResistant}
-                      onChange={e => setFrostResistant(e.target.checked)}
-                    />
+                    <input type="checkbox" checked={frostResistant} onChange={e => setFrostResistant(e.target.checked)} />
                     Frost Resistant?
                   </label>
                 </div>
-                <input
-                  type="text"
-                  value={imageUrl}
-                  onChange={e => setImageUrl(e.target.value)}
-                  placeholder="Image URL (Optional)"
-                  className="capsule-input"
-                />
+                <input type="text" value={imageUrl} onChange={e => setImageUrl(e.target.value)} placeholder="Image URL (Optional)" className="capsule-input" />
                 <div className="modal-actions-centered">
                   <button onClick={handleAddPlant} className="confirm-btn">Confirm Add</button>
                 </div>
@@ -294,22 +293,14 @@ const GardenView = ({ cityName, rainTotal, weatherAlert = [], weather }) => {
                   {plants.find(p => p.id === plantToRemoveId)?.nickname || 'Select Plant'}
                 </div>
                 <div className="styled-select-container">
-                  <select
-                    className="capsule-input"
-                    value={plantToRemoveId}
-                    onChange={e => setPlantToRemoveId(Number(e.target.value))}
-                  >
+                  <select className="capsule-input" value={plantToRemoveId} onChange={e => setPlantToRemoveId(Number(e.target.value))}>
                     {plants.map(plant => (
-                      <option key={plant.id} value={plant.id}>
-                        {plant.nickname}
-                      </option>
+                      <option key={plant.id} value={plant.id}>{plant.nickname}</option>
                     ))}
                   </select>
                 </div>
                 <div className="modal-actions-centered">
-                  <button onClick={handleConfirmRemove} className="confirm-btn delete-btn">
-                    Confirm Remove
-                  </button>
+                  <button onClick={handleConfirmRemove} className="confirm-btn delete-btn">Confirm Remove</button>
                 </div>
               </div>
             )}
@@ -317,7 +308,7 @@ const GardenView = ({ cityName, rainTotal, weatherAlert = [], weather }) => {
         </div>
       )}
 
-      {/* LOWER ROW PANELS */}
+      {/* LOWER ROW */}
       <div className="lower-row">
         <section className="card garden-left">
           <h3>Status {selectedPlant ? `of ${selectedPlant.nickname}` : ""}</h3>
@@ -341,10 +332,7 @@ const GardenView = ({ cityName, rainTotal, weatherAlert = [], weather }) => {
                   <span>{moisture.percent}%</span>
                 </div>
                 <div className="meter-bar-bg">
-                  <div
-                    className={`meter-bar-fill ${moisture.status.toLowerCase()}`}
-                    style={{ width: `${moisture.percent}%` }}
-                  ></div>
+                  <div className={`meter-bar-fill ${moisture.status.toLowerCase()}`} style={{ width: `${moisture.percent}%` }}></div>
                 </div>
               </div>
               <p className="recommendation">
@@ -364,9 +352,7 @@ const GardenView = ({ cityName, rainTotal, weatherAlert = [], weather }) => {
                     })
                     .flatMap(alert =>
                       alert.action.map((step, i) => (
-                        <li key={alert.type + i}>
-                          {step.replace("your plant", selectedPlant.nickname)}
-                        </li>
+                        <li key={alert.type + i}>{step.replace("your plant", selectedPlant.nickname)}</li>
                       ))
                     )}
                 </ul>
@@ -381,19 +367,11 @@ const GardenView = ({ cityName, rainTotal, weatherAlert = [], weather }) => {
           <h3>Watering</h3>
           {selectedPlant ? (
             <div className="schedule-content">
-              <p className="schedule-hint">
-                Based on <strong>{selectedPlant.waterCategory}</strong> water needs.
-              </p>
+              <p className="schedule-hint">Based on <strong>{selectedPlant.waterCategory}</strong> water needs.</p>
               <div className="manual-add-container">
                 <div className="amount-selector">
                   {[0.25, 0.5, 1.0].map(amt => (
-                    <button
-                      key={amt}
-                      className="amt-btn"
-                      onClick={() => handleManualWater(selectedPlant.id, amt)}
-                    >
-                      +{amt}"
-                    </button>
+                    <button key={amt} className="amt-btn" onClick={() => handleManualWater(selectedPlant.id, amt)}>+{amt}"</button>
                   ))}
                 </div>
                 <p className="small-label">Quick Log (Inches)</p>
