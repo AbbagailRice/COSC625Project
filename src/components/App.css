@@ -1,6 +1,6 @@
 /* Color Palette */
 :root {
-  --sidebar-accent: #2d6a4f;
+  --sidebar-accent: #3d8b6e;
   --bg-color: #E8F1E8;
   --accent-blue: #4f4f4f;
   --card-color: #FFFFFF;
@@ -38,7 +38,7 @@ body {
   flex-direction: column;
   align-items: center;
   padding-top: 2rem;
-  background: linear-gradient(180deg, #2d5a30 0%, #1a3d1c 100%);
+  background: linear-gradient(180deg, #1a4a3a 0%, #0d2e24 100%);
   border-right: none;
   box-shadow: 3px 0 16px rgba(0,0,0,0.12);
 }
@@ -645,7 +645,7 @@ body {
 .modal-actions-centered { margin-top: 25px; }
 
 .confirm-btn {
-  background: linear-gradient(135deg, #2d6a4f, #43a047);
+  background: linear-gradient(135deg, #3d8b6e, #43a047);
   color: white;
   border: none;
   padding: 10px 30px;
@@ -657,7 +657,7 @@ body {
 }
 
 .confirm-btn:hover {
-  background: linear-gradient(135deg, #1b5e20, #2d6a4f);
+  background: linear-gradient(135deg, #1b5e20, #3d8b6e);
   transform: translateY(-1px);
   box-shadow: 0 6px 16px rgba(46,125,50,0.35);
 }
@@ -747,7 +747,7 @@ body {
 .meter-bar-fill.damp { background: linear-gradient(90deg, #fb8c00, #ffa726); }
 .meter-bar-fill.moist { background: linear-gradient(90deg, #43a047, #66bb6a); }
 .meter-bar-fill.saturated { background: linear-gradient(90deg, #0288d1, #29b6f6); }
-.meter-bar-fill.stable { background: linear-gradient(90deg, #2d6a4f, #43a047); }
+.meter-bar-fill.stable { background: linear-gradient(90deg, #3d8b6e, #43a047); }
 
 .recommendation { margin-top: 15px; font-size: 0.88rem; color: var(--text-sub); font-style: italic; }
 .alert-actions { margin-top: 1rem; padding-left: 1.2rem; font-size: 0.88rem; color: var(--text-sub); line-height: 1.7; }
