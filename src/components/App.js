@@ -7,22 +7,14 @@ import './App.css';
 import { checkExtremeTemps } from '../logic/weatherAlerts';
 
 function App() {
-  // Check localStorage immediately. If empty, zip is an empty string.
   const [zip, setZip] = useState(() => localStorage.getItem('zip') || '');
   const [weather, setWeather] = useState(null);
-
-  // Weather Alert State to track any extreme conditions
   const [weatherAlert, setWeatherAlert] = useState({ hasRisk: false });
-
-  // Start loading as FALSE if there is no zip to fetch
   const [loading, setLoading] = useState(zip ? true : false); 
   const [fullName, setCityName] = useState('');
   const [rainTotal, setRainTotal] = useState('0.00');
 
-  // Funct to handel API sequence
-  const updateDashboard =  useCallback( async (searchZip) => {
-
-    // Validate Zip Code format before making API calls
+  const updateDashboard = useCallback(async (searchZip) => {
     const zipRegex = /^[0-9]{5}$/;
     if (!zipRegex.test(searchZip)) {
       alert("Please enter a valid 5-digit Zip Code.");
@@ -31,88 +23,78 @@ function App() {
 
     setLoading(true);
 
-    // the timeout buffer
     const timeoutBuffer = new Promise((_, reject) =>
       setTimeout(() => reject(new Error("Timeout")), 5000)
     );
     try {
-    // Race the coordinates fetch against the 5-second timeout
-    const coords = await Promise.race([
-      getCoordinates(searchZip),
-      timeoutBuffer
-    ]);
-
-    if (coords) {
-      // Rest of the weather data fetches against the timeout
-      await Promise.race([
-        (async () => {
-          const pointsRes = await fetch(`https://api.weather.gov/points/${coords.lat},${coords.lon}`, {
-            headers: { 'User-Agent': process.env.REACT_APP_NWS_USER_AGENT }
-          });
-          const pointsData = await pointsRes.json();
-          
-          const city = pointsData.properties.relativeLocation.properties.city;
-          const state = pointsData.properties.relativeLocation.properties.state;
-          setCityName(`${city}, ${state}`);
-
-          const total = await getPastRainTotal(coords.lat, coords.lon);
-          setRainTotal(total);
-
-          const data = await getWeatherData(coords.lat, coords.lon);
-          if (data) {
-            setWeather(data);
-            if (data.hourly) {
-              const next24Hours = data.hourly.properties.periods.slice(0, 24);
-              setWeatherAlert(checkExtremeTemps(next24Hours));
-            }
-            if (searchZip !== zip) {
-              setZip(searchZip);
-              localStorage.setItem('zip', searchZip);
-            }
-          }
-        })(),
-        timeoutBuffer // 5-second timer
+      const coords = await Promise.race([
+        getCoordinates(searchZip),
+        timeoutBuffer
       ]);
-    } else {
-      alert("Zip Code not found. Please try another area.");
+
+      if (coords) {
+        await Promise.race([
+          (async () => {
+            const pointsRes = await fetch(`https://api.weather.gov/points/${coords.lat},${coords.lon}`, {
+              headers: { 'User-Agent': process.env.REACT_APP_NWS_USER_AGENT }
+            });
+            const pointsData = await pointsRes.json();
+            
+            const city = pointsData.properties.relativeLocation.properties.city;
+            const state = pointsData.properties.relativeLocation.properties.state;
+            setCityName(`${city}, ${state}`);
+
+            const total = await getPastRainTotal(coords.lat, coords.lon);
+            setRainTotal(total);
+
+            const data = await getWeatherData(coords.lat, coords.lon);
+            if (data) {
+              setWeather(data);
+              if (data.hourly) {
+                const next24Hours = data.hourly.properties.periods.slice(0, 24);
+                setWeatherAlert(checkExtremeTemps(next24Hours));
+              }
+              if (searchZip !== zip) {
+                setZip(searchZip);
+                localStorage.setItem('zip', searchZip);
+              }
+            }
+          })(),
+          timeoutBuffer
+        ]);
+      } else {
+        alert("Zip Code not found. Please try another area.");
+      }
+    } catch (error) {
+      if (error.message === "Timeout") {
+        alert("Connection is too slow. Please check your internet and try again.");
+      } else {
+        console.error("Fetch Error:", error);
+        alert("Weather service is temporarily unavailable.");
+      }
+    } finally {
+      setLoading(false);
     }
-  } catch (error) {
-    if (error.message === "Timeout") {
-      alert("Connection is too slow. Please check your internet and try again.");
-    } else {
-      console.error("Fetch Error:", error);
-      alert("Weather service is temporarily unavailable.");
-    }
-  } finally {
-    setLoading(false);
-  }
-}, [zip]); 
+  }, [zip]); 
 
   useEffect(() => {
-    // Only trigger logic if we actually have a zip code
     if (zip) {
-      // Init load for the current zip
       const loadInitialWeather = async () => {
         await updateDashboard(zip);
       };
       loadInitialWeather();
 
-      // Set up the 30-minute refresh interval
       const refreshInterval = setInterval(() => {
         console.log("Auto-refreshing weather data for:", zip);
         updateDashboard(zip);
       }, 1800000); 
 
-      // stops the timer if the component unmounts or zip changes
       return () => clearInterval(refreshInterval);
     } else {
-      // If no zip exists, loading is off so HomeView shows the search prompt
       setLoading(false);
     }
+  }, [zip, updateDashboard]);
 
-}, [zip, updateDashboard]); // updateDashboard added for dependency best practices
-
-  // While data loads, show a simple message
   if (loading) {
     return (
       <div className="loading-container">
@@ -121,7 +103,6 @@ function App() {
       </div>
     );
   }
-
 
   return (
     <Router>
@@ -133,12 +114,26 @@ function App() {
           
           <nav className="nav-list">
             <NavLink to="/" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
-              <div className="nav-icon home-icon"></div>
+              <div className="nav-icon">
+                {/* House icon */}
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+                  <path d="M3 10.5L12 3L21 10.5V20C21 20.55 20.55 21 20 21H15V15H9V21H4C3.45 21 3 20.55 3 20V10.5Z"
+                    stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                  <path d="M9 21V15H15V21" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </div>
               <span>Home</span>
             </NavLink>
 
             <NavLink to="/garden" className={({ isActive }) => isActive ? "nav-item active" : "nav-item"}>
-              <div className="nav-icon garden-icon"></div>
+              <div className="nav-icon">
+                {/* Plant/leaf icon */}
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="24" height="24">
+                  <path d="M12 22V12" stroke="white" strokeWidth="1.8" strokeLinecap="round"/>
+                  <path d="M12 12C12 12 7 10 5 5C9 4 14 6 14 11" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                  <path d="M12 16C12 16 16 13 19 15C17 19 13 19 12 16Z" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                </svg>
+              </div>
               <span>My Garden</span>
             </NavLink>
           </nav>
@@ -170,4 +165,3 @@ function App() {
 }
 
 export default App;
-
