@@ -136,7 +136,7 @@ body {
 
 /* WEATHER CARD */
 .weather-card {
-  height: 200px;
+  height: 250px;
   border-radius: 20px;
   padding: 2rem;
   display: flex;
