@@ -33,6 +33,8 @@ const GardenView = ({ cityName, rainTotal, weatherAlert = [], weather }) => {
     }
   }, [plants, plantToRemoveId]);
 
+  // HANDLERS
+
   const handleAddPlant = () => {
     if (!nickname.trim()) return;
     if (plants.length >= GARDENING_CONFIG.MAX_PLANTS) {
@@ -73,6 +75,23 @@ const GardenView = ({ cityName, rainTotal, weatherAlert = [], weather }) => {
     });
     setPlants(updatedPlants);
     setSelectedPlant(updatedPlants.find(p => p.id === plantId));
+  };
+
+  const handleDirectDelete = (plant) => {
+    const confirmed = window.confirm(`Are you sure you want to remove "${plant.nickname}" from your garden?`);
+    
+    if (confirmed) {
+      const updated = plants.filter(p => p.id !== plant.id);
+      setPlants(updated);
+      
+      // clear the selection if just removed
+      if (selectedPlant?.id === plant.id) {
+        setSelectedPlant(null);
+      }
+      
+      // Keep the remove modal state in sync
+      setPlantToRemoveId(updated[0]?.id || null);
+    }
   };
 
   const handleConfirmRemove = () => {
@@ -265,7 +284,20 @@ const GardenView = ({ cityName, rainTotal, weatherAlert = [], weather }) => {
       {/* LOWER ROW */}
       <div className="lower-row">
         <section className="card garden-left">
-          <h3>Status {selectedPlant ? `of ${selectedPlant.nickname}` : ""}</h3>
+          {/* Quick Delete Button */}
+          <div className="status-header-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <h3>Status {selectedPlant ? `of ${selectedPlant.nickname}` : ""}</h3>
+            {selectedPlant && (
+              <button 
+                className="quick-delete-btn" 
+                onClick={() => handleDirectDelete(selectedPlant)}
+                title="Remove this plant"
+              >
+                X
+              </button>
+            )}
+          </div>
+        
           {selectedPlant ? (
             <div className="details-content">
               <div className="zone-range-display">

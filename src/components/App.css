@@ -38,7 +38,7 @@ body {
   flex-direction: column;
   align-items: center;
   padding-top: 2rem;
-  background: linear-gradient(180deg, #4a9e7e 0%, #2d7a5a 100%);
+  background: linear-gradient(180deg, #87c19b 0%, #427962 100%);
   border-right: none;
   box-shadow: 3px 0 16px rgba(0,0,0,0.12);
 }
@@ -278,6 +278,7 @@ body {
   display: flex;
   justify-content: space-between;
   padding: 1rem 0;
+  
 }
 
 .hour-item {
@@ -292,10 +293,10 @@ body {
 
 .hourly-forecast-card {
   flex: 2;
-  height: 250px;
+  height: 260px;
   display: flex;
   flex-direction: column;
-  padding: 1.5rem;
+  padding: 1rem;
 }
 
 .hourly-grid {
@@ -313,6 +314,7 @@ body {
   margin-top: 1.5rem;
   padding-top: .5rem;
   border-top: 1px solid var(--green-border);
+  
 }
 
 .rain-label { font-size: 0.85rem; color: var(--text-sub); font-weight: 500; }
@@ -700,6 +702,31 @@ body {
 
 .zone-range-display { margin-bottom: 0.75rem; }
 .zone-text { font-size: 0.9rem; color: var(--text-sub); margin: 0; }
+
+.status-header-row {
+  margin-bottom: 10px;
+}
+
+.quick-delete-btn {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 50%;
+  transition: background-color 0.2s, transform 0.1s;
+  opacity: 0.6;
+}
+
+.quick-delete-btn:hover {
+  background-color: rgba(255, 0, 0, 0.1);
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.quick-delete-btn:active {
+  transform: scale(0.9);
+}
 
 /* Water Stats */
 .water-stats {
