@@ -1,40 +1,48 @@
-/* Color Palette (can be changed later easier this way)*/
+/* Color Palette */
 :root {
-  --sidebar-accent: #2e7d32;
-  --bg-color: #E8F1E8;      /* The soft green background */
-  --accent-blue: #4f4f4f;      /* temp for weather card */
-  --card-color: #FFFFFF;    /* Clean white cards */
+  --sidebar-accent: #4db88a;
+  --bg-color: #E8F1E8;
+  --accent-blue: #4f4f4f;
+  --card-color: #FFFFFF;
   --text-main: #333333;
   --text-sub: #666666;
   --shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --green-light: #f0f7f1;
+  --green-border: #c8e6c9;
 }
 
-/* Base page setup */
+* { box-sizing: border-box; }
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  color: var(--text-main);
+  min-height: 100vh;
   background-color: var(--bg-color);
-  color: var(--text-dark);
+  background-image:
+    radial-gradient(ellipse at 5% 10%, rgba(255,255,255,0.45) 0%, transparent 38%),
+    radial-gradient(ellipse at 95% 90%, rgba(100,160,100,0.18) 0%, transparent 38%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cg fill='none' stroke='rgba(255,255,255,0.55)' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M28 118 C4 88 4 42 28 14 C52 42 52 88 28 118Z'/%3E%3Cline x1='28' y1='14' x2='28' y2='118'/%3E%3Cline x1='28' y1='40' x2='15' y2='56'/%3E%3Cline x1='28' y1='60' x2='13' y2='76'/%3E%3Cline x1='28' y1='80' x2='17' y2='94'/%3E%3Cline x1='28' y1='40' x2='41' y2='56'/%3E%3Cline x1='28' y1='60' x2='43' y2='76'/%3E%3Cline x1='28' y1='80' x2='39' y2='94'/%3E%3Cpath d='M108 82 C92 62 92 36 108 18 C124 36 124 62 108 82Z'/%3E%3Cline x1='108' y1='18' x2='108' y2='82'/%3E%3Cline x1='108' y1='36' x2='99' y2='48'/%3E%3Cline x1='108' y1='52' x2='98' y2='64'/%3E%3Cline x1='108' y1='36' x2='117' y2='48'/%3E%3Cline x1='108' y1='52' x2='118' y2='64'/%3E%3Cpath d='M126 138 C118 124 118 108 126 96 C134 108 134 124 126 138Z'/%3E%3Cline x1='126' y1='96' x2='126' y2='138'/%3E%3Cline x1='126' y1='112' x2='120' y2='122'/%3E%3Cline x1='126' y1='112' x2='132' y2='122'/%3E%3C/g%3E%3C/svg%3E");
+  background-attachment: fixed;
 }
 
-/* MAIN LAYOUT */
 .app-container {
   display: flex;
   min-height: 100vh;
 }
 
-/* Sidebar Styling */
+/* SIDEBAR */
 .sidebar {
-  width: 100px; /* Slimmer sidebar for vertical icons */
+  width: 100px;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding-top: 2rem;
-  background-color: #f4f7f4; /* background */
-  border-right: 1px solid #e0e0e0;
+  background: linear-gradient(180deg, #4a9e7e 0%, #2d7a5a 100%);
+  border-right: none;
+  box-shadow: 3px 0 16px rgba(0,0,0,0.12);
 }
 
-/* Logo Container */
 .logo-container {
   margin-bottom: 2.5rem;
   text-align: center;
@@ -44,54 +52,53 @@ body {
 .logo-text {
   font-size: 0.75rem;
   font-weight: 800;
-  color: var(--sidebar-accent);
+  color: #d4ede0;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin: 0;
 }
 
-/* Navigation List */
 .nav-list {
   display: flex;
   flex-direction: column;
-  gap: 2rem; 
-  margin-top: 0rem;
+  gap: 2rem;
+  margin-top: 0;
 }
 
-/* The Combined Nav Item (Icon + Text) */
 .nav-item {
   display: flex;
-  flex-direction: column; /* Stacks Icon on top of Text */
+  flex-direction: column;
   align-items: center;
   text-decoration: none;
-  color: #666;
+  color: #a8d5b8;
   font-size: 0.8rem;
   transition: all 0.3s ease;
 }
 
-/* The Square Icon Placeholders */
+.nav-item:hover { color: #c8e6c9; }
+
 .nav-icon {
   width: 45px;
   height: 45px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 12px; /* Small square with rounded corners */
+  background-color: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 12px;
   margin-bottom: 8px;
+  transition: all 0.3s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-/* Active State Styles */
-.nav-item.active {
-  color: var(--sidebar-accent);
-  font-weight: bold;
-}
+.nav-item.active { color: #ffffff; font-weight: bold; }
 
 .nav-item.active .nav-icon {
-  background-color: #e8f5e9;
-  border: 2px solid var(--sidebar-accent);
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  background-color: var(--sidebar-accent);
+  border: 2px solid #81c784;
+  box-shadow: 0 4px 12px rgba(46,125,50,0.5);
 }
 
-/* Main Content Area */
+/* MAIN CONTENT */
 .main-content {
   flex: 1;
   padding: 2rem;
@@ -100,26 +107,34 @@ body {
   gap: 1.5rem;
 }
 
-
-/* Header/Search Bar */
+/* SEARCH BAR */
 .search-bar {
   width: 98%;
   padding: 1rem;
   border-radius: 20px;
-  border: none;
-  background-color: var(--card-color);
+  border: 1.5px solid var(--green-border);
+  background-color: rgba(255,255,255,0.92);
+  font-size: 0.95rem;
+  color: var(--text-main);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Standard Card styling */
+.search-bar:focus {
+  border-color: var(--sidebar-accent);
+  box-shadow: 0 0 0 3px rgba(46,125,50,0.1);
+}
+
+/* CARD */
 .card {
-  background-color: var(--card-color);
+  background-color: rgba(255,255,255,0.95);
   border-radius: 12px;
-  padding:1rem;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.05); /* Soft shadow */
+  padding: 1rem;
+  box-shadow: 0 4px 12px rgba(30,70,30,0.08);
+  border: 1px solid rgba(200,230,200,0.4);
 }
 
-/* Weather Card (Placeholder for image) */
-
+/* WEATHER CARD */
 .weather-card {
   height: 200px;
   border-radius: 20px;
@@ -128,23 +143,31 @@ body {
   align-items: center;
   margin-bottom: 1rem;
   margin-top: 1rem;
-  
-  /* Image Scaling Logic */
-  background-size: cover;      /* Fills the whole card */
-  background-position: center; /* Centers the focus of the photo */
+  background-size: cover;
+  background-position: center;
   background-repeat: no-repeat;
-  
-  /* Visibility Fixes */
-  color: white; 
-  text-shadow: 0px 4px 8px rgba(0, 0, 0, 0.8); /* Strong shadow to read over bright JPGs */
+  background-color: #4a7c59;
+  color: white;
+  text-shadow: 0px 4px 8px rgba(0,0,0,0.8);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(30,70,30,0.15);
 }
 
+.weather-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(0,0,0,0.28) 0%, transparent 60%);
+  border-radius: 20px;
+}
+
+.weather-info { position: relative; z-index: 1; }
 .weather-info h1 { margin: 0; font-size: 2.5rem; }
 .current-temp { font-size: 4rem; font-weight: bold; margin: 0; }
 .short-forecast { font-size: 1.2rem; margin: 0; }
 
-/* Lower Row (Flexbox for Hourly + Alerts) */
-/* the horizontal container that holds the entire bottom section of home view page */
+/* LOWER ROW */
 .lower-row {
   display: flex;
   gap: 1.5rem;
@@ -152,15 +175,13 @@ body {
   align-items: flex-start;
 }
 
-/* Alerts and Tips Column */
-/* vertical container that lives inside the right side of the lower row */
 .alerts-and-tips {
   flex: 1;
   display: flex;
   flex-direction: column;
 }
 
-/* ALERT CARDS  */
+/* ALERT & TIP CARDS */
 .alert-card, .tip-card {
   margin-bottom: 1rem;
   position: relative;
@@ -174,22 +195,20 @@ body {
   color: #333;
 }
 
-/* Specific Alert Colors */
 .alert-card.frost {
-  background-color: #f0f7ff;
-  border: 1px solid #d1e9ff;
+  background: linear-gradient(135deg, #e8f4fd, #f5faff);
+  border: 1px solid #90caf9;
   color: #0056b3;
 }
 
 .alert-card.extreme-heat {
-  background-color: #fff9f0;
-  border: 1px solid #ffe8cc;
+  background: linear-gradient(135deg, #fff4e5, #fffaf4);
+  border: 1px solid #ffcc80;
   color: #b35900;
 }
 
-/* No Alerts State will remove later this is for testing */
 .alert-card.no-alert {
-  background-color: #f8fbf9;
+  background: linear-gradient(135deg, #f4faf4, #fafcfa);
   border: 1px solid #eef2ef;
   color: #7a8c7d;
 }
@@ -201,19 +220,26 @@ body {
   opacity: 0.8;
 }
 
-/* Tips Card */
+.tip-card {
+  background: linear-gradient(135deg, #f1f8e9, #f9fdf4);
+  border: 1px solid var(--green-border);
+}
 
 .tip-title {
-  font-weight: bold;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--sidebar-accent);
   margin: 0 0 5px 0;
-  color: #333;
   padding-right: 25px;
 }
 
 .tip-text {
-  font-size: 0.85rem;
-  color: #555;
+  font-size: 0.95rem;
+  color: var(--text-main);
   font-weight: 400;
+  line-height: 1.6;
 }
 
 .refresh-tip-btn {
@@ -222,14 +248,11 @@ body {
   cursor: pointer;
   font-size: 14px;
   padding: 4px;
-  margin-right: 25px; /* Leave room for the 'X' button */
+  margin-right: 25px;
 }
 
-.refresh-tip-btn:hover {
-  opacity: 1;
-}
+.refresh-tip-btn:hover { opacity: 0.7; }
 
-/* The 'X' Button styling */
 .dismiss-btn {
   position: absolute;
   top: 8px;
@@ -245,48 +268,31 @@ body {
   transition: color 0.2s ease, transform 0.2s ease;
 }
 
-.dismiss-btn:hover {
-  color: #000;
-  transform: scale(1.2);
-}
+.dismiss-btn:hover { color: #000; transform: scale(1.2); }
 
-/* Adjusting the text so it doesn't overlap the 'X' */
-.alert-type {
-  margin: 0;
-  font-weight: bold;
-  padding-right: 20px;
-}
+.alert-type { margin: 0; font-weight: bold; padding-right: 20px; }
 
-/* hourly forcase section */
+/* HOURLY FORECAST */
 .hourly-grid {
   flex: 1;
   display: flex;
-  justify-content: space-between; /* Spreads the items evenly */
+  justify-content: space-between;
   padding: 1rem 0;
 }
 
 .hour-item {
   display: flex;
-  flex-direction: column; /* Stacks Time over Temp */
+  flex-direction: column;
   align-items: center;
   gap: 0.5rem;
 }
 
-.hour-time {
-  font-size: 0.9rem;
-  color: #666;
-  margin: 0;
-}
-
-.hour-temp {
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin: 0;
-}
+.hour-time { font-size: 0.9rem; color: #666; margin: 0; }
+.hour-temp { font-size: 1.2rem; font-weight: bold; margin: 0; }
 
 .hourly-forecast-card {
-  flex: 2; /* Takes up more space than the alerts column */
-  height: 250px; /* Lock height*/
+  flex: 2;
+  height: 250px;
   display: flex;
   flex-direction: column;
   padding: 1.5rem;
@@ -294,42 +300,32 @@ body {
 
 .hourly-grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr); /* 6 columns */
+  grid-template-columns: repeat(6, 1fr);
   text-align: center;
 }
 
 .hour-item { font-weight: bold; font-size: 1.2rem; }
 
-/* Rain Total Section */
+/* RAIN TOTAL */
 .rain-total-container {
   display: flex;
   flex-direction: column;
-  
   margin-top: 1.5rem;
   padding-top: .5rem;
+  border-top: 1px solid var(--green-border);
 }
 
-.rain-label {
-  font-size: 0.85rem;
-  color: var(--text-sub);
-  font-weight: 500;
-}
+.rain-label { font-size: 0.85rem; color: var(--text-sub); font-weight: 500; }
+.rain-value { font-size: 1.5rem; font-weight: 700; color: var(--sidebar-accent); }
 
-.rain-value {
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--text-main);
-}
-
-
-/* Loading Screen */
+/* LOADING */
 .loading-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;           /* Takes up the full screen height */
-  width: 100vw;            /* Takes up the full screen width */
+  height: 100vh;
+  width: 100vw;
   background-color: var(--bg-color);
   gap: 1rem;
 }
@@ -337,71 +333,105 @@ body {
 .loading-spinner {
   width: 50px;
   height: 50px;
-  border: 5px solid rgba(0, 0, 0, 0.1);
-  border-top: 5px solid #4f4f4f; 
+  border: 5px solid rgba(46,125,50,0.15);
+  border-top: 5px solid var(--sidebar-accent);
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
 
-/* rotation */
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
 
-.loading-container p {
+.loading-container p { font-weight: 600; color: #555; margin: 0; }
+
+/* ═══════════════════════════════════════
+   GARDEN VIEW
+═══════════════════════════════════════ */
+.garden-view .header { margin-bottom: 1rem; }
+
+.garden-view h2,
+.garden-view h3,
+.garden-view h4 {
+  font-size: 1rem;
   font-weight: 600;
-  color: #555;
-  margin: 0;
+  color: var(--text-main);
+  margin: 0 0 0.75rem 0;
+  letter-spacing: 0.01em;
+  text-transform: none;
 }
 
-/* GARDEN VIEW STYLES */
-
-/* i don't know whats happening here whoever does the styling can fix it ( i was trying to use a overall card styling to no avail)*/
-.garden-view .header {
-  margin-bottom: 1rem; 
-}
-
-/* Main Layout Cards */
+/* Plant List Card */
 .plant-list-card {
   margin-bottom: 1rem;
   border-radius: 20px;
-  background-color: #fff;
+  background-color: rgba(255,255,255,0.95);
+  border: 1px solid rgba(200,230,200,0.4);
+  box-shadow: 0 4px 12px rgba(30,70,30,0.08);
+  padding: 1.25rem 1.5rem;
 }
 
-/* Plant Grid - Horizontal Scroll */
-.plant-grid {
+.plant-list-header {
   display: flex;
-  gap: 2.5rem; 
-  overflow-x: auto; 
-  padding: 1.5rem;
-  align-items: flex-start;
-  scrollbar-width: thin;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
 }
 
-/* Individual Plant Items */
+.plant-count {
+  font-size: 0.78rem;
+  color: var(--text-sub);
+  font-weight: 500;
+}
+
+/* ── Plant Grid: 8 columnas, tamaño original ── */
+.plant-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 120px);
+  gap: 1rem 1.5rem;
+  padding: 0.5rem 0 0.75rem 0;
+  align-items: start;
+}
+
+/* Plant Item */
 .plant-item {
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  min-width: 100px;
+  width: 120px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
 }
 
-.plant-item p {
-  margin: 0 0 8px 0;
-  font-size: 0.95rem;
-  color: #333;
-  font-weight: 600;
+.plant-item:hover { transform: translateY(-3px); }
+
+/* Plant nickname */
+.plant-nickname-label {
+  width: 120px;
+  max-width: 120px;
+  margin: 0 0 6px 0;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-main);
+  text-align: center;
+  line-height: 1.3;
+  word-break: break-word;
+  overflow-wrap: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.2em;
 }
 
-/* IMAGE STYLING */
+/* Plant Image */
 .plant-img-wrapper {
   position: relative;
   display: inline-block;
   width: 100px;
   height: 100px;
-  margin-top: 10px; /* Gives the floating drop some room */
 }
 
 .plant-img {
@@ -410,7 +440,7 @@ body {
   object-fit: cover;
   border-radius: 20px;
   background-color: #f9f9f9;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
   display: block;
   transition: transform 0.2s ease;
   box-sizing: border-box;
@@ -418,23 +448,22 @@ body {
 
 .plant-img.placeholder-icon {
   object-fit: contain;
-  padding: 15px;      
-  background-color: #f0f0f0;
+  padding: 15px;
+  background-color: var(--green-light);
 }
 
-/* The icons that float inside the wrapper */
 .status-icon-stack {
-  position: absolute; 
-  bottom: 5px;       
-  right: 5px;        
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
   display: flex;
-  flex-direction: column; 
+  flex-direction: column;
   gap: 4px;
-  z-index: 10;     
+  z-index: 10;
 }
 
 .status-icon {
-  background: white; 
+  background: white;
   width: 24px;
   height: 24px;
   border-radius: 50%;
@@ -445,46 +474,95 @@ body {
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }
 
-/* Updated Label for uniformity */
-.plant-nickname-label {
-  margin: 0 0 8px 0;
-  font-size: 0.9rem;
-  color: #333;
-  font-weight: 500; /* Medium weight, not heavy bold */
-  text-align: center;
-}
-
-/* The + Button Styling */
+/* Add Plant Button — siempre en fila 1 */
 .add-plant-btn {
-  min-width: 100px;
+  width: 100px;
   height: 100px;
-  border: 2px dashed #ccc;
+  border: 2px dashed var(--green-border);
   border-radius: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 2.5rem;
-  color: #aaa;
+  color: #aac8aa;
   cursor: pointer;
   transition: all 0.2s ease;
-  margin-top: 28px; /* Aligns with the images below the text */
+  margin-top: 28px;
 }
 
 .add-plant-btn:hover {
-  border-color: #7fb086; /* Match your primary green */
-  color: #7fb086;
-  background-color: #f0f7f1;
+  border-color: var(--sidebar-accent);
+  color: var(--sidebar-accent);
+  background-color: var(--green-light);
+  transform: translateY(-2px);
 }
 
-/* MODAL STYLES */
+/* ── Show More Pill en cajita ── */
+.show-more-pill-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+  padding-bottom: 0.25rem;
+}
 
+.show-more-pill-box {
+  background: var(--green-light);
+  border: 1.5px solid var(--green-border);
+  border-radius: 16px;
+  padding: 8px 24px;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.show-more-pill-box:hover {
+  background-color: #e0f0e0;
+  border-color: var(--sidebar-accent);
+}
+
+.show-more-pill {
+  background: none;
+  border: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--sidebar-accent);
+  cursor: pointer;
+  padding: 0;
+  letter-spacing: 0.02em;
+}
+
+.show-more-pill:hover { text-decoration: underline; }
+
+/* Extra plants grid — mismo estilo que el principal, con separador */
+.extra-plants-grid {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--green-border);
+  animation: fadeIn 0.25s ease;
+}
+
+/* Empty message */
+.empty-msg {
+  font-size: 0.9rem;
+  color: var(--text-sub);
+  font-style: italic;
+  padding: 0.5rem 0;
+  grid-column: 1 / -1;
+}
+
+/* Selected plant highlight */
+.plant-item.selected-highlight .plant-img {
+  border: 3px solid var(--sidebar-accent);
+  box-shadow: 0 0 15px rgba(46,125,50,0.35);
+}
+
+/* MODAL */
 .modal-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.4);
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(10,30,10,0.4);
+  backdrop-filter: blur(3px);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -496,8 +574,8 @@ body {
   width: 350px;
   height: 500px;
   padding: 30px;
-  border-radius: 40px; 
-  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  border-radius: 40px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
   text-align: center;
 }
 
@@ -505,7 +583,7 @@ body {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Centers the inputs vertically */
+  justify-content: center;
   gap: 10px;
 }
 
@@ -517,19 +595,9 @@ body {
   margin-bottom: 30px;
 }
 
-/* Stacks the two zone inputs horizontally */
-.zone-input-row {
-  display: flex;
-  gap: 10px;
-  width: 100%;
-}
+.zone-input-row { display: flex; gap: 10px; width: 100%; }
+.zone-input-row .capsule-input { flex: 1; margin: 12px 0; }
 
-.zone-input-row .capsule-input {
-  flex: 1; /* Makes them equal width */
-  margin: 12px 0;
-}
-
-/* Styles the checkbox row */
 .checkbox-row {
   display: flex;
   align-items: center;
@@ -547,21 +615,18 @@ body {
   color: #888;
   cursor: pointer;
   padding: 5px 12px;
+  transition: all 0.2s ease;
 }
 
 .tab-btn.active {
   color: #333;
-  background-color: #e0e0e0; 
+  background-color: var(--green-light);
   border-radius: 20px;
+  border: 1px solid var(--green-border);
 }
 
-.tab-separator {
-  font-size: 1.5rem;
-  color: #333;
-  font-weight: 300;
-}
+.tab-separator { font-size: 1.5rem; color: #333; font-weight: 300; }
 
-/* Capsule-Shaped Inputs */
 .capsule-input {
   width: 100%;
   max-width: 250px;
@@ -570,43 +635,50 @@ body {
   padding: 12px 20px;
   border-radius: 25px;
   border: 1px solid #eee;
-  background-color: #c4d6bc; 
+  background-color: #c4d6bc;
   color: #555;
   font-size: 0.9rem;
   text-align: center;
   outline: none;
+  transition: border-color 0.2s ease;
 }
 
-/* Action Buttons */
-.modal-actions-centered {
-  margin-top: 25px;
-}
+.capsule-input:focus { border-color: var(--sidebar-accent); }
+
+.modal-actions-centered { margin-top: 25px; }
 
 .confirm-btn {
-  background-color: #cfcfcf; 
-  color: #333;
+  background: linear-gradient(135deg, #4db88a, #43a047);
+  color: white;
   border: none;
   padding: 10px 30px;
   border-radius: 20px;
   font-weight: bold;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(46,125,50,0.25);
 }
 
 .confirm-btn:hover {
-  background-color: var(--sidebar-accent);
+  background: linear-gradient(135deg, #1b5e20, #4db88a);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(46,125,50,0.35);
 }
 
 .delete-btn {
-  background-color: #cfcfcf;
-  color: #333;
+  background: #fdecea;
+  color: #c62828;
+  border: 1px solid #ffcdd2;
+  box-shadow: none;
 }
 
 .delete-btn:hover {
-  background-color: #df6262;
+  background: #c62828;
+  color: white;
+  border-color: #c62828;
 }
 
-/* Lower Row Layout */
+/* GARDEN LOWER ROW */
 .garden-view .lower-row {
   display: flex;
   gap: 1.5rem;
@@ -614,124 +686,120 @@ body {
   align-items: stretch;
 }
 
-.garden-left, .schedule-card {
-  flex: 1;
-  border-radius: 20px;
-}
+.garden-left, .schedule-card { flex: 1; border-radius: 20px; }
+.garden-left h3 { margin-bottom: -0.5rem; }
 
-.garden-left h3 {
-  margin-bottom: -0.5rem; /* Reduce space below "Status of..." */
-}
-
-/* Highlight the selected plant */
-.plant-item.selected-highlight .plant-img {
-  border: 3px solid #7fb086; /* Primary green */
-  box-shadow: 0 0 15px rgba(127, 176, 134, 0.4);
-}
-
-.details-content {
-  padding: 1rem;
-  text-align: left;
-  animation: fadeIn 0.3s ease;
-}
-
-.details-content h4 {
-  margin: 0 0 10px 0;
-  color: #333;
-}
-
-.hint-text {
-  color: #888;
-  font-style: italic;
-  margin-top: 20px;
-}
+.details-content { padding: 1rem; text-align: left; animation: fadeIn 0.3s ease; }
+.details-content h4 { margin: 0 0 10px 0; color: #333; }
+.hint-text { color: #888; font-style: italic; margin-top: 20px; }
 
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(5px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
+.zone-range-display { margin-bottom: 0.75rem; }
+.zone-text { font-size: 0.9rem; color: var(--text-sub); margin: 0; }
+
 /* Water Stats */
 .water-stats {
-  background: rgba(0, 0, 0, 0.03);
+  background: linear-gradient(135deg, #f1f8e9, #f9fdf4);
+  border: 1px solid var(--green-border);
   border-radius: 12px;
+  padding: 10px;
   margin-bottom: 15px;
 }
 
-.stat-row {
-  display: flex;
-  justify-content: space-between;
-  color: #666;
-}
+.stat-row { display: flex; justify-content: space-between; color: #666; font-size: 0.88rem; }
 
 .total-highlight {
-  border-top: 1px dashed #000000;
+  border-top: 1px dashed var(--green-border);
   margin-top: 8px;
   padding-top: 8px;
+  font-weight: 600;
+  color: var(--text-main);
 }
 
+/* Moisture Meter */
+.moisture-meter { margin-bottom: 0.75rem; }
+
+.meter-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.88rem;
+  color: var(--text-sub);
+  margin-bottom: 6px;
+}
+
+.meter-bar-bg {
+  width: 100%;
+  height: 8px;
+  background-color: #e8f0e8;
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.meter-bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  transition: width 0.5s ease;
+  background: linear-gradient(90deg, #43a047, #66bb6a);
+}
+
+.meter-bar-fill.dry { background: linear-gradient(90deg, #e53935, #ef5350); }
+.meter-bar-fill.damp { background: linear-gradient(90deg, #fb8c00, #ffa726); }
+.meter-bar-fill.moist { background: linear-gradient(90deg, #43a047, #66bb6a); }
+.meter-bar-fill.saturated { background: linear-gradient(90deg, #0288d1, #29b6f6); }
+.meter-bar-fill.stable { background: linear-gradient(90deg, #4db88a, #43a047); }
+
+.recommendation { margin-top: 15px; font-size: 0.88rem; color: var(--text-sub); font-style: italic; }
+.alert-actions { margin-top: 1rem; padding-left: 1.2rem; font-size: 0.88rem; color: var(--text-sub); line-height: 1.7; }
 
 /* SCHEDULE CARD */
-.schedule-content {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
+.schedule-content { display: flex; flex-direction: column; gap: 10px; }
 
-.schedule-hint, 
-.manual-add-container p, 
-.recent-log h4, 
+.schedule-hint,
+.manual-add-container p,
+.recent-log h4,
 .log-list {
-  margin: 0 !important; 
+  margin: 0 !important;
   padding: 0 !important;
 }
-.manual-add-container {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 4px;
-}
 
-.schedule-hint {
-  margin-bottom: 20px;
-}
-
-.amount-selector {
-  display: flex;
-  gap: 8px;
-}
+.manual-add-container { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+.schedule-hint { margin-bottom: 20px; }
+.amount-selector { display: flex; gap: 8px; }
 
 .amt-btn {
   padding: 6px 14px;
-  border: 1px solid #ccc;
-  background: white;
-  border-radius: 6px;
-  font-weight: 500;
+  border: 1.5px solid var(--green-border);
+  background: var(--green-light);
+  color: var(--sidebar-accent);
+  border-radius: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
 .amt-btn:hover {
-  background: #d3e5fa;
-  border-color: #4a90e2;
+  background: var(--sidebar-accent);
+  color: white;
+  border-color: var(--sidebar-accent);
+  transform: translateY(-1px);
 }
 
-.recent-log {
-  margin-top: 25px;
-  text-align: left;
-}
+.recent-log { margin-top: 25px; text-align: left; }
 
 .recent-log h4 {
-  letter-spacing: 1px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-sub);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
   margin-bottom: -10px;
 }
 
-.log-list {
-  list-style: none;
-  padding: 0;
-}
-
-.log-item {
-  font-size: 0.85rem;
-  padding: 8px 0;
-  border-bottom: 1px solid #eee;
-  color: #555;
-}
+.log-list { list-style: none; padding: 0; }
+.log-item { font-size: 0.85rem; padding: 8px 0; border-bottom: 1px solid #eee; color: #555; }
+.no-log-text { font-size: 0.85rem; color: var(--text-sub); font-style: italic; margin: 0; }
+.small-label { font-size: 0.78rem; color: var(--text-sub); margin: 0; }
